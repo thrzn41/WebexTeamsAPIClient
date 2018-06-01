@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.3;netstandard2.0;netcoreapp1.0;netcoreapp2.0;net452;net461</TargetFrameworks>
+    <AssemblyName>Thrzn41.WebexTeams</AssemblyName>
+    <RootNamespace>Thrzn41.WebexTeams</RootNamespace>
+    <Copyright>Copyright (c) 2018 thrzn41</Copyright>
+    <Company>thrzn41</Company>
+    <Authors>thrzn41</Authors>
+    <Version>1.2.1</Version>
+    <PackageProjectUrl>https://github.com/thrzn41/WebexTeamsAPIClient</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/thrzn41/WebexTeamsAPIClient</RepositoryUrl>
+    <PackageTags>CiscoWebexTeams WebexTeams CiscoSpark</PackageTags>
+    <PackageLicenseUrl>https://github.com/thrzn41/WebexTeamsAPIClient/blob/master/LICENSE</PackageLicenseUrl>
+    <Description>Cisco Webex Teams API Client is a Library that wraps Cisco Webex Teams REST API.
+Also, some useful features for developers are provided.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyVersion>1.2.1.0</AssemblyVersion>
+    <FileVersion>1.2.1.0</FileVersion>
+    <DocumentationFile>Thrzn41.WebexTeams.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
+    <DefineConstants>DOTNETSTANDARD;DOTNETSTANDARD1_3;WEBHOOK_LISTENER_NOT_AVAILABLE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>DOTNETSTANDARD;DOTNETSTANDARD2_0</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">
+    <DefineConstants>DOTNETCORE;DOTNETCORE1_0;WEBHOOK_LISTENER_NOT_AVAILABLE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
+    <DefineConstants>DOTNETCORE;DOTNETCORE2_0</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net452' ">
+    <DefineConstants>DOTNETFRAMEWORK;DOTNETFRAMEWORK4_5_2</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <DefineConstants>DOTNETFRAMEWORK;DOTNETFRAMEWORK4_6_1</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Thrzn41.Util" Version="1.0.6" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' OR '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ResourceMessage\ErrorMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="ResourceMessage\ErrorMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
