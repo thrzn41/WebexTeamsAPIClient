@@ -1543,14 +1543,9 @@
             Event validator.
             </summary>
         </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.EventValidator.ENCODING">
+        <member name="F:Thrzn41.WebexTeams.Version1.EventValidator.hashString">
             <summary>
-            Internal encoding.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.EventValidator.hmacSha1">
-            <summary>
-            The hmac-sha1 algorithm to validate event data.
+            The Hash string to validate event data.
             </summary>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.EventValidator.#ctor">
@@ -1570,7 +1565,7 @@
             Validates event data.
             </summary>
             <param name="data">A data to be validated.</param>
-            <param name="xTeamsSignature">Signature that is notified on event.</param>
+            <param name="xTeamsSignature">X-Spark-Signature header value that is notified on event.</param>
             <returns>true if the event is valid, false if the event is invalid.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.EventValidator.Dispose(System.Boolean)">
@@ -2064,11 +2059,11 @@
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.Message.IsPostedByOther(Thrzn41.WebexTeams.Version1.Person)">
             <summary>
-            Checks if the message was posted by other person or not.
+            Checks if the message is posted by other person or not.
             This is mainly used on webhook notification, because apps need to reply a message from others(not from app itself) in most cases.
             </summary>
             <param name="person"><see cref="T:Thrzn41.WebexTeams.Version1.Person"/> to be checked.</param>
-            <returns>true if the message was posted by other.</returns>
+            <returns>true if the message is posted by other.</returns>
         </member>
         <member name="T:Thrzn41.WebexTeams.Version1.MessageList">
             <summary>

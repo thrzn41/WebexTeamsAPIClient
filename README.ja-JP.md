@@ -242,10 +242,10 @@ try
 
   Console.WriteLine("メッセージが投稿されました: id = {0}", message.Id);
 }
-catch(TeamsResultException sre)
+catch(TeamsResultException tre)
 {
   Console.WriteLine("メッセージの投稿に失敗しました: status = {0}, trackingId = {1}, description = {2}",
-                      sre.HttpStatusCode, sre.TrackingId, sre.Message);
+                      tre.HttpStatusCode, tre.TrackingId, tre.Message);
 }
 ```
 

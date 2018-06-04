@@ -23,7 +23,6 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using System.Text;
 using Thrzn41.Util;
 
@@ -36,18 +35,13 @@ namespace Thrzn41.WebexTeams.Version1
     public class EventValidator : IDisposable
     {
 
-        /// <summary>
-        /// Internal encoding.
-        /// </summary>
-        private static readonly Encoding ENCODING = UTF8Utils.UTF8_WITHOUT_BOM;
-
 
 
 
         /// <summary>
-        /// The hmac-sha1 algorithm to validate event data.
+        /// The Hash string to validate event data.
         /// </summary>
-        private HMACSHA1 hmacSha1 = null;
+        private HashString hashString = null;
 
 
 
@@ -71,7 +65,7 @@ namespace Thrzn41.WebexTeams.Version1
 
             if( !String.IsNullOrEmpty(secret) )
             {
-                validator.hmacSha1 = new HMACSHA1( ENCODING.GetBytes(secret) );
+                validator.hashString = HashString.CreateHMACSHA1(secret);
             }
 
             return validator;
@@ -82,25 +76,16 @@ namespace Thrzn41.WebexTeams.Version1
         /// Validates event data.
         /// </summary>
         /// <param name="data">A data to be validated.</param>
-        /// <param name="xTeamsSignature">Signature that is notified on event.</param>
+        /// <param name="xTeamsSignature">X-Spark-Signature header value that is notified on event.</param>
         /// <returns>true if the event is valid, false if the event is invalid.</returns>
         public bool Validate(byte[] data, string xTeamsSignature)
         {
             // Default result is false.
             bool result = false;
 
-            if( this.hmacSha1 != null && data != null && data.Length > 0 && !String.IsNullOrEmpty(xTeamsSignature) )
+            if( this.hashString != null && data != null && data.Length > 0 && !String.IsNullOrEmpty(xTeamsSignature) )
             {
-                var hash = this.hmacSha1.ComputeHash(data);
-
-                var hashValue = new StringBuilder( (hash.Length << 1) );
-
-                foreach (var item in hash)
-                {
-                    hashValue.Append(item.ToString("x2"));
-                }
-
-                result = ( xTeamsSignature.ToLower() == hashValue.ToString() );
+                result = ( xTeamsSignature.ToLower() == hashString.ComputeString(data) );
             }
 
             return result;
@@ -122,7 +107,7 @@ namespace Thrzn41.WebexTeams.Version1
             {
                 if (disposing)
                 {
-                    using (this.hmacSha1)
+                    using (this.hashString)
                     {
                         // Disposed.
                     }
