@@ -331,11 +331,11 @@ namespace Thrzn41.WebexTeams.Version1
 
 
         /// <summary>
-        /// Checks if the message was posted by other person or not.
+        /// Checks if the message is posted by other person or not.
         /// This is mainly used on webhook notification, because apps need to reply a message from others(not from app itself) in most cases.
         /// </summary>
         /// <param name="person"><see cref="Person"/> to be checked.</param>
-        /// <returns>true if the message was posted by other.</returns>
+        /// <returns>true if the message is posted by other.</returns>
         public bool IsPostedByOther(Person person)
         {
             return (person != null && (person.CheckOwnershipStatus(this) == OwnershipStatus.NotHold));

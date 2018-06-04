@@ -250,10 +250,10 @@ try
 
   Console.WriteLine("Message was posted: id = {0}", message.Id);
 }
-catch(TeamsResultException sre)
+catch(TeamsResultException tre)
 {
   Console.WriteLine("Failed to post a message: status = {0}, trackingId = {1}, description = {2}",
-                      sre.HttpStatusCode, sre.TrackingId, sre.Message);
+                      tre.HttpStatusCode, tre.TrackingId, tre.Message);
 }
 ```
 
