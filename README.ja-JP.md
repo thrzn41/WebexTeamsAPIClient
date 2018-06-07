@@ -1,8 +1,8 @@
-# Cisco Webex Teams API Client for .NET
+# Webex Teams API Client for .NET
 
 [![nuget](https://img.shields.io/nuget/v/Thrzn41.WebexTeams.svg)](https://www.nuget.org/packages/Thrzn41.WebexTeams) [![MIT license](https://img.shields.io/github/license/thrzn41/WebexTeamsAPIClient.svg)](https://github.com/thrzn41/WebexTeamsAPIClient/blob/master/LICENSE)
 
-`Cisco Webex Teams API Client`は、`Cisco Webex Teams REST API`を利用しやすくしたライブラリです。  
+`Webex Teams API Client`は、`Cisco Webex Teams REST API`を利用しやすくしたライブラリです。  
 基本的な機能のほかに、Cisco Webex TeamsのAPIを使いやすくするための機能を実装しています。
 
 #### ほかの言語のREADME
@@ -63,44 +63,44 @@
 
 Cisco Webex Teams APIのpaginationに関しては、[ここ](https://developer.webex.com/pagination.html)を参照。
 
-`result.HasNext`と`result.ListNextAsync()`が、Cisco Webex Teams API Clientで利用可能です。  
+`result.HasNext`と`result.ListNextAsync()`が、Webex Teams API Clientで利用可能です。  
 詳細は後述。
 
 ### Retry-Afterの取得
 
-`result.HasRetryAfter`と `result.RetryAfter`が、Cisco Webex Teams API Clientで利用可能です。  
+`result.HasRetryAfter`と `result.RetryAfter`が、Webex Teams API Clientで利用可能です。  
 また、 `RetryExecutor`が利用可能です。  
 詳細は後述。
 
 ### HTTP Statusコードの取得
 
-`result.HttpStatusCode`が、Cisco Webex Teams API Clientで利用可能です。  
+`result.HttpStatusCode`が、Webex Teams API Clientで利用可能です。  
 詳細は後述。
 
 ### エラーコードと詳細の取得
 
 Cisco Webex Teams APIは、エラーコードと詳細を返す場合があります。  
-`result.Data.HasErrors`と`result.Data.GetErrors()`が、Cisco Webex Teams API Clientで利用可能です。
+`result.Data.HasErrors`と`result.Data.GetErrors()`が、Webex Teams API Clientで利用可能です。
 
 ### 部分エラーの取得
 
 Cisco Webex Teams APIは、部分的なエラーを返す場合があります。  
 部分エラーの詳細に関しては、[ここ](https://developer.webex.com/errors.html)を参照。  
-`Item.HasErrors`と`Item.GetPartialErrors()`が、Cisco Webex Teams API Clientで利用可能です。
+`Item.HasErrors`と`Item.GetPartialErrors()`が、Webex Teams API Clientで利用可能です。
 
 ### trackingIdの取得
 
 trackingIdは、Cisco Webex Teams APIのテクニカルサポートで利用される可能性があります。
 
-`result.TrackingId`が、Cisco Webex Teams API Clientで利用可能です。  
+`result.TrackingId`が、Webex Teams API Clientで利用可能です。  
 詳細は後述。
 
 ### Validates webhook secret
 
-`Webhook.CreateEventValidator()`が、Cisco Webex Teams API Clientで利用可能です。   
+`Webhook.CreateEventValidator()`が、Webex Teams API Clientで利用可能です。   
 詳細は後述。
 
-Cisco Webex Teams API Clientの`CreateWebhookAsync()`メソッドはデフォルトでは、webhook secretを動的に生成します。
+Webex Teams API Clientの`CreateWebhookAsync()`メソッドはデフォルトでは、webhook secretを動的に生成します。
 
 ### Webhook listener(.NET Standard 2.0+, .NET Core 2.0+, .NET Framework 4.5.2+)
 
@@ -108,15 +108,15 @@ Webhook listener機能は、簡易的なWebhookのサーバ機能を提供しま
 > **注記: この機能は、簡単なテスト時の利用を想定しています。  
 > 運用環境等では、より信頼性のあるサーバをご利用ください。**
 
-`WebhookListener`が、Cisco Webex Teams API Clientで利用可能です。   
+`WebhookListener`が、Webex Teams API Clientで利用可能です。   
 詳細は後述。
 
 ---
 ## 基本的な使い方
 
-### Cisco Webex Teams API Clientのインストール
+### Webex Teams API Clientのインストール
 
-`Cisco Webex Teams API Client`は、以下のいずれかの方法で、`NuGet` package manager経由で入手できます。
+`Webex Teams API Client`は、以下のいずれかの方法で、`NuGet` package manager経由で入手できます。
 
 * NuGet Package ManagerのGUI  
 "`Thrzn41.WebexTeams`"を検索してインストール。
@@ -131,7 +131,7 @@ PM> Install-Package Thrzn41.WebexTeams
 > dotnet add package Thrzn41.WebexTeams
 ```
 
-### Cisco Webex Teams API Client関連のusingディレクティブ
+### Webex Teams API Client関連のusingディレクティブ
 
 usingディレクティブを利用する場合は、以下の名前空間を指定します。
 
@@ -143,9 +143,9 @@ using Thrzn41.WebexTeams.Version1
 
 必要に応じて、`Thrzn41.WebexTeams.Version1.Admin`も利用可能です。
 
-### Cisco Webex Teams API Clientインスタンスの作成
+### Webex Teams API Clientインスタンスの作成
 
-Cisco Webex Teams API Clientのインスタンスは可能な限り長い期間使いまわすようにします。
+Webex Teams API Clientのインスタンスは可能な限り長い期間使いまわすようにします。
 
 ``` csharp
 /// 基本API利用時。
@@ -162,7 +162,7 @@ TeamsAdminAPIClient teams = TeamsAPI.CreateVersion1AdminClient(token);
 > **注記: 'token'は、Cisco Webex Teams APIでは、非常にセンシティブな情報です。  
 > 'token'は、慎重に保護する必要があります。  
 > ソースコード中に直接記載したり、安全ではない方法で保存しないようにします。  
-> `Cisco Webex Teams API Client`では、トークンを暗号化したり復号する方法を、いくつか提供しています。  
+> `Webex Teams API Client`では、トークンを暗号化したり復号する方法を、いくつか提供しています。  
 > 独自の方法で暗号化や復号、保護を実装する場合は、インスタンス作成時に、復号されたトークン文字列を利用することができます。**
 
 ### 暗号化したTokenをストレージに保存する
@@ -181,7 +181,7 @@ Save("entropy.dat", protectedToken.Entropy);
 Tokenを保存する際の、暗号化と復号での利用を想定しています。**
 
 
-### 暗号化したTokenをストレージから読み込んで、Cisco Webex Teams API Clientのインスタンスを作成する
+### 暗号化したTokenをストレージから読み込んで、Webex Teams API Clientのインスタンスを作成する
 
 ``` csharp
 byte[] encryptedData = Load("token.dat");
