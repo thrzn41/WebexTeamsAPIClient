@@ -1,8 +1,8 @@
-# Cisco Webex Teams API Client for .NET
+# Webex Teams API Client for .NET
 
 [![nuget](https://img.shields.io/nuget/v/Thrzn41.WebexTeams.svg)](https://www.nuget.org/packages/Thrzn41.WebexTeams) [![MIT license](https://img.shields.io/github/license/thrzn41/WebexTeamsAPIClient.svg)](https://github.com/thrzn41/WebexTeamsAPIClient/blob/master/LICENSE)
 
-`Cisco Webex Teams API Client` is a Library that wraps `Cisco Webex Teams REST API`.   
+`Webex Teams API Client` is a Library that wraps `Cisco Webex Teams REST API`.   
 Also, some useful features for developers are provided.
 
 #### README in other language
@@ -63,54 +63,54 @@ More details are described later.
 
 Cisco Webex Teams API pagination is described on [here](https://developer.webex.com/pagination.html).
 
-`result.HasNext` and `result.ListNextAsync()` are available in the Cisco Webex Teams API Client.  
+`result.HasNext` and `result.ListNextAsync()` are available in the Webex Teams API Client.  
 More details are described later.
 
 ### Gets retry-after
 
-`result.HasRetryAfter` and `result.RetryAfter` are available in the Cisco Webex Teams API Client.  
+`result.HasRetryAfter` and `result.RetryAfter` are available in the Webex Teams API Client.  
 Also, `RetryExecutor` is available.  
 More details are described later.
 
 ### Gets HttpStatus code
 
-`result.HttpStatusCode` is available in the Cisco Webex Teams API Client.  
+`result.HttpStatusCode` is available in the Webex Teams API Client.  
 More details are described later.
 
 ### Gets Error code/description
 
 There are cases when Cisco Webex Teams API returns error with error code and description.  
-`result.Data.HasErrors` and `result.Data.GetErrors()` are available in the Cisco Webex Teams API Client.
+`result.Data.HasErrors` and `result.Data.GetErrors()` are available in the Webex Teams API Client.
 
 ### Gets Partial Errors
 
 There are cases when Cisco Webex Teams API returns partial errors.  
 This is described on [here](https://developer.webex.com/errors.html).    
-`Item.HasErrors` and `Item.GetPartialErrors()` are available in the Cisco Webex Teams API Client.
+`Item.HasErrors` and `Item.GetPartialErrors()` are available in the Webex Teams API Client.
 
 ### Gets trackingId
 
 The trackingId may be used on technical support of Cisco Webex Teams API side.
 
-`result.TrackingId` is available in the Cisco Webex Teams API Client.  
+`result.TrackingId` is available in the Webex Teams API Client.  
 More details are described later.
 
 ### Validates webhook secret
 
-`Webhook.CreateEventValidator()` is available in the Cisco Webex Teams API Client.  
+`Webhook.CreateEventValidator()` is available in the Webex Teams API Client.  
 Also, `WebhookNotificationManager` is available to facilicate event handling.  
 More details are described later.
 
-CreateWebhookAsync() method in the Cisco Webex Teams API Client generates `webhook secret` dynamically by default option.
+CreateWebhookAsync() method in the Webex Teams API Client generates `webhook secret` dynamically by default option.
 
 ### Markdonw builder
 
-`MarkdownBuilder` is available in the Cisco Webex Teams API Client.  
+`MarkdownBuilder` is available in the Webex Teams API Client.  
 More details are described later.
 
 ### OAuth2 Helper
 
-`TeamsOauth2Client` is available in the Cisco Webex Teams API Client.  
+`TeamsOauth2Client` is available in the Webex Teams API Client.  
 
 ### Webhook Listener(.NET Standard 2.0+, .NET Core 2.0+, .NET Framework 4.5.2+)
 
@@ -118,15 +118,15 @@ Webhook listener feature provides simple Webhook server feature.
 > **NOTE: This feature is intended to be used for quick testing purpose.  
 > In production environment, more reliable server solution should be used.**
 
-`WebhookListener` is available in the Cisco Webex Teams API Client.  
+`WebhookListener` is available in the Webex Teams API Client.  
 More details are described later.
 
 ---
 ## Basic Usage
 
-### Install Cisco Webex Teams API Client
+### Install Webex Teams API Client
 
-You can install `Cisco Webex Teams API Client` from `NuGet` package manager by any of the following methods.
+You can install `Webex Teams API Client` from `NuGet` package manager by any of the following methods.
 
 * NuGet Package Manager GUI  
 Search "`Thrzn41.WebexTeams`" package and install.
@@ -141,7 +141,7 @@ PM> Install-Package Thrzn41.WebexTeams
 > dotnet add package Thrzn41.WebexTeams
 ```
 
-### using Directive to import Cisco Webex Teams API Client related types
+### using Directive to import Webex Teams API Client related types
 
 If you want to use using directive, the following namespaces could be used.
 
@@ -153,9 +153,9 @@ using Thrzn41.WebexTeams.Version1
 
 You can also use `Thrzn41.WebexTeams.Version1.Admin` namespace, if needed.
 
-### Create a Cisco Webex Teams API Client instance
+### Create a Webex Teams API Client instance
 
-A Cisco Webex Teams API Client instance should be re-used as long as possible.
+A Webex Teams API Client instance should be re-used as long as possible.
 
 ``` csharp
 /// Basic APIs.
@@ -172,7 +172,7 @@ TeamsAdminAPIClient teams = TeamsAPI.CreateVersion1AdminClient(token);
 > **NOTE: The 'token' is very sensitive information for Cisco Webex Teams API.  
 > You MUST protect the 'token' carefully.  
 > NEVER put it in source code directly or NEVER save it in unsecure manner.  
-> `Cisco Webex Teams API Client` provides some token encryption/decryption methods.  
+> `Webex Teams API Client` provides some token encryption/decryption methods.  
 > If you use your own token encryption/decryption/protection methods, you can create an instance with the decrypted token string.**
 
 ### Save encrypted token to storage
@@ -190,7 +190,7 @@ Save("entropy.dat", protectedToken.Entropy);
 > **NOTE: `LocalProtectedString` does not provide in-memory protection.  
 > This is intended to be used to save and load encrypted token.**
 
-### Load encrypted token from storage and create a Cisco Webex Teams API Client
+### Load encrypted token from storage and create a Webex Teams API Client
 
 ``` csharp
 byte[] encryptedData = Load("token.dat");
