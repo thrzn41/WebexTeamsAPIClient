@@ -92,6 +92,27 @@ namespace Thrzn41.WebexTeams
             return result;
         }
 
+
+        /// <summary>
+        /// Gets enumerator to iterate <see cref="TeamsListResult{TTeamsObject}"/>.
+        /// </summary>
+        /// <returns><see cref="TeamsListResult{TTeamsObject}"/> to iterate <see cref="TeamsListResult{TTeamsObject}"/>.</returns>
+        public TeamsListResultEnumerator<TTeamsObject> GetListResultEnumerator()
+        {
+            return new TeamsListResultEnumerator<TTeamsObject>(this);
+        }
+
+        /// <summary>
+        /// Gets enumerator to iterate <see cref="TeamsListResult{TTeamsObject}"/>.
+        /// </summary>
+        /// <param name="retry">Retry will be tried by this instance if needed.</param>
+        /// <param name="retryNotificationFunc">Function to be notified on retry.</param>
+        /// <returns><see cref="TeamsListResult{TTeamsObject}"/> to iterate <see cref="TeamsListResult{TTeamsObject}"/>.</returns>
+        public TeamsListResultEnumerator<TTeamsObject> GetListResultEnumerator(TeamsRetry retry, Func<TeamsListResult<TTeamsObject>, int, bool> retryNotificationFunc = null)
+        {
+            return new TeamsListResultEnumerator<TTeamsObject>(this, retry, retryNotificationFunc);
+        }
+
     }
 
 }

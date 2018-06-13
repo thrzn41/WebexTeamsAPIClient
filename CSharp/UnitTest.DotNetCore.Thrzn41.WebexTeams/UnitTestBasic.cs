@@ -62,10 +62,12 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                 {
                     me = rMe.Data;
 
-                    var r = await teams.ListSpacesAsync(sortBy: SpaceSortBy.Created, max: 50);
+                    var e = (await teams.ListSpacesAsync(type: SpaceType.Group, sortBy: SpaceSortBy.Created, max: 50)).GetListResultEnumerator();
 
-                    while (true)
+                    while (await e.MoveNextAsync())
                     {
+                        var r = e.CurrentResult;
+
                         if (r.IsSuccessStatus && r.Data.HasItems)
                         {
                             foreach (var item in r.Data.Items)
@@ -78,11 +80,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                             }
                         }
 
-                        if (unitTestSpace == null && r.HasNext)
-                        {
-                            r = await r.ListNextAsync();
-                        }
-                        else
+                        if (unitTestSpace != null)
                         {
                             break;
                         }
@@ -106,10 +104,12 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                 return;
             }
 
-            var r = await teams.ListSpacesAsync(sortBy: SpaceSortBy.Created, max: 50);
+            var e = (await teams.ListSpacesAsync(type: SpaceType.Group, sortBy: SpaceSortBy.Created, max: 50)).GetListResultEnumerator();
 
-            while (true)
+            while (await e.MoveNextAsync())
             {
+                var r = e.CurrentResult;
+
                 if (r.IsSuccessStatus && r.Data.HasItems)
                 {
                     foreach (var item in r.Data.Items)
@@ -120,16 +120,8 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                         }
                     }
                 }
-
-                if (unitTestSpace == null && r.HasNext)
-                {
-                    r = await r.ListNextAsync();
-                }
-                else
-                {
-                    break;
-                }
             }
+
         }
 
         private void checkTeamsAPIClient(Person me)
@@ -357,6 +349,41 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             Assert.IsTrue(rls.IsSuccessStatus);
             Assert.IsTrue(rls.HasNext);
             Assert.AreEqual(2, rls.Data.ItemCount);
+
+        }
+
+
+        [TestMethod]
+        public async Task TestListResultEnumerator()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                var r = await this.teams.CreateSpaceAsync(String.Format("Test Space {0}{1}", UNIT_TEST_CREATED_PREFIX, i));
+
+                Assert.IsTrue(r.IsSuccessStatus);
+            }
+
+
+            int counter = 0;
+
+            var rls = await this.teams.ListSpacesAsync(max: 2);
+
+            var e = rls.GetListResultEnumerator();
+
+            while(await e.MoveNextAsync())
+            {
+                rls = e.CurrentResult;
+
+                Assert.IsTrue(rls.IsSuccessStatus);
+                Assert.IsTrue(rls.HasNext);
+                Assert.AreEqual(2, rls.Data.ItemCount);
+
+                if( ++counter >= 2 )
+                {
+                    // In this test, break after 2nd loop.
+                    break;
+                }
+            }
 
         }
 

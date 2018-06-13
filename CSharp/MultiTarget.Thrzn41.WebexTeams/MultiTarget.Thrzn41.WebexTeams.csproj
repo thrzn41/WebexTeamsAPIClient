@@ -46,7 +46,7 @@ Also, some useful features for developers are provided.</Description>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="Thrzn41.Util" Version="1.1.1" />
+    <PackageReference Include="Thrzn41.Util" Version="1.1.2" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net452' OR '$(TargetFramework)' == 'net461' ">

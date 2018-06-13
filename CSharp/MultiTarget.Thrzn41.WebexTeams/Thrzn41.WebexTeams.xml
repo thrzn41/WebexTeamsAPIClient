@@ -420,6 +420,68 @@
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsListResult`1"/> to get result.</returns>
         </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsListResult`1.GetListResultEnumerator">
+            <summary>
+            Gets enumerator to iterate <see cref="T:Thrzn41.WebexTeams.TeamsListResult`1"/>.
+            </summary>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsListResult`1"/> to iterate <see cref="T:Thrzn41.WebexTeams.TeamsListResult`1"/>.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsListResult`1.GetListResultEnumerator(Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsListResult{`0},System.Int32,System.Boolean})">
+            <summary>
+            Gets enumerator to iterate <see cref="T:Thrzn41.WebexTeams.TeamsListResult`1"/>.
+            </summary>
+            <param name="retry">Retry will be tried by this instance if needed.</param>
+            <param name="retryNotificationFunc">Function to be notified on retry.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsListResult`1"/> to iterate <see cref="T:Thrzn41.WebexTeams.TeamsListResult`1"/>.</returns>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsListResultEnumerator`1">
+            <summary>
+            Enumerator to iterate <see cref="T:Thrzn41.WebexTeams.TeamsListResult`1"/>.
+            </summary>
+            <typeparam name="TTeamsObject">Teams Object that is returned on API request.</typeparam>
+            <remarks>You should await result of <see cref="M:Thrzn41.WebexTeams.TeamsListResultEnumerator`1.MoveNextAsync(System.Nullable{System.Threading.CancellationToken})"/> before getting <see cref="P:Thrzn41.WebexTeams.TeamsListResultEnumerator`1.CurrentResult"/> and subsequent MoveNextAsync().</remarks>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsListResultEnumerator`1.prev">
+            <summary>
+            Previous result.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsListResultEnumerator`1.CurrentResult">
+            <summary>
+            Current result.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsListResultEnumerator`1.retry">
+            <summary>
+            Retry will be tried by this instance if needed.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsListResultEnumerator`1.retryNotificationFunc">
+            <summary>
+            Function to be notified on retry.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsListResultEnumerator`1.#ctor(Thrzn41.WebexTeams.TeamsListResult{`0},Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsListResult{`0},System.Int32,System.Boolean})">
+            <summary>
+            Constructor of <see cref="T:Thrzn41.WebexTeams.TeamsListResultEnumerator`1"/>.
+            </summary>
+            <param name="listResult">First result.</param>
+            <param name="retry">Retry will be tried by this instance if needed.</param>
+            <param name="retryNotificationFunc">Function to be notified on retry.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsListResultEnumerator`1.#ctor(Thrzn41.WebexTeams.TeamsListResult{`0})">
+            <summary>
+            Constructor of <see cref="T:Thrzn41.WebexTeams.TeamsListResultEnumerator`1"/>.
+            </summary>
+            <param name="listResult">First result.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsListResultEnumerator`1.MoveNextAsync(System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Advances the enumerator to the next <see cref="T:Thrzn41.WebexTeams.TeamsListResult`1"/>.
+            </summary>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns>true if the enumerator was successfully advanced to the next <see cref="T:Thrzn41.WebexTeams.TeamsListResult`1"/>; false if the enumerator has passed the end of the result.</returns>
+        </member>
         <member name="T:Thrzn41.WebexTeams.TeamsMediaType">
             <summary>
             Media type of Cisco Webex Teams.
