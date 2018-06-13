@@ -109,10 +109,61 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="notificationFunc">A function to be notified when a retry is trying.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
-        public async Task< TeamsResult<TTeamsData> > RequestAsync<TTeamsData>(Func< Task< TeamsResult<TTeamsData> > > teamsRequestFunc, Func<TeamsResult<TTeamsData>, int, bool> notificationFunc = null, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<TTeamsData> > RequestAsync<TTeamsData>(Func< Task< TeamsResult<TTeamsData> > > teamsRequestFunc, Func<TeamsResult<TTeamsData>, int, bool> notificationFunc = null, CancellationToken? cancellationToken = null)
             where TTeamsData : TeamsData, new()
         {
-            return (await this.requestAsync<TeamsResult<TTeamsData>, TTeamsData>(teamsRequestFunc, notificationFunc, cancellationToken));
+            return (this.requestAsync<TeamsResult<TTeamsData>, TTeamsData>(teamsRequestFunc, notificationFunc, cancellationToken));
+        }
+
+        /// <summary>
+        /// Creates with retry.
+        /// If you want to get notification on each retry, you can use notificationFunc function.
+        /// <see cref="TeamsResult{TTeamsObject}"/> and retry counter will be notified to the function.
+        /// You should retrun true, if you want to retry, otherwize the retry will be cancelled.
+        /// </summary>
+        /// <typeparam name="TTeamsData">Type of TeamsData to be returned.</typeparam>
+        /// <param name="teamsRequestFunc">A function to be requested with retry.</param>
+        /// <param name="notificationFunc">A function to be notified when a retry is trying.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
+        public Task< TeamsResult<TTeamsData> > CreateAsync<TTeamsData>(Func<Task<TeamsResult<TTeamsData>>> teamsRequestFunc, Func<TeamsResult<TTeamsData>, int, bool> notificationFunc = null, CancellationToken? cancellationToken = null)
+            where TTeamsData : TeamsData, new()
+        {
+            return (this.requestAsync<TeamsResult<TTeamsData>, TTeamsData>(teamsRequestFunc, notificationFunc, cancellationToken));
+        }
+
+        /// <summary>
+        /// Gets with retry.
+        /// If you want to get notification on each retry, you can use notificationFunc function.
+        /// <see cref="TeamsResult{TTeamsObject}"/> and retry counter will be notified to the function.
+        /// You should retrun true, if you want to retry, otherwize the retry will be cancelled.
+        /// </summary>
+        /// <typeparam name="TTeamsData">Type of TeamsData to be returned.</typeparam>
+        /// <param name="teamsRequestFunc">A function to be requested with retry.</param>
+        /// <param name="notificationFunc">A function to be notified when a retry is trying.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
+        public Task< TeamsResult<TTeamsData> > GetAsync<TTeamsData>(Func<Task<TeamsResult<TTeamsData>>> teamsRequestFunc, Func<TeamsResult<TTeamsData>, int, bool> notificationFunc = null, CancellationToken? cancellationToken = null)
+            where TTeamsData : TeamsData, new()
+        {
+            return (this.requestAsync<TeamsResult<TTeamsData>, TTeamsData>(teamsRequestFunc, notificationFunc, cancellationToken));
+        }
+
+        /// <summary>
+        /// Updates with retry.
+        /// If you want to get notification on each retry, you can use notificationFunc function.
+        /// <see cref="TeamsResult{TTeamsObject}"/> and retry counter will be notified to the function.
+        /// You should retrun true, if you want to retry, otherwize the retry will be cancelled.
+        /// </summary>
+        /// <typeparam name="TTeamsData">Type of TeamsData to be returned.</typeparam>
+        /// <param name="teamsRequestFunc">A function to be requested with retry.</param>
+        /// <param name="notificationFunc">A function to be notified when a retry is trying.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
+        public Task< TeamsResult<TTeamsData> > UpdateAsync<TTeamsData>(Func<Task<TeamsResult<TTeamsData>>> teamsRequestFunc, Func<TeamsResult<TTeamsData>, int, bool> notificationFunc = null, CancellationToken? cancellationToken = null)
+            where TTeamsData : TeamsData, new()
+        {
+            return (this.requestAsync<TeamsResult<TTeamsData>, TTeamsData>(teamsRequestFunc, notificationFunc, cancellationToken));
         }
 
 
@@ -127,10 +178,10 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="notificationFunc">A function to be notified when a retry is trying.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
         /// <returns><see cref="TeamsListData{TTeamsObject}"/> that represents result of API request.</returns>
-        public async Task< TeamsListResult<TTeamsListData> > ListAsync<TTeamsListData>(Func< Task< TeamsListResult<TTeamsListData> > > teamsRequestFunc, Func<TeamsListResult<TTeamsListData>, int, bool> notificationFunc = null, CancellationToken? cancellationToken = null)
+        public Task< TeamsListResult<TTeamsListData> > ListAsync<TTeamsListData>(Func< Task< TeamsListResult<TTeamsListData> > > teamsRequestFunc, Func<TeamsListResult<TTeamsListData>, int, bool> notificationFunc = null, CancellationToken? cancellationToken = null)
             where TTeamsListData : TeamsData, new()
         {
-            return (await this.requestAsync<TeamsListResult<TTeamsListData>, TTeamsListData>(teamsRequestFunc, notificationFunc, cancellationToken));
+            return (this.requestAsync<TeamsListResult<TTeamsListData>, TTeamsListData>(teamsRequestFunc, notificationFunc, cancellationToken));
         }
 
 
@@ -144,9 +195,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="notificationFunc">A function to be notified when a retry is trying.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
-        public async Task< TeamsResult<NoContent> > DeleteAsync(Func< Task< TeamsResult<NoContent> > > teamsRequestFunc, Func<TeamsResult<NoContent>, int, bool> notificationFunc = null, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<NoContent> > DeleteAsync(Func< Task< TeamsResult<NoContent> > > teamsRequestFunc, Func<TeamsResult<NoContent>, int, bool> notificationFunc = null, CancellationToken? cancellationToken = null)
         {
-            return (await this.requestAsync<TeamsResult<NoContent>, NoContent>(teamsRequestFunc, notificationFunc, cancellationToken));
+            return (this.requestAsync<TeamsResult<NoContent>, NoContent>(teamsRequestFunc, notificationFunc, cancellationToken));
         }
 
 

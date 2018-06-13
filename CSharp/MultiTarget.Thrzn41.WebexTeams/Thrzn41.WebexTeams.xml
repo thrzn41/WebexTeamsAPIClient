@@ -2836,6 +2836,45 @@
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> that represents result of API request.</returns>
         </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.RetryExecutor.CreateAsync``1(System.Func{System.Threading.Tasks.Task{Thrzn41.WebexTeams.TeamsResult{``0}}},System.Func{Thrzn41.WebexTeams.TeamsResult{``0},System.Int32,System.Boolean},System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Creates with retry.
+            If you want to get notification on each retry, you can use notificationFunc function.
+            <see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> and retry counter will be notified to the function.
+            You should retrun true, if you want to retry, otherwize the retry will be cancelled.
+            </summary>
+            <typeparam name="TTeamsData">Type of TeamsData to be returned.</typeparam>
+            <param name="teamsRequestFunc">A function to be requested with retry.</param>
+            <param name="notificationFunc">A function to be notified when a retry is trying.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> that represents result of API request.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.RetryExecutor.GetAsync``1(System.Func{System.Threading.Tasks.Task{Thrzn41.WebexTeams.TeamsResult{``0}}},System.Func{Thrzn41.WebexTeams.TeamsResult{``0},System.Int32,System.Boolean},System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Gets with retry.
+            If you want to get notification on each retry, you can use notificationFunc function.
+            <see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> and retry counter will be notified to the function.
+            You should retrun true, if you want to retry, otherwize the retry will be cancelled.
+            </summary>
+            <typeparam name="TTeamsData">Type of TeamsData to be returned.</typeparam>
+            <param name="teamsRequestFunc">A function to be requested with retry.</param>
+            <param name="notificationFunc">A function to be notified when a retry is trying.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> that represents result of API request.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.RetryExecutor.UpdateAsync``1(System.Func{System.Threading.Tasks.Task{Thrzn41.WebexTeams.TeamsResult{``0}}},System.Func{Thrzn41.WebexTeams.TeamsResult{``0},System.Int32,System.Boolean},System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Updates with retry.
+            If you want to get notification on each retry, you can use notificationFunc function.
+            <see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> and retry counter will be notified to the function.
+            You should retrun true, if you want to retry, otherwize the retry will be cancelled.
+            </summary>
+            <typeparam name="TTeamsData">Type of TeamsData to be returned.</typeparam>
+            <param name="teamsRequestFunc">A function to be requested with retry.</param>
+            <param name="notificationFunc">A function to be notified when a retry is trying.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> that represents result of API request.</returns>
+        </member>
         <member name="M:Thrzn41.WebexTeams.Version1.RetryExecutor.ListAsync``1(System.Func{System.Threading.Tasks.Task{Thrzn41.WebexTeams.TeamsListResult{``0}}},System.Func{Thrzn41.WebexTeams.TeamsListResult{``0},System.Int32,System.Boolean},System.Nullable{System.Threading.CancellationToken})">
             <summary>
             Lists with retry.

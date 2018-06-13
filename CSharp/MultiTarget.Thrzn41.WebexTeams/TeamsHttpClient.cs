@@ -321,11 +321,11 @@ namespace Thrzn41.WebexTeams
         /// <param name="objectToBePosted">Object inherited from <see cref="TeamsObject"/> to be sent to Teams API.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
-        public async Task<TTeamsResult> RequestJsonAsync<TTeamsResult, TTeamsObject>(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, TeamsObject objectToBePosted = null, CancellationToken? cancellationToken = null)
+        public Task<TTeamsResult> RequestJsonAsync<TTeamsResult, TTeamsObject>(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, TeamsObject objectToBePosted = null, CancellationToken? cancellationToken = null)
             where TTeamsResult : TeamsResult<TTeamsObject>, new()
             where TTeamsObject : TeamsObject, new()
         {
-            return (await RequestAsync<TTeamsResult, TTeamsObject>(CreateJsonRequest(method, uri, queryParameters, objectToBePosted), cancellationToken));
+            return (RequestAsync<TTeamsResult, TTeamsObject>(CreateJsonRequest(method, uri, queryParameters, objectToBePosted), cancellationToken));
         }
 
         /// <summary>
@@ -338,11 +338,11 @@ namespace Thrzn41.WebexTeams
         /// <param name="queryParameters">Query parameter collection.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
-        public async Task<TTeamsResult> RequestFileInfoAsync<TTeamsResult, TTeamsFileInfo>(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, CancellationToken? cancellationToken = null)
+        public Task<TTeamsResult> RequestFileInfoAsync<TTeamsResult, TTeamsFileInfo>(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, CancellationToken? cancellationToken = null)
             where TTeamsResult   : TeamsResult<TTeamsFileInfo>, new()
             where TTeamsFileInfo : TeamsFileInfo, new()
         {
-            return (await RequestAsync<TTeamsResult, TTeamsFileInfo>(CreateFileInfoRequest(method, uri, queryParameters), cancellationToken));
+            return (RequestAsync<TTeamsResult, TTeamsFileInfo>(CreateFileInfoRequest(method, uri, queryParameters), cancellationToken));
         }
 
         /// <summary>
@@ -357,11 +357,11 @@ namespace Thrzn41.WebexTeams
         /// <param name="fileData">File data list.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
-        public async Task<TTeamsResult> RequestMultipartFormDataAsync<TTeamsResult, TTeamsObject>(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, NameValueCollection stringData = null, TeamsFileData fileData = null, CancellationToken? cancellationToken = null)
+        public Task<TTeamsResult> RequestMultipartFormDataAsync<TTeamsResult, TTeamsObject>(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, NameValueCollection stringData = null, TeamsFileData fileData = null, CancellationToken? cancellationToken = null)
             where TTeamsResult : TeamsResult<TTeamsObject>, new()
             where TTeamsObject : TeamsObject, new()
         {
-            return (await RequestAsync<TTeamsResult, TTeamsObject>(CreateMultipartFormDataRequest(method, uri, queryParameters, stringData, fileData), cancellationToken));
+            return (RequestAsync<TTeamsResult, TTeamsObject>(CreateMultipartFormDataRequest(method, uri, queryParameters, stringData, fileData), cancellationToken));
         }
 
         /// <summary>
@@ -375,11 +375,11 @@ namespace Thrzn41.WebexTeams
         /// <param name="stringData">String data collection.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
-        public async Task<TTeamsResult> RequestFormDataAsync<TTeamsResult, TTeamsObject>(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, NameValueCollection stringData = null, CancellationToken? cancellationToken = null)
+        public Task<TTeamsResult> RequestFormDataAsync<TTeamsResult, TTeamsObject>(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, NameValueCollection stringData = null, CancellationToken? cancellationToken = null)
             where TTeamsResult : TeamsResult<TTeamsObject>, new()
             where TTeamsObject : TeamsObject, new()
         {
-            return (await RequestAsync<TTeamsResult, TTeamsObject>(CreateFormDataRequest(method, uri, queryParameters, stringData), cancellationToken));
+            return (RequestAsync<TTeamsResult, TTeamsObject>(CreateFormDataRequest(method, uri, queryParameters, stringData), cancellationToken));
         }
 
 

@@ -167,7 +167,7 @@ namespace Thrzn41.WebexTeams.Version1.OAuth2
         /// <param name="redirectUri">Redirect uri.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<TokenInfo> > GetTokenInfoAsync(string code, string redirectUri, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<TokenInfo> > GetTokenInfoAsync(string code, string redirectUri, CancellationToken? cancellationToken = null)
         {
             var parameters = new NameValueCollection();
 
@@ -177,7 +177,7 @@ namespace Thrzn41.WebexTeams.Version1.OAuth2
             parameters.Add("code",          code);
             parameters.Add("redirect_uri",  redirectUri);
 
-            return await getTokenInfoAsync(parameters, cancellationToken);
+            return (getTokenInfoAsync(parameters, cancellationToken));
         }
 
 
@@ -187,7 +187,7 @@ namespace Thrzn41.WebexTeams.Version1.OAuth2
         /// <param name="refreshToken">Refresh Code.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<TokenInfo> > RefreshTokenInfoAsync(string refreshToken, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<TokenInfo> > RefreshTokenInfoAsync(string refreshToken, CancellationToken? cancellationToken = null)
         {
             var parameters = new NameValueCollection();
 
@@ -196,7 +196,7 @@ namespace Thrzn41.WebexTeams.Version1.OAuth2
             parameters.Add("client_secret", this.clientSecret);
             parameters.Add("refresh_token", refreshToken);
 
-            return await getTokenInfoAsync(parameters, cancellationToken);
+            return (getTokenInfoAsync(parameters, cancellationToken));
         }
 
         /// <summary>
@@ -205,9 +205,9 @@ namespace Thrzn41.WebexTeams.Version1.OAuth2
         /// <param name="tokenInfo">Refresh Code.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<TokenInfo> > RefreshTokenInfoAsync(TokenInfo tokenInfo, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<TokenInfo> > RefreshTokenInfoAsync(TokenInfo tokenInfo, CancellationToken? cancellationToken = null)
         {
-            return await RefreshTokenInfoAsync(tokenInfo.RefreshToken, cancellationToken);
+            return (RefreshTokenInfoAsync(tokenInfo.RefreshToken, cancellationToken));
         }
 
     }
