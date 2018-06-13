@@ -264,9 +264,9 @@ namespace Thrzn41.WebexTeams.Version1.Admin
         /// <param name="person"><see cref="Person"/> to be deleted.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task<TeamsResult<NoContent>> DeletePersonAsync(Person person, CancellationToken? cancellationToken = null)
+        public Task<TeamsResult<NoContent>> DeletePersonAsync(Person person, CancellationToken? cancellationToken = null)
         {
-            return (await DeletePersonAsync(person.Id, cancellationToken));
+            return (DeletePersonAsync(person.Id, cancellationToken));
         }
 
         #endregion
@@ -320,9 +320,9 @@ namespace Thrzn41.WebexTeams.Version1.Admin
         /// <param name="organization"><see cref="Organization"/> that the detail info is gotten.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task<TeamsResult<Organization>> GetOrganizationAsync(Organization organization, CancellationToken? cancellationToken = null)
+        public Task<TeamsResult<Organization>> GetOrganizationAsync(Organization organization, CancellationToken? cancellationToken = null)
         {
-            return (await GetOrganizationAsync(organization.Id, cancellationToken));
+            return (GetOrganizationAsync(organization.Id, cancellationToken));
         }
 
         #endregion
@@ -360,9 +360,9 @@ namespace Thrzn41.WebexTeams.Version1.Admin
         /// <param name="organization">Specify the <see cref="Organization"/>.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsListResult<LicenseList> > ListLicensesAsync(Organization organization, CancellationToken? cancellationToken = null)
+        public Task< TeamsListResult<LicenseList> > ListLicensesAsync(Organization organization, CancellationToken? cancellationToken = null)
         {
-            return (await ListLicensesAsync(organization.Id, cancellationToken));
+            return (ListLicensesAsync(organization.Id, cancellationToken));
         }
 
 
@@ -392,9 +392,9 @@ namespace Thrzn41.WebexTeams.Version1.Admin
         /// <param name="license"><see cref="License"/> that the detail info is gotten.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<License> > GetLicenseAsync(License license, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<License> > GetLicenseAsync(License license, CancellationToken? cancellationToken = null)
         {
-            return (await GetLicenseAsync(license.Id, cancellationToken));
+            return (GetLicenseAsync(license.Id, cancellationToken));
         }
 
         #endregion
@@ -453,9 +453,9 @@ namespace Thrzn41.WebexTeams.Version1.Admin
         /// <param name="role"><see cref="Role"/> that the detail info is gotten.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Role> > GetRoleAsync(Role role, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Role> > GetRoleAsync(Role role, CancellationToken? cancellationToken = null)
         {
-            return (await GetRoleAsync(role.Id, cancellationToken));
+            return (GetRoleAsync(role.Id, cancellationToken));
         }
 
         #endregion
@@ -524,9 +524,9 @@ namespace Thrzn41.WebexTeams.Version1.Admin
         /// <param name="eventData"><see cref="EventData"/> that the detail info is gotten.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<EventData> > GetEventAsync(EventData eventData, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<EventData> > GetEventAsync(EventData eventData, CancellationToken? cancellationToken = null)
         {
-            return (await GetEventAsync(eventData.Id, cancellationToken));
+            return (GetEventAsync(eventData.Id, cancellationToken));
         }
 
         #endregion

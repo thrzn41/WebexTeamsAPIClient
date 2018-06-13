@@ -275,9 +275,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="max">Limit the maximum number of people in the response.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsListResult<PersonList> > ListPeopleAsync(string email = null, string displayName = null, IEnumerable<string> ids = null, int? max = null, CancellationToken? cancellationToken = null)
+        public Task< TeamsListResult<PersonList> > ListPeopleAsync(string email = null, string displayName = null, IEnumerable<string> ids = null, int? max = null, CancellationToken? cancellationToken = null)
         {
-            return (await ListPersonsAsync(email, displayName, ids, max, cancellationToken));
+            return (ListPersonsAsync(email, displayName, ids, max, cancellationToken));
         }
 
 
@@ -307,9 +307,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="person"><see cref="Person"/> that the detail info is gotten.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Person> > GetPersonAsync(Person person, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Person> > GetPersonAsync(Person person, CancellationToken? cancellationToken = null)
         {
-            return (await GetPersonAsync(person.Id, cancellationToken));
+            return (GetPersonAsync(person.Id, cancellationToken));
         }
 
 
@@ -318,9 +318,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// </summary>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Person> > GetMeAsync(CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Person> > GetMeAsync(CancellationToken? cancellationToken = null)
         {
-            return (await GetPersonAsync("me", cancellationToken));
+            return (GetPersonAsync("me", cancellationToken));
         }
 
         /// <summary>
@@ -482,9 +482,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="space"><see cref="Space"/> that the detail info is gotten.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Space> > GetSpaceAsync(Space space, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Space> > GetSpaceAsync(Space space, CancellationToken? cancellationToken = null)
         {
-            return (await GetSpaceAsync(space.Id, cancellationToken));
+            return (GetSpaceAsync(space.Id, cancellationToken));
         }
 
 
@@ -520,9 +520,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="title">A user-friendly name for the space.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Space> > UpdateSpaceAsync(Space space, string title, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Space> > UpdateSpaceAsync(Space space, string title, CancellationToken? cancellationToken = null)
         {
-            return (await UpdateSpaceAsync(space.Id, title, cancellationToken));
+            return (UpdateSpaceAsync(space.Id, title, cancellationToken));
         }
 
 
@@ -552,9 +552,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="space"><see cref="Space"/> to be deleted.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<NoContent> > DeleteSpaceAsync(Space space, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<NoContent> > DeleteSpaceAsync(Space space, CancellationToken? cancellationToken = null)
         {
-            return (await DeleteSpaceAsync(space.Id, cancellationToken));
+            return (DeleteSpaceAsync(space.Id, cancellationToken));
         }
 
         #endregion
@@ -613,9 +613,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="max">Limit the maximum number of items in the response.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsListResult<SpaceMembershipList> > ListSpaceMembershipsAsync(Space space, Person person = null, int? max = null, CancellationToken? cancellationToken = null)
+        public Task< TeamsListResult<SpaceMembershipList> > ListSpaceMembershipsAsync(Space space, Person person = null, int? max = null, CancellationToken? cancellationToken = null)
         {
-            return (await ListSpaceMembershipsAsync(space.Id, person?.Id, max, PersonIdType.Id, cancellationToken));
+            return (ListSpaceMembershipsAsync(space.Id, person?.Id, max, PersonIdType.Id, cancellationToken));
         }
 
         /// <summary>
@@ -625,9 +625,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="max">Limit the maximum number of items in the response.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsListResult<SpaceMembershipList> > ListSpaceMembershipsAsync(Space space, int? max = null, CancellationToken? cancellationToken = null)
+        public Task< TeamsListResult<SpaceMembershipList> > ListSpaceMembershipsAsync(Space space, int? max = null, CancellationToken? cancellationToken = null)
         {
-            return (await ListSpaceMembershipsAsync(space.Id, null, max, PersonIdType.Id, cancellationToken));
+            return (ListSpaceMembershipsAsync(space.Id, null, max, PersonIdType.Id, cancellationToken));
         }
 
         /// <summary>
@@ -637,9 +637,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="max">Limit the maximum number of items in the response.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsListResult<SpaceMembershipList> > ListSpaceMembershipsAsync(Person person, int? max = null, CancellationToken? cancellationToken = null)
+        public Task< TeamsListResult<SpaceMembershipList> > ListSpaceMembershipsAsync(Person person, int? max = null, CancellationToken? cancellationToken = null)
         {
-            return (await ListSpaceMembershipsAsync(null, person.Id, max, PersonIdType.Id, cancellationToken));
+            return (ListSpaceMembershipsAsync(null, person.Id, max, PersonIdType.Id, cancellationToken));
         }
 
 
@@ -692,9 +692,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="isModerator">Set to true to make the person a room moderator.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<SpaceMembership> > CreateSpaceMembershipAsync(Space space, Person person, bool? isModerator = null, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<SpaceMembership> > CreateSpaceMembershipAsync(Space space, Person person, bool? isModerator = null, CancellationToken? cancellationToken = null)
         {
-            return (await CreateSpaceMembershipAsync(space.Id, person.Id, isModerator, PersonIdType.Id, cancellationToken));
+            return (CreateSpaceMembershipAsync(space.Id, person.Id, isModerator, PersonIdType.Id, cancellationToken));
         }
 
         /// <summary>
@@ -706,9 +706,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="personIdType"><see cref="PersonIdType"/> for personIdOrEmail parameter.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<SpaceMembership> > CreateSpaceMembershipAsync(Space space, string personIdOrEmail, bool? isModerator = null, PersonIdType personIdType = PersonIdType.Detect, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<SpaceMembership> > CreateSpaceMembershipAsync(Space space, string personIdOrEmail, bool? isModerator = null, PersonIdType personIdType = PersonIdType.Detect, CancellationToken? cancellationToken = null)
         {
-            return (await CreateSpaceMembershipAsync(space.Id, personIdOrEmail, isModerator, personIdType, cancellationToken));
+            return (CreateSpaceMembershipAsync(space.Id, personIdOrEmail, isModerator, personIdType, cancellationToken));
         }
 
 
@@ -738,9 +738,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="membership"><see cref="SpaceMembership"/> that the detail info is gotten.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<SpaceMembership> > GetSpaceMembershipAsync(SpaceMembership membership, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<SpaceMembership> > GetSpaceMembershipAsync(SpaceMembership membership, CancellationToken? cancellationToken = null)
         {
-            return (await GetSpaceMembershipAsync(membership.Id, cancellationToken));
+            return (GetSpaceMembershipAsync(membership.Id, cancellationToken));
         }
 
 
@@ -776,9 +776,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="isModerator">Set to true to make the person a space moderator.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<SpaceMembership> > UpdateSpaceMembershipAsync(SpaceMembership membership, bool isModerator, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<SpaceMembership> > UpdateSpaceMembershipAsync(SpaceMembership membership, bool isModerator, CancellationToken? cancellationToken = null)
         {
-            return (await UpdateSpaceMembershipAsync(membership.Id, isModerator, cancellationToken));
+            return (UpdateSpaceMembershipAsync(membership.Id, isModerator, cancellationToken));
         }
 
 
@@ -808,9 +808,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="membership"><see cref="SpaceMembership"/> to be deleted.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<NoContent> > DeleteSpaceMembershipAsync(SpaceMembership membership, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<NoContent> > DeleteSpaceMembershipAsync(SpaceMembership membership, CancellationToken? cancellationToken = null)
         {
-            return (await DeleteSpaceMembershipAsync(membership.Id, cancellationToken));
+            return (DeleteSpaceMembershipAsync(membership.Id, cancellationToken));
         }
 
         #endregion
@@ -860,9 +860,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="max">Limit the maximum number of messages in the response.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsListResult<MessageList> > ListMessagesAsync(Space space, string mentionedPeople = null, DateTime? before = null, string beforeMessage = null, int? max = null, CancellationToken? cancellationToken = null)
+        public Task< TeamsListResult<MessageList> > ListMessagesAsync(Space space, string mentionedPeople = null, DateTime? before = null, string beforeMessage = null, int? max = null, CancellationToken? cancellationToken = null)
         {
-            return (await ListMessagesAsync(space.Id, mentionedPeople, before, beforeMessage, max, cancellationToken));
+            return (ListMessagesAsync(space.Id, mentionedPeople, before, beforeMessage, max, cancellationToken));
         }
 
 
@@ -937,9 +937,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Message> > CreateMessageAsync(Space space, string markdownOrText, IEnumerable<Uri> files = null, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Message> > CreateMessageAsync(Space space, string markdownOrText, IEnumerable<Uri> files = null, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
         {
-            return (await CreateMessageAsync(space.Id, markdownOrText, files, MessageTarget.SpaceId, textType, cancellationToken));
+            return (CreateMessageAsync(space.Id, markdownOrText, files, MessageTarget.SpaceId, textType, cancellationToken));
         }
 
 
@@ -1008,9 +1008,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Message> > CreateMessageAsync(Space space, string markdownOrText, TeamsFileData fileData, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Message> > CreateMessageAsync(Space space, string markdownOrText, TeamsFileData fileData, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
         {
-            return (await CreateMessageAsync(space.Id, markdownOrText, fileData, MessageTarget.SpaceId, textType, cancellationToken));
+            return (CreateMessageAsync(space.Id, markdownOrText, fileData, MessageTarget.SpaceId, textType, cancellationToken));
         }
 
 
@@ -1025,7 +1025,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Message> > CreateDirectMessageAsync(string personIdOrEmail, string markdownOrText, IEnumerable<Uri> files = null, PersonIdType personIdType = PersonIdType.Detect, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Message> > CreateDirectMessageAsync(string personIdOrEmail, string markdownOrText, IEnumerable<Uri> files = null, PersonIdType personIdType = PersonIdType.Detect, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
         {
             personIdType = DetectPersonIdType(personIdOrEmail, personIdType);
 
@@ -1041,7 +1041,7 @@ namespace Thrzn41.WebexTeams.Version1
                     break;
             }
 
-            return (await CreateMessageAsync(personIdOrEmail, markdownOrText, files, targetType, textType, cancellationToken));
+            return (CreateMessageAsync(personIdOrEmail, markdownOrText, files, targetType, textType, cancellationToken));
         }
 
         /// <summary>
@@ -1054,7 +1054,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Message> > CreateDirectMessageAsync(string personIdOrEmail, string markdownOrText, TeamsFileData fileData, PersonIdType personIdType = PersonIdType.Detect, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Message> > CreateDirectMessageAsync(string personIdOrEmail, string markdownOrText, TeamsFileData fileData, PersonIdType personIdType = PersonIdType.Detect, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
         {
             personIdType = DetectPersonIdType(personIdOrEmail, personIdType);
 
@@ -1070,7 +1070,7 @@ namespace Thrzn41.WebexTeams.Version1
                     break;
             }
 
-            return (await CreateMessageAsync(personIdOrEmail, markdownOrText, fileData, targetType, textType, cancellationToken));
+            return (CreateMessageAsync(personIdOrEmail, markdownOrText, fileData, targetType, textType, cancellationToken));
         }
 
         /// <summary>
@@ -1082,9 +1082,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Message> > CreateDirectMessageAsync(Person person, string markdownOrText, IEnumerable<Uri> files = null, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Message> > CreateDirectMessageAsync(Person person, string markdownOrText, IEnumerable<Uri> files = null, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
         {
-            return (await CreateDirectMessageAsync(person.Id, markdownOrText, files, PersonIdType.Id, textType, cancellationToken));
+            return (CreateDirectMessageAsync(person.Id, markdownOrText, files, PersonIdType.Id, textType, cancellationToken));
         }
 
         /// <summary>
@@ -1096,9 +1096,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Message> > CreateDirectMessageAsync(Person person, string markdownOrText, TeamsFileData fileData, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Message> > CreateDirectMessageAsync(Person person, string markdownOrText, TeamsFileData fileData, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
         {
-            return (await CreateDirectMessageAsync(person.Id, markdownOrText, fileData, PersonIdType.Id, textType, cancellationToken));
+            return (CreateDirectMessageAsync(person.Id, markdownOrText, fileData, PersonIdType.Id, textType, cancellationToken));
         }
 
 
@@ -1128,9 +1128,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="message"><see cref="Message"/> that the detail info is be gotten.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Message> > GetMessageAsync(Message message, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Message> > GetMessageAsync(Message message, CancellationToken? cancellationToken = null)
         {
-            return (await GetMessageAsync(message.Id, cancellationToken));
+            return (GetMessageAsync(message.Id, cancellationToken));
         }
 
 
@@ -1160,9 +1160,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="message">Message to be deleted.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task<TeamsResult<NoContent>> DeleteMessageAsync(Message message, CancellationToken? cancellationToken = null)
+        public Task<TeamsResult<NoContent>> DeleteMessageAsync(Message message, CancellationToken? cancellationToken = null)
         {
-            return (await DeleteMessageAsync(message.Id, cancellationToken));
+            return (DeleteMessageAsync(message.Id, cancellationToken));
         }
 
         #endregion
@@ -1246,9 +1246,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="team"><see cref="Team"/> that the detail info is gotten.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Team> > GetTeamAsync(Team team, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Team> > GetTeamAsync(Team team, CancellationToken? cancellationToken = null)
         {
-            return (await GetTeamAsync(team.Id, cancellationToken));
+            return (GetTeamAsync(team.Id, cancellationToken));
         }
 
 
@@ -1284,9 +1284,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="name">A user-friendly name for the team.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task<TeamsResult<Team>> UpdateTeamAsync(Team team, string name, CancellationToken? cancellationToken = null)
+        public Task<TeamsResult<Team>> UpdateTeamAsync(Team team, string name, CancellationToken? cancellationToken = null)
         {
-            return (await UpdateTeamAsync(team.Id, name, cancellationToken));
+            return (UpdateTeamAsync(team.Id, name, cancellationToken));
         }
 
         /// <summary>
@@ -1315,9 +1315,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="team"><see cref="Team"/> to be deleted.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<NoContent> > DeleteTeamAsync(Team team, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<NoContent> > DeleteTeamAsync(Team team, CancellationToken? cancellationToken = null)
         {
-            return (await DeleteTeamAsync(team.Id, cancellationToken));
+            return (DeleteTeamAsync(team.Id, cancellationToken));
         }
 
 
@@ -1359,9 +1359,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="max">Limit the maximum number of items in the response.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task<TeamsListResult<TeamMembershipList>> ListTeamMembershipsAsync(Team team, int? max = null, CancellationToken? cancellationToken = null)
+        public Task<TeamsListResult<TeamMembershipList>> ListTeamMembershipsAsync(Team team, int? max = null, CancellationToken? cancellationToken = null)
         {
-            return (await ListTeamMembershipsAsync(team.Id, max, cancellationToken));
+            return (ListTeamMembershipsAsync(team.Id, max, cancellationToken));
         }
 
 
@@ -1414,9 +1414,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="isModerator">Set to true to make the person a room moderator.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<TeamMembership> > CreateTeamMembershipAsync(Team team, Person person, bool? isModerator = null, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<TeamMembership> > CreateTeamMembershipAsync(Team team, Person person, bool? isModerator = null, CancellationToken? cancellationToken = null)
         {
-            return (await CreateTeamMembershipAsync(team.Id, person.Id, isModerator, PersonIdType.Id, cancellationToken));
+            return (CreateTeamMembershipAsync(team.Id, person.Id, isModerator, PersonIdType.Id, cancellationToken));
         }
 
         /// <summary>
@@ -1428,9 +1428,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="personIdType"><see cref="PersonIdType"/> for personIdOrEmail parameter.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<TeamMembership> > CreateTeamMembershipAsync(Team team, string personIdOrEmail, bool? isModerator = null, PersonIdType personIdType = PersonIdType.Detect, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<TeamMembership> > CreateTeamMembershipAsync(Team team, string personIdOrEmail, bool? isModerator = null, PersonIdType personIdType = PersonIdType.Detect, CancellationToken? cancellationToken = null)
         {
-            return (await CreateTeamMembershipAsync(team.Id, personIdOrEmail, isModerator, personIdType, cancellationToken));
+            return (CreateTeamMembershipAsync(team.Id, personIdOrEmail, isModerator, personIdType, cancellationToken));
         }
 
 
@@ -1460,9 +1460,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="membeship"><see cref="TeamMembership"/> that the detail info is gotten.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<TeamMembership> > GetTeamMembershipAsync(TeamMembership membeship, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<TeamMembership> > GetTeamMembershipAsync(TeamMembership membeship, CancellationToken? cancellationToken = null)
         {
-            return (await GetTeamMembershipAsync(membeship.Id, cancellationToken));
+            return (GetTeamMembershipAsync(membeship.Id, cancellationToken));
         }
 
 
@@ -1498,9 +1498,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="isModerator">Set to true to make the person a team moderator.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<TeamMembership> > UpdateTeamMembershipAsync(TeamMembership membership, bool isModerator, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<TeamMembership> > UpdateTeamMembershipAsync(TeamMembership membership, bool isModerator, CancellationToken? cancellationToken = null)
         {
-            return (await UpdateTeamMembershipAsync(membership.Id, isModerator, cancellationToken));
+            return (UpdateTeamMembershipAsync(membership.Id, isModerator, cancellationToken));
         }
 
 
@@ -1530,9 +1530,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="membership"><see cref="TeamMembership"/> to be deleted.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<NoContent> > DeleteTeamMembershipAsync(TeamMembership membership, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<NoContent> > DeleteTeamMembershipAsync(TeamMembership membership, CancellationToken? cancellationToken = null)
         {
-            return (await DeleteTeamMembershipAsync(membership.Id, cancellationToken));
+            return (DeleteTeamMembershipAsync(membership.Id, cancellationToken));
         }
 
         #endregion
@@ -1653,9 +1653,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="webhook"><see cref="Webhook"/> that the detail info is gotten.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Webhook> > GetWebhookAsync(Webhook webhook, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Webhook> > GetWebhookAsync(Webhook webhook, CancellationToken? cancellationToken = null)
         {
-            return (await GetWebhookAsync(webhook.Id, cancellationToken));
+            return (GetWebhookAsync(webhook.Id, cancellationToken));
         }
 
 
@@ -1694,9 +1694,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="targetUri">The URL that receives POST requests for each event.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Webhook> > UpdateWebhookAsync(Webhook webhook, string name, Uri targetUri, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Webhook> > UpdateWebhookAsync(Webhook webhook, string name, Uri targetUri, CancellationToken? cancellationToken = null)
         {
-            return (await UpdateWebhookAsync(webhook.Id, name, targetUri, cancellationToken));
+            return (UpdateWebhookAsync(webhook.Id, name, targetUri, cancellationToken));
         }
 
 
@@ -1726,9 +1726,9 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="webhook"><see cref="Webhook"/> to be deleted.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<NoContent> > DeleteWebhookAsync(Webhook webhook, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<NoContent> > DeleteWebhookAsync(Webhook webhook, CancellationToken? cancellationToken = null)
         {
-            return (await DeleteWebhookAsync(webhook.Id, cancellationToken));
+            return (DeleteWebhookAsync(webhook.Id, cancellationToken));
         }
 
         #endregion
