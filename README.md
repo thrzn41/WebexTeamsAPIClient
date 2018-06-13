@@ -8,6 +8,40 @@ Also, some useful features for developers are provided.
 #### README in other language
 * [日本語のREADMEはこちら](https://github.com/thrzn41/WebexTeamsAPIClient/blob/master/README.ja-JP.md) ([Japanese README is here](https://github.com/thrzn41/WebexTeamsAPIClient/blob/master/README.ja-JP.md))
 
+By using `Webex Teams API Client`, you can invoke `Cisco Webex Teams REST API` easily.  
+For example, it is an example that facilicates [Pagination feature](https://developer.webex.com/pagination.html) of Webex Teams REST API.  
+It demonstrates to get and iterate for each 50 spaces, then say "Hello" to the specific named space.
+
+``` csharp
+// Gets Enumerator to list all the Group spaces.
+var e = (await teams.ListSpacesAsync(
+                       type: SpaceType.Group,
+                       max: 50)
+        ).GetListResultEnumerator();
+
+// Iterates until getting all the spaces.
+while (await e.MoveNextAsync())
+{
+  var r = e.CurrentResult;
+
+  if (r.IsSuccessStatus && r.Data.HasItems)
+  {
+    // Each result has space list.
+    foreach (var space in r.Data.Items)
+    {
+      // Say "Hello" to the specific named space.
+      if (space.Title == "Demo space for Webex Teams API Client(Thrzn41.WebexTeams)")
+      {
+        await teams.CreateMessageAsync(space, "Hello, Webex Teams!!");
+      }
+    }
+
+  }
+}
+```
+
+More samples are [here](https://github.com/thrzn41/WebexTeamsAPIClientSamples).
+
 ---
 ## Available Platforms
 
@@ -18,13 +52,19 @@ Also, some useful features for developers are provided.
 > NOTE: If you use Simple Webhook Listener/Server feature,  
 > .NET Stardard 2.0+, .NET Core 2.0+ or .NET Framework 4.5.2+ is required.
 
+
+## Samples
+
+Samples for Webex Teams API Client is available on [here](https://github.com/thrzn41/WebexTeamsAPIClientSamples).
+
+
 ---
 ## Available Features
 
 * Basic Cisco Webex Teams APIs(List/Get/Create Message, Space, etc.).
 * Cisco Webex Teams Admin APIs(List/Get Event, License, etc.).
 * Encrypt/Decrypt Cisco Webex Teams token in storage.
-* Pagination for list APIs.
+* Pagination for list APIs. Enumerator to faciliate the pagination.
 * Retry-after value, Retry executor.
 * Markdown builder
 * Error code, error description.
@@ -64,6 +104,7 @@ More details are described later.
 Cisco Webex Teams API pagination is described on [here](https://developer.webex.com/pagination.html).
 
 `result.HasNext` and `result.ListNextAsync()` are available in the Webex Teams API Client.  
+Also, `TeamsListResultEnumerator` is available.  
 More details are described later.
 
 ### Gets retry-after
@@ -327,7 +368,7 @@ if(result.IsSuccessStatus)
 }
 ```
 
-### Pagenation
+### Pagination
 
 ``` csharp
 var result = await teams.ListSpacesAsync();
@@ -347,6 +388,32 @@ if(result.IsSuccessStatus)
     {
       // ...
     }
+  }
+}
+```
+
+### Enumerator for Pagination
+
+``` csharp
+// Gets Enumerator to list all the Group spaces.
+var e = (await teams.ListSpacesAsync(
+                       type: SpaceType.Group,
+                       max: 50)
+        ).GetListResultEnumerator();
+
+// Iterates until getting all the spaces.
+while (await e.MoveNextAsync())
+{
+  var r = e.CurrentResult;
+
+  if (r.IsSuccessStatus && r.Data.HasItems)
+  {
+    // Each result has space list.
+    foreach (var space in r.Data.Items)
+    {
+      Console.WriteLine("Title = {0}", space.Title);
+    }
+
   }
 }
 ```

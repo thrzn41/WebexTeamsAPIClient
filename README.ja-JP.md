@@ -8,6 +8,41 @@
 #### ほかの言語のREADME
 * [English README is here](https://github.com/thrzn41/WebexTeamsAPIClient/blob/master/README.md) ([英語のREADMEはこちら](https://github.com/thrzn41/WebexTeamsAPIClient/blob/master/README.md))
 
+`Webex Teams API Client`を使って、`Cisco Webex Teams REST API`を簡単に実行できます。  
+例えば、Webex Temas REST APIの[Pagination機能](https://developer.webex.com/pagination.html)の例が以下になります。  
+スペースを50個ずつ取得していって、特定の名前のスペースへ「こんにちは」を投稿します。
+
+``` csharp
+// すべてのGroupスペースを取得するためにEnumeratorを取得します。
+var e = (await teams.ListSpacesAsync(
+                       type: SpaceType.Group,
+                       max: 50)
+        ).GetListResultEnumerator();
+
+// すべてのスペースを取得するまで繰り返します。
+while (await e.MoveNextAsync())
+{
+  var r = e.CurrentResult;
+
+  if (r.IsSuccessStatus && r.Data.HasItems)
+  {
+    // それぞれの結果にスペースのリストが含まれます。
+    foreach (var space in r.Data.Items)
+    {
+      // 特定の名前のスペースに、「こんにちは」と投稿します。
+      if (space.Title == "Webex Teams API Client(Thrzn41.WebexTeams)のデモ用スペース")
+      {
+        await teams.CreateMessageAsync(space, "こんにちは、Webex Teams！！");
+      }
+    }
+
+  }
+}
+```
+
+ほかのサンプルは、 [こちら](https://github.com/thrzn41/WebexTeamsAPIClientSamples)。
+
+
 ---
 ## 利用可能なプラットフォーム
 * .NET Standard 1.3以降
@@ -18,13 +53,18 @@
 > .NET Stardard 2.0+, .NET Core 2.0+, .NET Framework 4.5.2+が必要です。
 
 
+## サンプル
+
+Webex Teams API Clientのサンプルは、 [こちら](https://github.com/thrzn41/WebexTeamsAPIClientSamples)。
+
+
 ---
 ## 利用可能な機能
 
 * Cisco Webex Teamsの基本的なAPI(List/Get/Create Message, Spaceなど)。
 * Cisco Webex TeamsのAdmin API(List/Get Event, Licenseなど)。
 * ストレージに保存するTokenの暗号化と復号。
-* List API用のPagination機能。
+* List API用のPagination機能。Paginationを簡単にするためのEnumerator。
 * Retry-after値の処理とRetry executor。
 * Markdown builder
 * エラーコードや詳細の取得。
@@ -320,7 +360,7 @@ if(result.IsSuccessStatus)
 }
 ```
 
-### Pagenation機能を利用する
+### Pagination機能を利用する
 
 ``` csharp
 var result = await teams.ListSpacesAsync();
@@ -340,6 +380,32 @@ if(result.IsSuccessStatus)
     {
       // ...
     }
+  }
+}
+```
+
+### Enumeratorを使ってPaginaionを利用する
+
+``` csharp
+// すべてのGroupスペースを取得するためにEnumeratorを取得します。
+var e = (await teams.ListSpacesAsync(
+                       type: SpaceType.Group,
+                       max: 50)
+        ).GetListResultEnumerator();
+
+// すべてのスペースを取得するまで繰り返します。
+while (await e.MoveNextAsync())
+{
+  var r = e.CurrentResult;
+
+  if (r.IsSuccessStatus && r.Data.HasItems)
+  {
+    // それぞれの結果にスペースのリストが含まれます。
+    foreach (var space in r.Data.Items)
+    {
+      Console.WriteliLine("Title = {0}", space.Title);
+    }
+
   }
 }
 ```

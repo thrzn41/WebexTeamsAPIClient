@@ -107,7 +107,7 @@ namespace Thrzn41.WebexTeams
         /// <param name="notificationFunc">A function to be notified when a retry is trying.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
-        protected async Task<TTeamsResult> requestAsync<TTeamsResult, TTeamsObject>(Func< Task<TTeamsResult> > teamsRequestFunc, Func<TTeamsResult, int, bool> notificationFunc = null, CancellationToken? cancellationToken = null)
+        internal async Task<TTeamsResult> requestAsync<TTeamsResult, TTeamsObject>(Func< Task<TTeamsResult> > teamsRequestFunc, Func<TTeamsResult, int, bool> notificationFunc = null, CancellationToken? cancellationToken = null)
             where TTeamsResult : TeamsResult<TTeamsObject>, new()
             where TTeamsObject : TeamsObject, new()
         {
