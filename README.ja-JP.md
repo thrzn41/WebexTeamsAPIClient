@@ -8,6 +8,7 @@
 #### ほかの言語のREADME
 * [English README is here](https://github.com/thrzn41/WebexTeamsAPIClient/blob/master/README.md) ([英語のREADMEはこちら](https://github.com/thrzn41/WebexTeamsAPIClient/blob/master/README.md))
 
+---
 `Webex Teams API Client`を使って、`Cisco Webex Teams REST API`を簡単に実行できます。  
 例えば、Webex Temas REST APIの[Pagination機能](https://developer.webex.com/pagination.html)の例が以下になります。  
 スペースを50個ずつ取得していって、特定の名前のスペースへ「こんにちは」を投稿します。
@@ -50,13 +51,12 @@ while (await e.MoveNextAsync())
 * .NET Framework 4.5.2以降
 
 > 注記: 簡易Webhookサーバ機能を利用する場合は、  
-> .NET Stardard 2.0+, .NET Core 2.0+, .NET Framework 4.5.2+が必要です。
+> .NET Standard 2.0+, .NET Core 2.0+, .NET Framework 4.5.2+が必要です。
 
-
+---
 ## サンプル
 
-Webex Teams API Clientのサンプルは、 [こちら](https://github.com/thrzn41/WebexTeamsAPIClientSamples)。
-
+Webex Teams API Clientのサンプルは、 [こちらをクリック](https://github.com/thrzn41/WebexTeamsAPIClientSamples)。
 
 ---
 ## 利用可能な機能
