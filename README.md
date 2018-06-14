@@ -8,8 +8,9 @@ Also, some useful features for developers are provided.
 #### README in other language
 * [日本語のREADMEはこちら](https://github.com/thrzn41/WebexTeamsAPIClient/blob/master/README.ja-JP.md) ([Japanese README is here](https://github.com/thrzn41/WebexTeamsAPIClient/blob/master/README.ja-JP.md))
 
+---
 By using `Webex Teams API Client`, you can invoke `Cisco Webex Teams REST API` easily.  
-For example, it is an example that facilicates [Pagination feature](https://developer.webex.com/pagination.html) of Webex Teams REST API.  
+For example, it is an example that facilitates [Pagination feature](https://developer.webex.com/pagination.html) of Webex Teams REST API.  
 It demonstrates to get and iterate for each 50 spaces, then say "Hello" to the specific named space.
 
 ``` csharp
@@ -50,9 +51,9 @@ More samples are [here](https://github.com/thrzn41/WebexTeamsAPIClientSamples).
 * .NET Framework 4.5.2 or later
 
 > NOTE: If you use Simple Webhook Listener/Server feature,  
-> .NET Stardard 2.0+, .NET Core 2.0+ or .NET Framework 4.5.2+ is required.
+> .NET Standard 2.0+, .NET Core 2.0+ or .NET Framework 4.5.2+ is required.
 
-
+---
 ## Samples
 
 Samples for Webex Teams API Client is available on [here](https://github.com/thrzn41/WebexTeamsAPIClientSamples).
@@ -64,7 +65,7 @@ Samples for Webex Teams API Client is available on [here](https://github.com/thr
 * Basic Cisco Webex Teams APIs(List/Get/Create Message, Space, etc.).
 * Cisco Webex Teams Admin APIs(List/Get Event, License, etc.).
 * Encrypt/Decrypt Cisco Webex Teams token in storage.
-* Pagination for list APIs. Enumerator to faciliate the pagination.
+* Pagination for list APIs. Enumerator to facilitate the pagination.
 * Retry-after value, Retry executor.
 * Markdown builder
 * Error code, error description.
