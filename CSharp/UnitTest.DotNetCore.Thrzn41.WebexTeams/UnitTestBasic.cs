@@ -219,11 +219,11 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
             md.Append("Link: ").AppendLink("this is link", new Uri("https://www.example.com/path?p1=v1&p2=v2")).AppendLine();
 
-            md.AppendBold("Orderd List:").AppendLine();
-            md.AppendOrderdList("item-1").AppendOrderdList("item-2").AppendOrderdListFormat("item-{0}", 3).AppendParagraphSeparater();
+            md.AppendBold("Ordered List:").AppendLine();
+            md.AppendOrderedList("item-1").AppendOrderedList("item-2").AppendOrderedListFormat("item-{0}", 3).AppendParagraphSeparater();
 
-            md.AppendBold("Unorderd List:").AppendLine();
-            md.AppendUnorderdList("item-1").AppendUnorderdList("item-2").AppendUnorderdListFormat("item-{0}", 3).AppendParagraphSeparater();
+            md.AppendBold("Unordered List:").AppendLine();
+            md.AppendUnorderedList("item-1").AppendUnorderedList("item-2").AppendUnorderedListFormat("item-{0}", 3).AppendParagraphSeparater();
 
             md.AppendBlockQuote("This is block quote.").AppendLine();
             md.Append("Code: ").AppendInLineCode("printf(\"Hello, World!\");").Append("is very famous!").AppendLine();

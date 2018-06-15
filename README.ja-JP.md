@@ -61,12 +61,12 @@ Webex Teams API Clientのサンプルは、 [こちらをクリック](https://g
 ---
 ## 利用可能な機能
 
-* Cisco Webex Teamsの基本的なAPI(List/Get/Create Message, Spaceなど)。
-* Cisco Webex TeamsのAdmin API(List/Get Event, Licenseなど)。
+* Webex Teamsの基本的なAPI(List/Get/Create Message, Spaceなど)。
+* Webex TeamsのAdmin API(List/Get Event, Licenseなど)。
 * ストレージに保存するTokenの暗号化と復号。
 * List API用のPagination機能。Paginationを簡単にするためのEnumerator。
 * Retry-after値の処理とRetry executor。
-* Markdown builder
+* Markdown builder。
 * エラーコードや詳細の取得。
 * Webhook secretの検証とWebhook notification manager、Webhook event handler。
 * OAuth2 helper
