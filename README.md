@@ -62,16 +62,16 @@ Samples for Webex Teams API Client is available on [here](https://github.com/thr
 ---
 ## Available Features
 
-* Basic Cisco Webex Teams APIs(List/Get/Create Message, Space, etc.).
-* Cisco Webex Teams Admin APIs(List/Get Event, License, etc.).
-* Encrypt/Decrypt Cisco Webex Teams token in storage.
+* Basic Webex Teams APIs(List/Get/Create Message, Space, etc.).
+* Webex Teams Admin APIs(List/Get Event, License, etc.).
+* Encrypt/Decrypt Webex Teams token in storage.
 * Pagination for list APIs. Enumerator to facilitate the pagination.
 * Retry-after value, Retry executor.
-* Markdown builder
+* Markdown builder.
 * Error code, error description.
 * Webhook secret validator, Webhook notification manager, Webhook event handler.
-* OAuth2 helper
-* Simple Webhook Listener/Server(.NET Standard 2.0+, .NET Core 2.0+, .NET Framework 4.5.2+)
+* OAuth2 helper.
+* Simple Webhook Listener/Server(.NET Standard 2.0+, .NET Core 2.0+, .NET Framework 4.5.2+).
 
 ### Basic Features
 

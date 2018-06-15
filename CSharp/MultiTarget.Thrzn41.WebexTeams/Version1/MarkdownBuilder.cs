@@ -242,17 +242,41 @@ namespace Thrzn41.WebexTeams.Version1
         /// </summary>
         /// <param name="value">string value to be appended.</param>
         /// <returns>A reference to this instance after the append operation has completed.</returns>
+        public MarkdownBuilder AppendOrderedList(string value)
+        {
+            return BeginOrderedList().Append(value).EndOrderedList();
+        }
+
+        /// <summary>
+        /// Appends Ordered List with format.
+        /// </summary>
+        /// <param name="format">string format.</param>
+        /// <param name="args">Arguments for format.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
+        public MarkdownBuilder AppendOrderedListFormat(string format, params object[] args)
+        {
+            return BeginOrderedList().AppendFormat(format, args).EndOrderedList();
+        }
+
+
+        /// <summary>
+        /// Appends Ordered List.
+        /// </summary>
+        /// <param name="value">string value to be appended.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
+        [Obsolete("Please use AppendOrderedList().")]
         public MarkdownBuilder AppendOrderdList(string value)
         {
             return BeginOrderedList().Append(value).EndOrderedList();
         }
 
         /// <summary>
-        /// Appends Orderd List with format.
+        /// Appends Ordered List with format.
         /// </summary>
         /// <param name="format">string format.</param>
         /// <param name="args">Arguments for format.</param>
         /// <returns>A reference to this instance after the append operation has completed.</returns>
+        [Obsolete("Please use AppendOrderedListFormat().")]
         public MarkdownBuilder AppendOrderdListFormat(string format, params object[] args)
         {
             return BeginOrderedList().AppendFormat(format, args).EndOrderedList();
@@ -281,23 +305,45 @@ namespace Thrzn41.WebexTeams.Version1
             return this;
         }
 
+        /// <summary>
+        /// Appends Unordered List.
+        /// </summary>
+        /// <param name="value">string value to be appended.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
+        public MarkdownBuilder AppendUnorderedList(string value)
+        {
+            return BeginUnorderedList().Append(value).EndUnorderedList();
+        }
+
+        /// <summary>
+        /// Appends Unordered List with format.
+        /// </summary>
+        /// <param name="format">string format.</param>
+        /// <param name="args">Arguments for format.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
+        public MarkdownBuilder AppendUnorderedListFormat(string format, params object[] args)
+        {
+            return BeginUnorderedList().AppendFormat(format, args).EndUnorderedList();
+        }
 
         /// <summary>
         /// Appends Unordered List.
         /// </summary>
         /// <param name="value">string value to be appended.</param>
         /// <returns>A reference to this instance after the append operation has completed.</returns>
+        [Obsolete("Please use AppendUnorderedList().")]
         public MarkdownBuilder AppendUnorderdList(string value)
         {
             return BeginUnorderedList().Append(value).EndUnorderedList();
         }
 
         /// <summary>
-        /// Appends Unorderd List with format.
+        /// Appends Unordered List with format.
         /// </summary>
         /// <param name="format">string format.</param>
         /// <param name="args">Arguments for format.</param>
         /// <returns>A reference to this instance after the append operation has completed.</returns>
+        [Obsolete("Please use AppendUnorderedListFormat().")]
         public MarkdownBuilder AppendUnorderdListFormat(string format, params object[] args)
         {
             return BeginUnorderedList().AppendFormat(format, args).EndUnorderedList();
