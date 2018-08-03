@@ -120,6 +120,24 @@ namespace Thrzn41.WebexTeams.Version1
         public string Secret { get; internal set; }
 
         /// <summary>
+        /// Indicates if the webhook is active.
+        /// </summary>
+        [JsonProperty(PropertyName = "status")]
+        public string StatusName { get; internal set; }
+
+        /// <summary>
+        /// Indicates if the webhook is active.
+        /// </summary>
+        [JsonIgnore]
+        public WebhookStatus Status
+        {
+            get
+            {
+                return WebhookStatus.Parse(this.StatusName);
+            }
+        }
+
+        /// <summary>
         /// <see cref="DateTime"/> when the webhook was created.
         /// </summary>
         [JsonProperty(PropertyName = "created")]

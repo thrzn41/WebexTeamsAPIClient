@@ -233,6 +233,20 @@ namespace Thrzn41.WebexTeams.Version1
             return strs.ToString();
         }
 
+        /// <summary>
+        /// Gets value or default.
+        /// </summary>
+        /// <typeparam name="TResult">Type of the value.</typeparam>
+        /// <param name="value">Value.</param>
+        /// <param name="defaultValue">Default value that is returned if value parameter is null.</param>
+        /// <returns>Value or default.</returns>
+        protected static TResult getValueOrDefault<TResult>(TResult value, TResult defaultValue)
+        {
+            return ((value != null) ? value : defaultValue);
+        }
+
+
+
 
         #region Person APIs
 
@@ -1665,6 +1679,64 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="webhookId">Webhook id to be updated.</param>
         /// <param name="name">A user-friendly name for this webhook.</param>
         /// <param name="targetUri">The URL that receives POST requests for each event.</param>
+        /// <param name="secret">Secret used to generate payload signature.</param>
+        /// <param name="secretLength">Secret length that is generated, if the secret parameter is null.</param>
+        /// <param name="status"><see cref="WebhookStatus"/> to be updated.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task< TeamsResult<Webhook> > UpdateWebhookAsync(string webhookId, string name, Uri targetUri, string secret = null, int secretLength = 0, WebhookStatus status = null, CancellationToken? cancellationToken = null)
+        {
+            var webhook = new Webhook();
+
+            webhook.Name      = name;
+            webhook.TargetUrl = targetUri.AbsoluteUri;
+
+            if (secret != null)
+            {
+                webhook.Secret = secret;
+            }
+            else if (secretLength > 0)
+            {
+                webhook.Secret = new String(RAND.GetASCIIChars(secretLength, (CryptoRandom.ASCIICategory.UpperAlphabet | CryptoRandom.ASCIICategory.LowerAlphabet | CryptoRandom.ASCIICategory.Number)));
+            }
+
+            webhook.StatusName = status?.Name;
+
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsResult<Webhook>, Webhook>(
+                                    HttpMethod.Put,
+                                    new Uri(String.Format("{0}/{1}", TEAMS_WEBHOOKS_API_PATH, Uri.EscapeDataString(webhookId))),
+                                    null,
+                                    webhook,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Updates webhook.
+        /// </summary>
+        /// <param name="webhook">Webhook id to be updated.</param>
+        /// <param name="name">A user-friendly name for this webhook.</param>
+        /// <param name="targetUri">The URL that receives POST requests for each event.</param>
+        /// <param name="secret">Secret used to generate payload signature.</param>
+        /// <param name="secretLength">Secret length that is generated, if the secret parameter is null.</param>
+        /// <param name="status"><see cref="WebhookStatus"/> to be updated.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsResult<Webhook> > UpdateWebhookAsync(Webhook webhook, string name, Uri targetUri, string secret = null, int secretLength = 0, WebhookStatus status = null, CancellationToken? cancellationToken = null)
+        {
+            return (UpdateWebhookAsync(webhook.Id, name, targetUri, secret, secretLength, status, cancellationToken));
+        }
+
+
+        /// <summary>
+        /// Updates webhook.
+        /// </summary>
+        /// <param name="webhookId">Webhook id to be updated.</param>
+        /// <param name="name">A user-friendly name for this webhook.</param>
+        /// <param name="targetUri">The URL that receives POST requests for each event.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
         public async Task< TeamsResult<Webhook> > UpdateWebhookAsync(string webhookId, string name, Uri targetUri, CancellationToken? cancellationToken = null)
@@ -1729,6 +1801,18 @@ namespace Thrzn41.WebexTeams.Version1
         public Task< TeamsResult<NoContent> > DeleteWebhookAsync(Webhook webhook, CancellationToken? cancellationToken = null)
         {
             return (DeleteWebhookAsync(webhook.Id, cancellationToken));
+        }
+
+
+        /// <summary>
+        /// Activate a webhook.
+        /// </summary>
+        /// <param name="webhook"><see cref="Webhook"/> to be activated.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsResult<Webhook> > ActivateWebhookAsync(Webhook webhook, CancellationToken? cancellationToken = null)
+        {
+            return (UpdateWebhookAsync(webhook.Id, webhook.Name, webhook.TargetUri, webhook.Secret, 0, WebhookStatus.Active, cancellationToken));
         }
 
         #endregion

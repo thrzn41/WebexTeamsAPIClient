@@ -1036,15 +1036,6 @@
             </summary>
             <param name="token">token of Teams API.</param>
         </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.getValueOrDefault``1(``0,``0)">
-            <summary>
-            Gets value or default.
-            </summary>
-            <typeparam name="TResult">Type of the value.</typeparam>
-            <param name="value">Value.</param>
-            <param name="defaultValue">Default value that is returned if value parameter is null.</param>
-            <returns>Value or default.</returns>
-        </member>
         <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.CreatePersonAsync(System.String,System.String,System.String,System.String,System.Uri,System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},System.Nullable{System.Threading.CancellationToken})">
             <summary>
             Creates a person.
@@ -3418,6 +3409,15 @@
             <param name="values">Value list.</param>
             <returns>Comma separated string.</returns>
         </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.getValueOrDefault``1(``0,``0)">
+            <summary>
+            Gets value or default.
+            </summary>
+            <typeparam name="TResult">Type of the value.</typeparam>
+            <param name="value">Value.</param>
+            <param name="defaultValue">Default value that is returned if value parameter is null.</param>
+            <returns>Value or default.</returns>
+        </member>
         <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.ListPersonsAsync(System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Nullable{System.Int32},System.Nullable{System.Threading.CancellationToken})">
             <summary>
             Lists people.
@@ -4028,6 +4028,32 @@
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
         </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.UpdateWebhookAsync(System.String,System.String,System.Uri,System.String,System.Int32,Thrzn41.WebexTeams.Version1.WebhookStatus,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Updates webhook.
+            </summary>
+            <param name="webhookId">Webhook id to be updated.</param>
+            <param name="name">A user-friendly name for this webhook.</param>
+            <param name="targetUri">The URL that receives POST requests for each event.</param>
+            <param name="secret">Secret used to generate payload signature.</param>
+            <param name="secretLength">Secret length that is generated, if the secret parameter is null.</param>
+            <param name="status"><see cref="T:Thrzn41.WebexTeams.Version1.WebhookStatus"/> to be updated.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.UpdateWebhookAsync(Thrzn41.WebexTeams.Version1.Webhook,System.String,System.Uri,System.String,System.Int32,Thrzn41.WebexTeams.Version1.WebhookStatus,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Updates webhook.
+            </summary>
+            <param name="webhook">Webhook id to be updated.</param>
+            <param name="name">A user-friendly name for this webhook.</param>
+            <param name="targetUri">The URL that receives POST requests for each event.</param>
+            <param name="secret">Secret used to generate payload signature.</param>
+            <param name="secretLength">Secret length that is generated, if the secret parameter is null.</param>
+            <param name="status"><see cref="T:Thrzn41.WebexTeams.Version1.WebhookStatus"/> to be updated.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
         <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.UpdateWebhookAsync(System.String,System.String,System.Uri,System.Nullable{System.Threading.CancellationToken})">
             <summary>
             Updates webhook.
@@ -4061,6 +4087,14 @@
             Deletes a webhook.
             </summary>
             <param name="webhook"><see cref="T:Thrzn41.WebexTeams.Version1.Webhook"/> to be deleted.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.ActivateWebhookAsync(Thrzn41.WebexTeams.Version1.Webhook,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Activate a webhook.
+            </summary>
+            <param name="webhook"><see cref="T:Thrzn41.WebexTeams.Version1.Webhook"/> to be activated.</param>
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
         </member>
@@ -4196,6 +4230,16 @@
             Secret for the webhook.
             </summary>
         </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Webhook.StatusName">
+            <summary>
+            Indicates if the webhook is active.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Webhook.Status">
+            <summary>
+            Indicates if the webhook is active.
+            </summary>
+        </member>
         <member name="P:Thrzn41.WebexTeams.Version1.Webhook.Created">
             <summary>
             <see cref="T:System.DateTime"/> when the webhook was created.
@@ -4320,6 +4364,154 @@
         <member name="T:Thrzn41.WebexTeams.Version1.WebhookList">
             <summary>
             <see cref="T:Thrzn41.WebexTeams.Version1.Webhook"/> list.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.WebhookListener">
+            <summary>
+            Provides simple webhook listener.
+            This listener is NOT INTENDED TO BE USED IN PRODUCTION ENVIRONMENT.
+            Mainly focus on use in quick testing or trying webhook.
+            This listner consumes user thread pool.
+            </summary>
+            <remarks>
+            This listener is NOT INTENDED TO BE USED IN PRODUCTION ENVIRONMENT.
+            Mainly focus on use in quick testing or trying webhook.
+            This listner consumes user thread pool.
+            </remarks>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.DEFAULT_DATA_BUFFER_SIZE">
+            <summary>
+            Default data buffue bytes size for event data.
+            The 2048 bytes will be reasonable size for most event data.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.DEFAULT_NUMBER_OF_THREADS">
+            <summary>
+            Default number of listener threads.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.PATH_PREFIX_PATTERN">
+            <summary>
+            Path prefix pattern of path in uri.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.PATH_PATTERN">
+            <summary>
+            Pattern of path in uri.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.DEFAULT_ENCODING">
+            <summary>
+            Default encoding.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.slimLock">
+            <summary>
+            Slim lock.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.notificationManager">
+            <summary>
+            Notification manager.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.httpListener">
+            <summary>
+            Http listner.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.numberOfThreads">
+            <summary>
+            Number of listner threads.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.pathPrefix">
+            <summary>
+            Path prefix that is listened.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.activeThreadCount">
+            <summary>
+            Thread count that is now active.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.WebhookListener.ActiveThreadCount">
+            <summary>
+            Thread count that is now active.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.WebhookListener.Path">
+            <summary>
+            Path that is listened.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.WebhookListener.IsListening">
+            <summary>
+            true if the WebhookListener was started; otherwise, false.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.#ctor(System.Int32)">
+            <summary>
+            Creates webhook listner.
+            </summary>
+            <param name="numberOfThreads">Number of listener threads.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.AddListenerEndpoint(System.String,System.UInt16,System.Boolean)">
+            <summary>
+            Adds listening host and port.
+            If you expose the server for public, you should use https.
+            You need to bind the host and port with TLS certificates in your environment.
+            </summary>
+            <param name="hostnameOrIPAddress">Hostname or IP address of local machine.</param>
+            <param name="port">Port number of the listening port.</param>
+            <param name="useHttps">true if the listening uri uses https.</param>
+            <returns><see cref="T:System.Uri"/> that is added.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.AddNotification(Thrzn41.WebexTeams.Version1.Webhook,System.Action{Thrzn41.WebexTeams.Version1.WebhookEventData})">
+            <summary>
+            Adds event notification to the listner.
+            </summary>
+            <param name="webhook">Webhook to be added.</param>
+            <param name="func">Function to be notified on receiving event.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.AddNotification(Thrzn41.WebexTeams.Version1.Webhook,System.Func{Thrzn41.WebexTeams.Version1.WebhookEventData,System.Threading.Tasks.Task})">
+            <summary>
+            Adds event notification to the listner.
+            </summary>
+            <param name="webhook">Webhook to be added.</param>
+            <param name="funcAsync">Async function to be notified on receiving event.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.RemoveNotification(Thrzn41.WebexTeams.Version1.Webhook)">
+            <summary>
+            Removes notification info.
+            </summary>
+            <param name="webhook">Webhook to be removed.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.startListening">
+            <summary>
+            Starts listening.
+            </summary>
+            <returns><see cref="T:System.Threading.Tasks.Task"/>.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.Start">
+            <summary>
+            Starts listening.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.Stop">
+            <summary>
+            Stop listening.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">disposing.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.Dispose">
+            <summary>
+            Dispose.
             </summary>
         </member>
         <member name="T:Thrzn41.WebexTeams.Version1.WebhookNotificationManager">

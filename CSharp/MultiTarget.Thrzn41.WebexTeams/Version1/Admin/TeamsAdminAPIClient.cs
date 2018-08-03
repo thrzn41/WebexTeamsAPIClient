@@ -94,21 +94,6 @@ namespace Thrzn41.WebexTeams.Version1.Admin
 
 
 
-        /// <summary>
-        /// Gets value or default.
-        /// </summary>
-        /// <typeparam name="TResult">Type of the value.</typeparam>
-        /// <param name="value">Value.</param>
-        /// <param name="defaultValue">Default value that is returned if value parameter is null.</param>
-        /// <returns>Value or default.</returns>
-        private static TResult getValueOrDefault<TResult>(TResult value, TResult defaultValue)
-        {
-            return ((value != null) ? value : defaultValue);
-        }
-
-
-
-
         #region Person APIs
 
         /// <summary>
