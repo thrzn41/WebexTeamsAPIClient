@@ -242,8 +242,22 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             md.Append("OK!");
 
             var r = await this.teams.CreateMessageAsync(unitTestSpace.Id, md.ToString());
-
             Assert.IsTrue(r.IsSuccessStatus);
+
+
+            md.Clear();
+            md.AppendMentionToGroup(MentionedGroup.All).Append(", Hello All!");
+
+            r = await this.teams.CreateMessageAsync(unitTestSpace.Id, md.ToString());
+            Assert.IsTrue(r.IsSuccessStatus);
+
+
+            md.Clear();
+            md.AppendMentionToAll().Append(", Hello All again!!");
+
+            r = await this.teams.CreateMessageAsync(unitTestSpace.Id, md.ToString());
+            Assert.IsTrue(r.IsSuccessStatus);
+
         }
 
         [TestMethod]

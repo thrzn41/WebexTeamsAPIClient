@@ -1904,6 +1904,19 @@
             <param name="nameType"><see cref="T:Thrzn41.WebexTeams.Version1.PersonNameType"/> to be used on mention.</param>
             <returns>A reference to this instance after the append operation has completed.</returns>
         </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.MarkdownBuilder.AppendMentionToGroup(Thrzn41.WebexTeams.Version1.MentionedGroup)">
+            <summary>
+            Appends mention to a person.
+            </summary>
+            <param name="group"><see cref="T:Thrzn41.WebexTeams.Version1.MentionedGroup"/> to be mentioned.</param>
+            <returns>A reference to this instance after the append operation has completed.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.MarkdownBuilder.AppendMentionToAll">
+            <summary>
+            Appends mention to all.
+            </summary>
+            <returns>A reference to this instance after the append operation has completed.</returns>
+        </member>
         <member name="M:Thrzn41.WebexTeams.Version1.MarkdownBuilder.Clear">
             <summary>
             Clears the markdown.

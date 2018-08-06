@@ -264,7 +264,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// </summary>
         /// <param name="value">string value to be appended.</param>
         /// <returns>A reference to this instance after the append operation has completed.</returns>
-        [Obsolete("Please use AppendOrderedList().")]
+        [Obsolete("There is a typo in the method name. Please use AppendOrderedList().")]
         public MarkdownBuilder AppendOrderdList(string value)
         {
             return BeginOrderedList().Append(value).EndOrderedList();
@@ -276,7 +276,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="format">string format.</param>
         /// <param name="args">Arguments for format.</param>
         /// <returns>A reference to this instance after the append operation has completed.</returns>
-        [Obsolete("Please use AppendOrderedListFormat().")]
+        [Obsolete("There is a typo in the method name. Please use AppendOrderedListFormat().")]
         public MarkdownBuilder AppendOrderdListFormat(string format, params object[] args)
         {
             return BeginOrderedList().AppendFormat(format, args).EndOrderedList();
@@ -331,7 +331,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// </summary>
         /// <param name="value">string value to be appended.</param>
         /// <returns>A reference to this instance after the append operation has completed.</returns>
-        [Obsolete("Please use AppendUnorderedList().")]
+        [Obsolete("There is a typo in the method name. Please use AppendUnorderedList().")]
         public MarkdownBuilder AppendUnorderdList(string value)
         {
             return BeginUnorderedList().Append(value).EndUnorderedList();
@@ -343,7 +343,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="format">string format.</param>
         /// <param name="args">Arguments for format.</param>
         /// <returns>A reference to this instance after the append operation has completed.</returns>
-        [Obsolete("Please use AppendUnorderedListFormat().")]
+        [Obsolete("There is a typo in the method name. Please use AppendUnorderedListFormat().")]
         public MarkdownBuilder AppendUnorderdListFormat(string format, params object[] args)
         {
             return BeginUnorderedList().AppendFormat(format, args).EndUnorderedList();
@@ -552,6 +552,35 @@ namespace Thrzn41.WebexTeams.Version1
             }
 
             return AppendMentionToPerson(person.Id, name, PersonIdType.Id);
+        }
+
+
+        /// <summary>
+        /// Appends mention to a person.
+        /// </summary>
+        /// <param name="group"><see cref="MentionedGroup"/> to be mentioned.</param>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
+        public MarkdownBuilder AppendMentionToGroup(MentionedGroup group)
+        {
+            if(group == MentionedGroup.All)
+            {
+                this.Append("<@all>");
+            }
+            else
+            {
+                this.AppendFormat("<@{0}>", encodeHtml(group.Name));
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Appends mention to all.
+        /// </summary>
+        /// <returns>A reference to this instance after the append operation has completed.</returns>
+        public MarkdownBuilder AppendMentionToAll()
+        {
+            return AppendMentionToGroup(MentionedGroup.All);
         }
 
 
