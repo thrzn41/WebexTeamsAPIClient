@@ -65,6 +65,16 @@ namespace Thrzn41.WebexTeams
             return new Thrzn41.WebexTeams.Version1.TeamsAPIClient(tokenString);
         }
 
+        /// <summary>
+        /// Creates Teams API client for v1 API.
+        /// </summary>
+        /// <param name="tokenInfo">Teams API token info.</param>
+        /// <returns>Teams API client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.TeamsAPIClient CreateVersion1Client(Thrzn41.WebexTeams.Version1.AccessTokenInfo tokenInfo)
+        {
+            return new Thrzn41.WebexTeams.Version1.TeamsAPIClient(tokenInfo.AccessToken);
+        }
+
 
         /// <summary>
         /// Creates Teams Admin API client for v1 API.
@@ -94,6 +104,16 @@ namespace Thrzn41.WebexTeams
         public static Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient CreateVersion1AdminClient(string tokenString)
         {
             return new Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient(tokenString);
+        }
+
+        /// <summary>
+        /// Creates Teams Admin API client for v1 API.
+        /// </summary>
+        /// <param name="tokenInfo">Teams API token info.</param>
+        /// <returns>Teams Admin API client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient CreateVersion1AdminClient(Thrzn41.WebexTeams.Version1.AccessTokenInfo tokenInfo)
+        {
+            return new Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient(tokenInfo.AccessToken);
         }
 
 
@@ -129,6 +149,41 @@ namespace Thrzn41.WebexTeams
         {
             return new Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client(clientSecretString, clientId);
         }
+
+
+        /// <summary>
+        /// Creates Teams Guest Issuer client for v1 API.
+        /// </summary>
+        /// <param name="secretProtected">Secret of <see cref="ProtectedString"/>.</param>
+        /// <param name="guestIssuerId">Guest Issuer Id.</param>
+        /// <returns>Teams Guest Issuer client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient CreateVersion1GuestIssuerClient(ProtectedString secretProtected, string guestIssuerId)
+        {
+            return new Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient(secretProtected.DecryptToString(), guestIssuerId);
+        }
+
+        /// <summary>
+        /// Creates Teams Guest Issuer client for v1 API.
+        /// </summary>
+        /// <param name="secretChars">Secret of char array.</param>
+        /// <param name="guestIssuerId">Guest Issuer Id.</param>
+        /// <returns>Teams Guest Issuer client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient CreateVersion1GuestIssuerClient(char[] secretChars, string guestIssuerId)
+        {
+            return new Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient(new string(secretChars), guestIssuerId);
+        }
+
+        /// <summary>
+        /// Creates Teams Guest Issuer client for v1 API.
+        /// </summary>
+        /// <param name="secretString">Secret of string.</param>
+        /// <param name="guestIssuerId">Guest Issuer Id.</param>
+        /// <returns>Teams Guest Issuer client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient CreateVersion1GuestIssuerClient(string secretString, string guestIssuerId)
+        {
+            return new Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient(secretString, guestIssuerId);
+        }
+
 
     }
 

@@ -26,39 +26,67 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Thrzn41.WebexTeams.Version1.OAuth2
+namespace Thrzn41.WebexTeams.Version1.GuestIssuer
 {
 
+
     /// <summary>
-    /// OAuth2 token info object.
+    /// JWT Token Type.
+    /// </summary>
+    internal enum JWTTokenType
+    {
+        /// <summary>
+        /// Token type is JWT.
+        /// </summary>
+        JWT
+    };
+
+
+    /// <summary>
+    /// JWT Signature Algorithm.
+    /// </summary>
+    internal enum JWTSignatureAlgorithm
+    {
+        /// <summary>
+        /// HMAC-SHA256.
+        /// </summary>
+        HMACSHA256
+    };
+
+
+
+
+    /// <summary>
+    /// JWT Header.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    internal class Oauth2TokenInfo : TeamsData
+    internal class JWTHeader : TeamsData
     {
 
         /// <summary>
-        /// Access token.
+        /// JWT Token Type.
         /// </summary>
-        [JsonProperty(PropertyName = "access_token")]
-        public string AccessToken { get; internal set; }
+        [JsonIgnore]
+        public JWTTokenType Type { get; internal set; } = JWTTokenType.JWT;
 
         /// <summary>
-        /// Access token will expire in this time from refreshed date time.
+        /// JWT Token type name.
         /// </summary>
-        [JsonProperty(PropertyName = "expires_in")]
-        public int? ExpiresIn { get; internal set; }
+        [JsonProperty(PropertyName = "typ")]
+        public string TypeName { get; private set; } = "JWT";
+
 
         /// <summary>
-        /// Refresh token.
+        /// JWT Signature algorithm.
         /// </summary>
-        [JsonProperty(PropertyName = "refresh_token")]
-        public string RefreshToken { get; internal set; }
+        [JsonIgnore]
+        public JWTSignatureAlgorithm Algorithm { get; internal set; } = JWTSignatureAlgorithm.HMACSHA256;
 
         /// <summary>
-        /// Refresh token will expire in this time from refreshed date time.
+        /// JWT Signature algorithm name.
         /// </summary>
-        [JsonProperty(PropertyName = "refresh_token_expires_in")]
-        public int? RefreshTokenExpiresIn { get; internal set; }
+        [JsonProperty(PropertyName = "alg")]
+        public string AlgorithmName { get; private set; } = "HS256";
 
     }
 

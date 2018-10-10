@@ -26,53 +26,61 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Thrzn41.WebexTeams.Version1.OAuth2
+namespace Thrzn41.WebexTeams.Version1
 {
 
+
     /// <summary>
-    /// Cisco Webex Teams token info object.
+    /// Cisco Webex Teams token info.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public class TokenInfo : AccessTokenInfo
+    public abstract class AccessTokenInfo : TeamsData
     {
 
 
         /// <summary>
-        /// Refresh token.
+        /// Access token.
         /// </summary>
-        [JsonProperty(PropertyName = "refreshToken")]
-        public string RefreshToken { get; internal set; }
+        [JsonProperty(PropertyName = "accessToken")]
+        public string AccessToken { get; internal set; }
 
         /// <summary>
-        /// Refresh token will expire in this time from refreshed date time.
+        /// Access token will expire in this time from refreshed date time.
         /// </summary>
-        [JsonProperty(PropertyName = "refreshTokenExpiresIn")]
-        public TimeSpan? RefreshTokenExpiresIn { get; internal set; }
+        [JsonProperty(PropertyName = "accessTokenExpiresIn")]
+        public TimeSpan? AccessTokenExpiresIn { get; internal set; }
 
         /// <summary>
-        /// <see cref="DateTime"/> when the refresh token will expire.
+        /// <see cref="DateTime"/> when the access token will expire.
         /// </summary>
-        [JsonProperty(PropertyName = "refreshTokenExpiresAt")]
-        public DateTime? RefreshTokenExpiresAt { get; internal set; }
+        [JsonProperty(PropertyName = "accessTokenExpiresAt")]
+        public DateTime? AccessTokenExpiresAt { get; internal set; }
 
         /// <summary>
-        /// <see cref="TimeSpan"/> till the refresh token will expire.
+        /// <see cref="TimeSpan"/> till the access token will expire.
         /// </summary>
-        [JsonProperty(PropertyName = "refreshTokenTimeLeft")]
-        public TimeSpan? RefreshTokenTimeLeft
+        [JsonProperty(PropertyName = "accessTokenTimeLeft")]
+        public TimeSpan? AccessTokenTimeLeft
         {
             get
             {
-                if (!this.RefreshTokenExpiresAt.HasValue)
+                if(!this.AccessTokenExpiresAt.HasValue)
                 {
                     return null;
                 }
                 else
                 {
-                    return (this.RefreshTokenExpiresAt.Value.ToUniversalTime() - DateTime.UtcNow);
+                    return (this.AccessTokenExpiresAt.Value.ToUniversalTime() - DateTime.UtcNow);
                 }
             }
         }
+
+
+        /// <summary>
+        /// <see cref="DateTime"/> when the token info is refreshed.
+        /// </summary>
+        [JsonProperty(PropertyName = "refreshedAt")]
+        public DateTime? RefreshedAt { get; internal set; }
 
 
     }

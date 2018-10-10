@@ -26,54 +26,26 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Thrzn41.WebexTeams.Version1.OAuth2
+namespace Thrzn41.WebexTeams.Version1.GuestIssuer
 {
 
+
     /// <summary>
-    /// Cisco Webex Teams token info object.
+    /// Guest token info object.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public class TokenInfo : AccessTokenInfo
+    internal class GuestTokenInternalInfo : TeamsData
     {
 
 
-        /// <summary>
-        /// Refresh token.
-        /// </summary>
-        [JsonProperty(PropertyName = "refreshToken")]
-        public string RefreshToken { get; internal set; }
+        [JsonProperty(PropertyName = "token")]
+        public string Token { get; internal set; }
 
         /// <summary>
-        /// Refresh token will expire in this time from refreshed date time.
+        /// Access token will expire in this time from refreshed date time.
         /// </summary>
-        [JsonProperty(PropertyName = "refreshTokenExpiresIn")]
-        public TimeSpan? RefreshTokenExpiresIn { get; internal set; }
-
-        /// <summary>
-        /// <see cref="DateTime"/> when the refresh token will expire.
-        /// </summary>
-        [JsonProperty(PropertyName = "refreshTokenExpiresAt")]
-        public DateTime? RefreshTokenExpiresAt { get; internal set; }
-
-        /// <summary>
-        /// <see cref="TimeSpan"/> till the refresh token will expire.
-        /// </summary>
-        [JsonProperty(PropertyName = "refreshTokenTimeLeft")]
-        public TimeSpan? RefreshTokenTimeLeft
-        {
-            get
-            {
-                if (!this.RefreshTokenExpiresAt.HasValue)
-                {
-                    return null;
-                }
-                else
-                {
-                    return (this.RefreshTokenExpiresAt.Value.ToUniversalTime() - DateTime.UtcNow);
-                }
-            }
-        }
-
+        [JsonProperty(PropertyName = "expiresIn")]
+        public int? ExpiresIn { get; internal set; }
 
     }
 

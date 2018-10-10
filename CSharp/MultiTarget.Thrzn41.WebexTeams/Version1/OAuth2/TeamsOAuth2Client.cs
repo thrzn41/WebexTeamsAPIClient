@@ -33,9 +33,9 @@ namespace Thrzn41.WebexTeams.Version1.OAuth2
 {
 
     /// <summary>
-    /// Cisco Webex Teams OAuth2 Client for API version 1.
+    /// Cisco Webex Teams token info object.
     /// </summary>
-    public class TeamsOAuth2Client
+    public class TeamsOAuth2Client : IDisposable
     {
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Thrzn41.WebexTeams.Version1.OAuth2
         /// <param name="source">Source result.</param>
         /// <param name="refreshedAt"><see cref="DateTime"/> when the token refreshed.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        private static TeamsResult<TokenInfo> convert(TeamsResult<Oauth2TokenInfo> source, DateTime refreshedAt)
+        private static TeamsResult<TokenInfo> convert(TeamsResult<Oauth2TokenInternalInfo> source, DateTime refreshedAt)
         {
             var result = new TeamsResult<TokenInfo>();
 
@@ -147,7 +147,7 @@ namespace Thrzn41.WebexTeams.Version1.OAuth2
         {
             DateTime refreshedAt = DateTime.UtcNow;
 
-            var result = await this.teamsHttpClient.RequestFormDataAsync<TeamsResult<Oauth2TokenInfo>, Oauth2TokenInfo>(
+            var result = await this.teamsHttpClient.RequestFormDataAsync<TeamsResult<Oauth2TokenInternalInfo>, Oauth2TokenInternalInfo>(
                                     HttpMethod.Post,
                                     TEAMS_ACCESS_TOKEN_API_URI,
                                     null,
@@ -209,6 +209,55 @@ namespace Thrzn41.WebexTeams.Version1.OAuth2
         {
             return (RefreshTokenInfoAsync(tokenInfo.RefreshToken, cancellationToken));
         }
+
+        
+        
+        
+#region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">disposing.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    using (this.teamsHttpClient)
+                    {
+
+                    }
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~TeamsOAuth2Client() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+#endregion
 
     }
 

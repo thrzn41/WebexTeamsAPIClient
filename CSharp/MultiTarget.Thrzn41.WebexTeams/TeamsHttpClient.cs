@@ -99,15 +99,9 @@ namespace Thrzn41.WebexTeams
         /// </summary>
         /// <param name="teamsToken">Cisco Webex Teams Token.</param>
         /// <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
-        internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern)
+        /// <param name="preAuthenticate">true if preAuthenticate is needed.</param>
+        internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern, bool preAuthenticate)
         {
-            bool preAuthenticate = false;
-
-            if(teamsToken != null)
-            {
-                preAuthenticate = true;
-            }
-
             // HttpClient for Cisco Webex Teams API.
             // Teams Token MUST be sent to only Teams API https URL.
             // NEVER SEND Token to other URLs or non-secure http URL.
@@ -140,6 +134,16 @@ namespace Thrzn41.WebexTeams
 
             this.teamsAPIUriPattern = teamsAPIUriPattern;
 
+        }
+
+        /// <summary>
+        /// TeamsHttpClient constructor.
+        /// </summary>
+        /// <param name="teamsToken">Cisco Webex Teams Token.</param>
+        /// <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
+        internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern)
+            : this(teamsToken, teamsAPIUriPattern, (teamsToken != null))
+        {
         }
 
 
@@ -329,6 +333,26 @@ namespace Thrzn41.WebexTeams
         }
 
         /// <summary>
+        /// Requests to Cisco Webex Teams API with bearer token.
+        /// </summary>
+        /// <typeparam name="TTeamsResult">Type of TeamsResult to be returned.</typeparam>
+        /// <typeparam name="TTeamsObject">Type of TeamsObject to be returned.</typeparam>
+        /// <param name="method"><see cref="HttpMethod"/> to be used on requesting.</param>
+        /// <param name="uri">Uri to be requested.</param>
+        /// <param name="queryParameters">Query parameter collection.</param>
+        /// <param name="objectToBePosted">Object inherited from <see cref="TeamsObject"/> to be sent to Teams API.</param>
+        /// <param name="token">Bearer token of this request.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
+        public Task<TTeamsResult> RequestJsonWithBearerTokenAsync<TTeamsResult, TTeamsObject>(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, TeamsObject objectToBePosted = null, string token = null, CancellationToken? cancellationToken = null)
+            where TTeamsResult : TeamsResult<TTeamsObject>, new()
+            where TTeamsObject : TeamsObject, new()
+        {
+            return (RequestAsync<TTeamsResult, TTeamsObject>(CreateJsonRequestWithBearerToken(method, uri, queryParameters, objectToBePosted, token), cancellationToken));
+        }
+
+
+        /// <summary>
         /// Requests file info/data to Cisco Webex Teams API.
         /// </summary>
         /// <typeparam name="TTeamsResult">Type of TeamsResult to be returned.</typeparam>
@@ -400,6 +424,41 @@ namespace Thrzn41.WebexTeams
 
             headers.AcceptCharset.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue(ENCODING.WebName));
             headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(MEDIA_TYPE_APPLICATION_JSON));
+
+            if (objectToBePosted != null)
+            {
+                request.Content = new StringContent(
+                    objectToBePosted.ToJsonString(),
+                    ENCODING,
+                    MEDIA_TYPE_APPLICATION_JSON);
+            }
+
+            return request;
+        }
+
+        /// <summary>
+        /// Creates <see cref="HttpRequestMessage"/> to use for Json request.
+        /// </summary>
+        /// <param name="method"><see cref="HttpMethod"/> to be used on requesting.</param>
+        /// <param name="uri">Uri to be requested.</param>
+        /// <param name="queryParameters">Query parameter collection.</param>
+        /// <param name="objectToBePosted">Object inherited from <see cref="TeamsObject"/> to be sent to Teams API.</param>
+        /// <param name="token">Bearer token of this request.</param>
+        /// <returns><see cref="HttpRequestMessage"/> that is created.</returns>
+        public HttpRequestMessage CreateJsonRequestWithBearerToken(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, TeamsObject objectToBePosted = null, string token = null)
+        {
+            var request = new HttpRequestMessage(method, HttpUtils.BuildUri(uri, queryParameters));
+
+            var headers = request.Headers;
+
+            headers.AcceptCharset.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue(ENCODING.WebName));
+            headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(MEDIA_TYPE_APPLICATION_JSON));
+
+            if(token != null)
+            {
+                headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            }
+            
 
             if (objectToBePosted != null)
             {
