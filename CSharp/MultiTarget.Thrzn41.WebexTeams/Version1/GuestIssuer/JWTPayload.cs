@@ -26,55 +26,52 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Thrzn41.WebexTeams.Version1.OAuth2
+namespace Thrzn41.WebexTeams.Version1.GuestIssuer
 {
 
+
     /// <summary>
-    /// Cisco Webex Teams token info object.
+    /// JWT Payload.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public class TokenInfo : AccessTokenInfo
+    internal class JWTPayload : TeamsData
     {
 
+        /// <summary>
+        /// The subject of the token.
+        /// A unique, public identifier for the end-user of the token.
+        /// This claim may contain only letters, numbers, and hyphens.
+        /// This claim is required.
+        /// </summary>
+        [JsonProperty(PropertyName = "sub")]
+        public string Subject { get; internal set; }
+
 
         /// <summary>
-        /// Refresh token.
+        /// The display name of the guest user.
+        /// This will be the name shown in Webex Teams clients.
         /// </summary>
-        [JsonProperty(PropertyName = "refreshToken")]
-        public string RefreshToken { get; internal set; }
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; internal set; }
+
 
         /// <summary>
-        /// Refresh token will expire in this time from refreshed date time.
+        /// The issuer of the token.
+        /// Use the Guest Issuer ID provided in My Webex Teams Apps.
+        /// This claim is required.
         /// </summary>
-        [JsonProperty(PropertyName = "refreshTokenExpiresIn")]
-        public TimeSpan? RefreshTokenExpiresIn { get; internal set; }
+        [JsonProperty(PropertyName = "iss")]
+        public string Issuer { get; internal set; }
+
 
         /// <summary>
-        /// <see cref="DateTime"/> when the refresh token will expire.
+        /// The expiration time of the token, as a UNIX timestamp in seconds.
+        /// Use the lowest practical value for the use of the token.
+        /// This claim is required.
         /// </summary>
-        [JsonProperty(PropertyName = "refreshTokenExpiresAt")]
-        public DateTime? RefreshTokenExpiresAt { get; internal set; }
-
-        /// <summary>
-        /// <see cref="TimeSpan"/> till the refresh token will expire.
-        /// </summary>
-        [JsonProperty(PropertyName = "refreshTokenTimeLeft")]
-        public TimeSpan? RefreshTokenTimeLeft
-        {
-            get
-            {
-                if (!this.RefreshTokenExpiresAt.HasValue)
-                {
-                    return null;
-                }
-                else
-                {
-                    return (this.RefreshTokenExpiresAt.Value.ToUniversalTime() - DateTime.UtcNow);
-                }
-            }
-        }
+        [JsonProperty(PropertyName = "exp")]
+        public Int64? ExpirationTime { get; internal set; }
 
 
     }
-
 }

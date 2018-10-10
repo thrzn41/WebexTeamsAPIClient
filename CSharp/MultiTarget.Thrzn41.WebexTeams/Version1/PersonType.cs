@@ -44,6 +44,10 @@ namespace Thrzn41.WebexTeams.Version1
         /// </summary>
         public static readonly PersonType Bot = new PersonType("bot");
 
+        /// <summary>
+        /// Person is AppUser.
+        /// </summary>
+        public static readonly PersonType AppUser = new PersonType("appuser");
 
 
 
@@ -59,8 +63,9 @@ namespace Thrzn41.WebexTeams.Version1
         {
             PERSON_TYPES = new Dictionary<string, PersonType>();
 
-            PERSON_TYPES.Add(Person.Name, Person);
-            PERSON_TYPES.Add(Bot.Name,    Bot);
+            PERSON_TYPES.Add(Person.Name,  Person);
+            PERSON_TYPES.Add(Bot.Name,     Bot);
+            PERSON_TYPES.Add(AppUser.Name, AppUser);
         }
 
 

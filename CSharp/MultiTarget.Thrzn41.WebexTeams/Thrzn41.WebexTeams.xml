@@ -61,6 +61,13 @@
             <param name="tokenString">Teams API token of string.</param>
             <returns>Teams API client for v1 API.</returns>
         </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1Client(Thrzn41.WebexTeams.Version1.AccessTokenInfo)">
+            <summary>
+            Creates Teams API client for v1 API.
+            </summary>
+            <param name="tokenInfo">Teams API token info.</param>
+            <returns>Teams API client for v1 API.</returns>
+        </member>
         <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1AdminClient(Thrzn41.Util.ProtectedString)">
             <summary>
             Creates Teams Admin API client for v1 API.
@@ -80,6 +87,13 @@
             Creates Teams Admin API client for v1 API.
             </summary>
             <param name="tokenString">Teams API token of string.</param>
+            <returns>Teams Admin API client for v1 API.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1AdminClient(Thrzn41.WebexTeams.Version1.AccessTokenInfo)">
+            <summary>
+            Creates Teams Admin API client for v1 API.
+            </summary>
+            <param name="tokenInfo">Teams API token info.</param>
             <returns>Teams Admin API client for v1 API.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1OAuth2Client(Thrzn41.Util.ProtectedString,System.String)">
@@ -105,6 +119,30 @@
             <param name="clientSecretString">Client secret of string.</param>
             <param name="clientId">Client id.</param>
             <returns>Teams OAuth2 client for v1 API.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1GuestIssuerClient(Thrzn41.Util.ProtectedString,System.String)">
+            <summary>
+            Creates Teams Guest Issuer client for v1 API.
+            </summary>
+            <param name="secretProtected">Secret of <see cref="T:Thrzn41.Util.ProtectedString"/>.</param>
+            <param name="guestIssuerId">Guest Issuer Id.</param>
+            <returns>Teams Guest Issuer client for v1 API.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1GuestIssuerClient(System.Char[],System.String)">
+            <summary>
+            Creates Teams Guest Issuer client for v1 API.
+            </summary>
+            <param name="secretChars">Secret of char array.</param>
+            <param name="guestIssuerId">Guest Issuer Id.</param>
+            <returns>Teams Guest Issuer client for v1 API.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1GuestIssuerClient(System.String,System.String)">
+            <summary>
+            Creates Teams Guest Issuer client for v1 API.
+            </summary>
+            <param name="secretString">Secret of string.</param>
+            <param name="guestIssuerId">Guest Issuer Id.</param>
+            <returns>Teams Guest Issuer client for v1 API.</returns>
         </member>
         <member name="T:Thrzn41.WebexTeams.TeamsException">
             <summary>
@@ -265,6 +303,14 @@
             Regex pattern to check if the Uri is Cisco Webex Teams API uris.
             </summary>
         </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.#ctor(System.String,System.Text.RegularExpressions.Regex,System.Boolean)">
+            <summary>
+            TeamsHttpClient constructor.
+            </summary>
+            <param name="teamsToken">Cisco Webex Teams Token.</param>
+            <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
+            <param name="preAuthenticate">true if preAuthenticate is needed.</param>
+        </member>
         <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.#ctor(System.String,System.Text.RegularExpressions.Regex)">
             <summary>
             TeamsHttpClient constructor.
@@ -299,6 +345,20 @@
             <param name="uri">Uri to be requested.</param>
             <param name="queryParameters">Query parameter collection.</param>
             <param name="objectToBePosted">Object inherited from <see cref="T:Thrzn41.WebexTeams.TeamsObject"/> to be sent to Teams API.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> that represents result of API request.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.RequestJsonWithBearerTokenAsync``2(System.Net.Http.HttpMethod,System.Uri,System.Collections.Specialized.NameValueCollection,Thrzn41.WebexTeams.TeamsObject,System.String,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Requests to Cisco Webex Teams API with bearer token.
+            </summary>
+            <typeparam name="TTeamsResult">Type of TeamsResult to be returned.</typeparam>
+            <typeparam name="TTeamsObject">Type of TeamsObject to be returned.</typeparam>
+            <param name="method"><see cref="T:System.Net.Http.HttpMethod"/> to be used on requesting.</param>
+            <param name="uri">Uri to be requested.</param>
+            <param name="queryParameters">Query parameter collection.</param>
+            <param name="objectToBePosted">Object inherited from <see cref="T:Thrzn41.WebexTeams.TeamsObject"/> to be sent to Teams API.</param>
+            <param name="token">Bearer token of this request.</param>
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> that represents result of API request.</returns>
         </member>
@@ -349,6 +409,17 @@
             <param name="uri">Uri to be requested.</param>
             <param name="queryParameters">Query parameter collection.</param>
             <param name="objectToBePosted">Object inherited from <see cref="T:Thrzn41.WebexTeams.TeamsObject"/> to be sent to Teams API.</param>
+            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> that is created.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.CreateJsonRequestWithBearerToken(System.Net.Http.HttpMethod,System.Uri,System.Collections.Specialized.NameValueCollection,Thrzn41.WebexTeams.TeamsObject,System.String)">
+            <summary>
+            Creates <see cref="T:System.Net.Http.HttpRequestMessage"/> to use for Json request.
+            </summary>
+            <param name="method"><see cref="T:System.Net.Http.HttpMethod"/> to be used on requesting.</param>
+            <param name="uri">Uri to be requested.</param>
+            <param name="queryParameters">Query parameter collection.</param>
+            <param name="objectToBePosted">Object inherited from <see cref="T:Thrzn41.WebexTeams.TeamsObject"/> to be sent to Teams API.</param>
+            <param name="token">Bearer token of this request.</param>
             <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> that is created.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.CreateFileInfoRequest(System.Net.Http.HttpMethod,System.Uri,System.Collections.Specialized.NameValueCollection)">
@@ -829,6 +900,36 @@
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
             <returns><see cref="T:System.Threading.Tasks.Task"/> for result.</returns>
             <exception cref="T:System.OverflowException">The (delta + (delta * weight) + buffer) is greater than <see cref="F:System.Int32.MaxValue"/> or less than <see cref="F:System.Int32.MinValue"/>.</exception>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.AccessTokenInfo">
+            <summary>
+            Cisco Webex Teams token info.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.AccessTokenInfo.AccessToken">
+            <summary>
+            Access token.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.AccessTokenInfo.AccessTokenExpiresIn">
+            <summary>
+            Access token will expire in this time from refreshed date time.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.AccessTokenInfo.AccessTokenExpiresAt">
+            <summary>
+            <see cref="T:System.DateTime"/> when the access token will expire.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.AccessTokenInfo.AccessTokenTimeLeft">
+            <summary>
+            <see cref="T:System.TimeSpan"/> till the access token will expire.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.AccessTokenInfo.RefreshedAt">
+            <summary>
+            <see cref="T:System.DateTime"/> when the token info is refreshed.
+            </summary>
         </member>
         <member name="T:Thrzn41.WebexTeams.Version1.Admin.EventData">
             <summary>
@@ -1632,6 +1733,214 @@
             Dispose.
             </summary>
         </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.GuestIssuer.GuestTokenInfo">
+            <summary>
+            Cisco Webex Teams Guest Issuer token info.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.GuestIssuer.GuestTokenInternalInfo">
+            <summary>
+            Guest token info object.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.GuestIssuer.GuestTokenInternalInfo.ExpiresIn">
+            <summary>
+            Access token will expire in this time from refreshed date time.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.GuestIssuer.JWTTokenType">
+            <summary>
+            JWT Token Type.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.GuestIssuer.JWTTokenType.JWT">
+            <summary>
+            Token type is JWT.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.GuestIssuer.JWTSignatureAlgorithm">
+            <summary>
+            JWT Signature Algorithm.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.GuestIssuer.JWTSignatureAlgorithm.HMACSHA256">
+            <summary>
+            HMAC-SHA256.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.GuestIssuer.JWTHeader">
+            <summary>
+            JWT Header.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.GuestIssuer.JWTHeader.Type">
+            <summary>
+            JWT Token Type.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.GuestIssuer.JWTHeader.TypeName">
+            <summary>
+            JWT Token type name.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.GuestIssuer.JWTHeader.Algorithm">
+            <summary>
+            JWT Signature algorithm.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.GuestIssuer.JWTHeader.AlgorithmName">
+            <summary>
+            JWT Signature algorithm name.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.GuestIssuer.JWTPayload">
+            <summary>
+            JWT Payload.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.GuestIssuer.JWTPayload.Subject">
+            <summary>
+            The subject of the token.
+            A unique, public identifier for the end-user of the token.
+            This claim may contain only letters, numbers, and hyphens.
+            This claim is required.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.GuestIssuer.JWTPayload.Name">
+            <summary>
+            The display name of the guest user.
+            This will be the name shown in Webex Teams clients.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.GuestIssuer.JWTPayload.Issuer">
+            <summary>
+            The issuer of the token.
+            Use the Guest Issuer ID provided in My Webex Teams Apps.
+            This claim is required.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.GuestIssuer.JWTPayload.ExpirationTime">
+            <summary>
+            The expiration time of the token, as a UNIX timestamp in seconds.
+            Use the lowest practical value for the use of the token.
+            This claim is required.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient">
+            <summary>
+            Cisco Webex Teams Guest Issuer Client for API version 1.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.TEAMS_GUEST_ISSUER_API_PATH">
+            <summary>
+            Teams Guest Issuer API Path.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.TEAMS_GUEST_ISSUER_API_URI">
+            <summary>
+            Teams Guest Issuer API Uri.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.ENCODING">
+            <summary>
+            Internal Encoding of this class.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.TEAMS_GUEST_ISSUER_ENCODED_JWT_HEADER">
+            <summary>
+            base64url encoded JWT Header.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.UNIX_TIME_BASE">
+            <summary>
+            Unix time base.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.teamsHttpClient">
+            <summary>
+            HttpClient for Guest Issuer API.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.jwtSigner">
+            <summary>
+            <see cref="T:System.Security.Cryptography.HashAlgorithm"/> to sign JWT Header and Payload.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.guestIssuerId">
+            <summary>
+            Guest Issuer Id.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.#ctor(System.String,System.String)">
+            <summary>
+            Constuctor of TeamsGuestIssuerClient.
+            </summary>
+            <param name="secret">Secret of the Guest Issuer.</param>
+            <param name="guestIssuerId">Guest Issuer ID.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.encodeBase64Url(System.Byte[])">
+            <summary>
+            Encodes to base64url string.
+            </summary>
+            <param name="data">data to be encoded.</param>
+            <returns>base64url encoded string.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.encodeBase64Url(System.String)">
+            <summary>
+            Encodes to base64url string.
+            </summary>
+            <param name="str"><see cref="T:System.String"/> to be encoded.</param>
+            <returns>base64url encoded string.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.convert(Thrzn41.WebexTeams.TeamsResult{Thrzn41.WebexTeams.Version1.GuestIssuer.GuestTokenInternalInfo},System.DateTime)">
+            <summary>
+            Converts Guest Issuer token result to Teams token result.
+            </summary>
+            <param name="source">Source result.</param>
+            <param name="refreshedAt"><see cref="T:System.DateTime"/> when the token refreshed.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.getGuestTokenInfoAsync(System.String,System.String,System.DateTime,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Gets Guest Token info.
+            </summary>
+            <param name="subject">The subject of the token. A unique, public identifier for the end-user of the token. This claim may contain only letters, numbers, and hyphens.</param>
+            <param name="name">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
+            <param name="expiresAt">The expiration time of the token. Use the lowest practical value for the use of the token.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.GetGuestTokenInfoAsync(System.String,System.String,System.TimeSpan,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Gets Guest Token info.
+            </summary>
+            <param name="subject">The subject of the token. A unique, public identifier for the end-user of the token. This claim may contain only letters, numbers, and hyphens.</param>
+            <param name="name">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
+            <param name="expiresIn">The expiration time of the token. Use the lowest practical value for the use of the token.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.GetGuestTokenInfoAsync(System.String,System.String,System.DateTime,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Gets Guest Token info.
+            </summary>
+            <param name="subject">The subject of the token. A unique, public identifier for the end-user of the token. This claim may contain only letters, numbers, and hyphens.</param>
+            <param name="name">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
+            <param name="expiresAt">The expiration time of the token. Use the lowest practical value for the use of the token.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">disposing.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="T:Thrzn41.WebexTeams.Version1.MarkdownBuilder">
             <summary>
             Simple markdown builder.
@@ -2211,34 +2520,34 @@
             Creates empty object.
             </summary>
         </member>
-        <member name="T:Thrzn41.WebexTeams.Version1.OAuth2.Oauth2TokenInfo">
+        <member name="T:Thrzn41.WebexTeams.Version1.OAuth2.Oauth2TokenInternalInfo">
             <summary>
             OAuth2 token info object.
             </summary>
         </member>
-        <member name="P:Thrzn41.WebexTeams.Version1.OAuth2.Oauth2TokenInfo.AccessToken">
+        <member name="P:Thrzn41.WebexTeams.Version1.OAuth2.Oauth2TokenInternalInfo.AccessToken">
             <summary>
             Access token.
             </summary>
         </member>
-        <member name="P:Thrzn41.WebexTeams.Version1.OAuth2.Oauth2TokenInfo.ExpiresIn">
+        <member name="P:Thrzn41.WebexTeams.Version1.OAuth2.Oauth2TokenInternalInfo.ExpiresIn">
             <summary>
             Access token will expire in this time from refreshed date time.
             </summary>
         </member>
-        <member name="P:Thrzn41.WebexTeams.Version1.OAuth2.Oauth2TokenInfo.RefreshToken">
+        <member name="P:Thrzn41.WebexTeams.Version1.OAuth2.Oauth2TokenInternalInfo.RefreshToken">
             <summary>
             Refresh token.
             </summary>
         </member>
-        <member name="P:Thrzn41.WebexTeams.Version1.OAuth2.Oauth2TokenInfo.RefreshTokenExpiresIn">
+        <member name="P:Thrzn41.WebexTeams.Version1.OAuth2.Oauth2TokenInternalInfo.RefreshTokenExpiresIn">
             <summary>
             Refresh token will expire in this time from refreshed date time.
             </summary>
         </member>
         <member name="T:Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client">
             <summary>
-            Cisco Webex Teams OAuth2 Client for API version 1.
+            Cisco Webex Teams token info object.
             </summary>
         </member>
         <member name="F:Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client.TEAMS_ACCESS_TOKEN_API_PATH">
@@ -2273,7 +2582,7 @@
             <param name="clientSecret">Client secret key.</param>
             <param name="clientId">Client id.</param>
         </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client.convert(Thrzn41.WebexTeams.TeamsResult{Thrzn41.WebexTeams.Version1.OAuth2.Oauth2TokenInfo},System.DateTime)">
+        <member name="M:Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client.convert(Thrzn41.WebexTeams.TeamsResult{Thrzn41.WebexTeams.Version1.OAuth2.Oauth2TokenInternalInfo},System.DateTime)">
             <summary>
             Converts OAuth2 result to Teams token result.
             </summary>
@@ -2314,24 +2623,20 @@
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
         </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">disposing.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="T:Thrzn41.WebexTeams.Version1.OAuth2.TokenInfo">
             <summary>
             Cisco Webex Teams token info object.
-            </summary>
-        </member>
-        <member name="P:Thrzn41.WebexTeams.Version1.OAuth2.TokenInfo.AccessToken">
-            <summary>
-            Access token.
-            </summary>
-        </member>
-        <member name="P:Thrzn41.WebexTeams.Version1.OAuth2.TokenInfo.AccessTokenExpiresIn">
-            <summary>
-            Access token will expire in this time from refreshed date time.
-            </summary>
-        </member>
-        <member name="P:Thrzn41.WebexTeams.Version1.OAuth2.TokenInfo.AccessTokenExpiresAt">
-            <summary>
-            <see cref="T:System.DateTime"/> when the access token will expire.
             </summary>
         </member>
         <member name="P:Thrzn41.WebexTeams.Version1.OAuth2.TokenInfo.RefreshToken">
@@ -2349,9 +2654,9 @@
             <see cref="T:System.DateTime"/> when the refresh token will expire.
             </summary>
         </member>
-        <member name="P:Thrzn41.WebexTeams.Version1.OAuth2.TokenInfo.RefreshedAt">
+        <member name="P:Thrzn41.WebexTeams.Version1.OAuth2.TokenInfo.RefreshTokenTimeLeft">
             <summary>
-            <see cref="T:System.DateTime"/> when the token info is refreshed.
+            <see cref="T:System.TimeSpan"/> till the refresh token will expire.
             </summary>
         </member>
         <member name="T:Thrzn41.WebexTeams.Version1.OwnershipStatus">
@@ -2737,6 +3042,11 @@
         <member name="F:Thrzn41.WebexTeams.Version1.PersonType.Bot">
             <summary>
             Person is Bot.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.PersonType.AppUser">
+            <summary>
+            Person is AppUser.
             </summary>
         </member>
         <member name="F:Thrzn41.WebexTeams.Version1.PersonType.PERSON_TYPES">
