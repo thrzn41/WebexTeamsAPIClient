@@ -93,6 +93,8 @@ Webex Teams API Clientのサンプルは、 [こちらをクリック](https://g
 | Organization    | List/Get                      | 利用可能。                                       |
 | License         | List/Get                      | 利用可能。                                       |
 | Role            | List/Get                      | 利用可能。                                       |
+| GroupResource            | List/Get                      | 利用可能。                                      |
+| GroupResourceMembership  | List/Get/Update                      | 利用可能。                                      |
 
 ### ストレージのTokenの暗号化と復号
 
@@ -581,7 +583,7 @@ listener.AddNotification(
   {
     Console.WriteLine("Eventが通知されました, id = {0}", eventData.Id);
 
-    if(eventData.Resouce == EventResouce.Message)
+    if(eventData.Resource == EventResource.Message)
     {
       Console.WriteLine("Message, id = {0}", eventData.MessageData.Id);
     }
@@ -655,7 +657,7 @@ listener.AddNotification(
   {
     Console.WriteLine("Eventが通知されました, id = {0}", eventData.Id);
 
-    if(eventData.Resouce == EventResouce.Message)
+    if(eventData.Resource == EventResource.Message)
     {
       Console.WriteLine("Message, id = {0}", eventData.MessageData.Id);
     }

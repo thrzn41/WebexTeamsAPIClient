@@ -57,7 +57,17 @@ namespace Thrzn41.WebexTeams.Version1.Admin
         /// Teams events API Path.
         /// </summary>
         protected static readonly string TEAMS_EVENT_API_PATH = GetAPIPath("events");
-        
+
+        /// <summary>
+        /// Teams Resource Group API Path.
+        /// </summary>
+        protected static readonly string TEAMS_RESOURCE_GROUP_API_PATH = GetAPIPath("resourceGroups");
+
+        /// <summary>
+        /// Teams Resource Group Membership API Path.
+        /// </summary>
+        protected static readonly string TEAMS_RESOURCE_GROUP_MEMBERSHIP_API_PATH = GetAPIPath("resourceGroup/memberships");
+
 
         /// <summary>
         /// Teams organizations API Uri.
@@ -78,6 +88,16 @@ namespace Thrzn41.WebexTeams.Version1.Admin
         /// Teams events API Uri.
         /// </summary>
         protected static readonly Uri TEAMS_EVENT_API_URI = new Uri(TEAMS_EVENT_API_PATH);
+
+        /// <summary>
+        /// Teams Resource Group API Uri.
+        /// </summary>
+        protected static readonly Uri TEAMS_RESOURCE_GROUP_API_URI = new Uri(TEAMS_RESOURCE_GROUP_API_PATH);
+
+        /// <summary>
+        /// Teams Resource Group Membership API Uri.
+        /// </summary>
+        protected static readonly Uri TEAMS_RESOURCE_GROUP_MEMBERSHIP_API_URI = new Uri(TEAMS_RESOURCE_GROUP_MEMBERSHIP_API_PATH);
 
 
 
@@ -321,7 +341,7 @@ namespace Thrzn41.WebexTeams.Version1.Admin
         /// <param name="organizationId">Specify the organization.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsListResult<LicenseList> > ListLicensesAsync(string organizationId, CancellationToken? cancellationToken = null)
+        public async Task< TeamsListResult<LicenseList> > ListLicensesAsync(string organizationId = null, CancellationToken? cancellationToken = null)
         {
             var queryParameters = new NameValueCollection();
 
@@ -515,6 +535,232 @@ namespace Thrzn41.WebexTeams.Version1.Admin
         }
 
         #endregion
+
+
+        #region Resource Group APIs
+
+        /// <summary>
+        /// Lists Resource Groups. 
+        /// </summary>
+        /// <param name="organizationId">Specify the organization.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task< TeamsListResult<ResourceGroupList> > ListResourceGroupsAsync(string organizationId = null, CancellationToken? cancellationToken = null)
+        {
+            var queryParameters = new NameValueCollection();
+
+            queryParameters.Add("orgId", organizationId);
+
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsListResult<ResourceGroupList>, ResourceGroupList>(
+                                    HttpMethod.Get,
+                                    TEAMS_RESOURCE_GROUP_API_URI,
+                                    queryParameters,
+                                    null,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Lists Resource Groups. 
+        /// </summary>
+        /// <param name="organization">Specify the <see cref="Organization"/>.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsListResult<ResourceGroupList> > ListResourceGroupsAsync(Organization organization, CancellationToken? cancellationToken = null)
+        {
+            return (ListResourceGroupsAsync(organization.Id, cancellationToken));
+        }
+
+
+        /// <summary>
+        /// Gets Resource Group detail.
+        /// </summary>
+        /// <param name="resourceGroupId">Resource Group id that the detail info is gotten.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task< TeamsResult<ResourceGroup> > GetResourceGroupAsync(string resourceGroupId, CancellationToken? cancellationToken = null)
+        {
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsResult<ResourceGroup>, ResourceGroup>(
+                                    HttpMethod.Get,
+                                    new Uri(String.Format("{0}/{1}", TEAMS_RESOURCE_GROUP_API_PATH, Uri.EscapeDataString(resourceGroupId))),
+                                    null,
+                                    null,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets Resource Group detail.
+        /// </summary>
+        /// <param name="resourceGroup"><see cref="ResourceGroup"/> that the detail info is gotten.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsResult<ResourceGroup> > GetResourceGroupAsync(ResourceGroup resourceGroup, CancellationToken? cancellationToken = null)
+        {
+            return (GetResourceGroupAsync(resourceGroup.Id, cancellationToken));
+        }
+
+        #endregion
+
+
+        #region Resource Group Membership APIs
+
+
+        /// <summary>
+        /// Lists Resource Group Memberships. 
+        /// </summary>
+        /// <param name="licenseId">List resource group memberships for a license, by ID.</param>
+        /// <param name="personId">List resource group memberships for a person, by ID.</param>
+        /// <param name="personOrganizationId">List resource group memberships for an organization, by ID.</param>
+        /// <param name="status">Limit resource group memberships to a specific status.</param>
+        /// <param name="max">Limit the maximum number of items in the response.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task< TeamsListResult<ResourceGroupMembershipList> > ListResourceGroupMembershipsAsync(string licenseId = null, string personId = null, string personOrganizationId = null, ResourceGroupMembershipStatus status = null, int? max = null, CancellationToken? cancellationToken = null)
+        {
+            var queryParameters = new NameValueCollection();
+
+            queryParameters.Add("licenseId",   licenseId);
+            queryParameters.Add("personId",    personId);
+            queryParameters.Add("personOrgId", personOrganizationId);
+            queryParameters.Add("status",      status?.Name);
+            queryParameters.Add("max",         max?.ToString());
+
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsListResult<ResourceGroupMembershipList>, ResourceGroupMembershipList>(
+                                    HttpMethod.Get,
+                                    TEAMS_RESOURCE_GROUP_MEMBERSHIP_API_URI,
+                                    queryParameters,
+                                    null,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Lists Resource Group Memberships. 
+        /// </summary>
+        /// <param name="license">List resource group memberships for a license.</param>
+        /// <param name="person">List resource group memberships for a person.</param>
+        /// <param name="personOrganization">List resource group memberships for an organization.</param>
+        /// <param name="status">Limit resource group memberships to a specific status.</param>
+        /// <param name="max">Limit the maximum number of items in the response.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsListResult<ResourceGroupMembershipList> > ListResourceGroupMembershipsAsync(License license = null, Person person = null, Organization personOrganization = null, ResourceGroupMembershipStatus status = null, int? max = null, CancellationToken? cancellationToken = null)
+        {
+            return (ListResourceGroupMembershipsAsync(license?.Id, person?.Id, personOrganization?.Id, status, max, cancellationToken));
+        }
+
+        
+        /// <summary>
+        /// Gets Resource Group Membership detail.
+        /// </summary>
+        /// <param name="resourceGroupMembershipId">Resource Group Membership id that the detail info is gotten.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task< TeamsResult<ResourceGroupMembership> > GetResourceGroupMembershipAsync(string resourceGroupMembershipId, CancellationToken? cancellationToken = null)
+        {
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsResult<ResourceGroupMembership>, ResourceGroupMembership>(
+                                    HttpMethod.Get,
+                                    new Uri(String.Format("{0}/{1}", TEAMS_RESOURCE_GROUP_MEMBERSHIP_API_PATH, Uri.EscapeDataString(resourceGroupMembershipId))),
+                                    null,
+                                    null,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets Resource Group Membership detail.
+        /// </summary>
+        /// <param name="resourceGroupMembership"><see cref="ResourceGroupMembership"/> that the detail info is gotten.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsResult<ResourceGroupMembership> > GetResourceGroupMembershipAsync(ResourceGroupMembership resourceGroupMembership, CancellationToken? cancellationToken = null)
+        {
+            return (GetResourceGroupMembershipAsync(resourceGroupMembership.Id, cancellationToken));
+        }
+
+
+        /// <summary>
+        /// Updates Resource Group membership.
+        /// </summary>
+        /// <param name="resourceGroupMembershipId">The ID of the resource group membership.</param>
+        /// <param name="resourceGroupId">The ID of the resource group to which this resource group membership belongs.</param>
+        /// <param name="licenseId">The license ID for the Hybrid Services licensed feature.</param>
+        /// <param name="personId">The ID of the person to which this resource group membership is associated.</param>
+        /// <param name="personOrganizationId">The OrganizationId for the person.</param>
+        /// <param name="status">personOrganizationId</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task<TeamsResult<ResourceGroupMembership>> UpdateResourceGroupMembershipAsync(string resourceGroupMembershipId, string resourceGroupId, string licenseId, string personId, string personOrganizationId, ResourceGroupMembershipStatus status = null, CancellationToken? cancellationToken = null)
+        {
+            var membership = new ResourceGroupMembership
+            {
+                ResourceGroupId      = resourceGroupId,
+                LicenseId            = licenseId,
+                PersonId             = personId,
+                PersonOrganizationId = personOrganizationId,
+                StatusName           = status?.Name,
+            };
+
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsResult<ResourceGroupMembership>, ResourceGroupMembership>(
+                                    HttpMethod.Put,
+                                    new Uri(String.Format("{0}/{1}", TEAMS_RESOURCE_GROUP_MEMBERSHIP_API_PATH, Uri.EscapeDataString(resourceGroupMembershipId))),
+                                    null,
+                                    membership,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Updates Resource Group membership.
+        /// </summary>
+        /// <param name="resourceGroupMembership"><see cref="ResourceGroupMembership"/> to be updated.</param>
+        /// <param name="resourceGroupId">The ID of the resource group to which this resource group membership belongs.</param>
+        /// <param name="licenseId">The license ID for the Hybrid Services licensed feature.</param>
+        /// <param name="personId">The ID of the person to which this resource group membership is associated.</param>
+        /// <param name="personOrganizationId">The OrganizationId for the person.</param>
+        /// <param name="status">The activation status of the resource group membership.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsResult<ResourceGroupMembership> > UpdateResourceGroupMembershipAsync(ResourceGroupMembership resourceGroupMembership, string resourceGroupId, string licenseId, string personId, string personOrganizationId, ResourceGroupMembershipStatus status = null, CancellationToken? cancellationToken = null)
+        {
+            return (UpdateResourceGroupMembershipAsync(resourceGroupMembership.Id, resourceGroupId, licenseId, personId, personOrganizationId, status, cancellationToken));
+        }
+
+        /// <summary>
+        /// Updates Resource Group membership.
+        /// </summary>
+        /// <param name="resourceGroupMembership"><see cref="ResourceGroupMembership"/> to be updated.</param>
+        /// <param name="resourceGroup"><see cref="ResourceGroup"/> to which this resource group membership belongs.</param>
+        /// <param name="license"><see cref="License"/> for the Hybrid Services licensed feature.</param>
+        /// <param name="person"><see cref="Person"/> to which this resource group membership is associated.</param>
+        /// <param name="personOrganization"><see cref="Organization"/> for the person.</param>
+        /// <param name="status">The activation status of the resource group membership.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsResult<ResourceGroupMembership> > UpdateResourceGroupMembershipAsync(ResourceGroupMembership resourceGroupMembership, ResourceGroup resourceGroup, License license, Person person, Organization personOrganization, ResourceGroupMembershipStatus status = null, CancellationToken? cancellationToken = null)
+        {
+            return (UpdateResourceGroupMembershipAsync(resourceGroupMembership.Id, resourceGroup.Id, license.Id, person.Id, personOrganization.Id, status, cancellationToken));
+        }
+
+
+        #endregion
+
 
     }
 
