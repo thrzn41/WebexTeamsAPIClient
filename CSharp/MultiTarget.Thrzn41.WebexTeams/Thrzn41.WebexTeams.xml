@@ -2023,11 +2023,6 @@
             Dispose.
             </summary>
         </member>
-        <member name="T:Thrzn41.WebexTeams.Version1.GuestIssuer.GuestTokenInfo">
-            <summary>
-            Cisco Webex Teams Guest Issuer token info.
-            </summary>
-        </member>
         <member name="T:Thrzn41.WebexTeams.Version1.GuestIssuer.GuestTokenInternalInfo">
             <summary>
             Guest token info object.
@@ -2036,6 +2031,22 @@
         <member name="P:Thrzn41.WebexTeams.Version1.GuestIssuer.GuestTokenInternalInfo.ExpiresIn">
             <summary>
             Access token will expire in this time from refreshed date time.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.GuestIssuer.GuestUserInfo">
+            <summary>
+            Cisco Webex Teams Guest User info.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.GuestIssuer.GuestUserInfo.UserId">
+            <summary>
+            A unique, public identifier for the Guest User.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.GuestIssuer.GuestUserInfo.DisplayName">
+            <summary>
+            The display name of the guest user.
+            This will be the name shown in Webex Teams clients.
             </summary>
         </member>
         <member name="T:Thrzn41.WebexTeams.Version1.GuestIssuer.JWTTokenType">
@@ -2146,6 +2157,11 @@
             Unix time base.
             </summary>
         </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.DEFAULT_INTERNAL_TOKEN_EXPIRES_IN">
+            <summary>
+            Default time of expiration of internal token.
+            </summary>
+        </member>
         <member name="F:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.teamsHttpClient">
             <summary>
             HttpClient for Guest Issuer API.
@@ -2182,7 +2198,7 @@
             <param name="str"><see cref="T:System.String"/> to be encoded.</param>
             <returns>base64url encoded string.</returns>
         </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.convert(Thrzn41.WebexTeams.TeamsResult{Thrzn41.WebexTeams.Version1.GuestIssuer.GuestTokenInternalInfo},System.DateTime)">
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.convert(Thrzn41.WebexTeams.TeamsResult{Thrzn41.WebexTeams.Version1.GuestIssuer.GuestTokenInternalInfo},System.DateTime,System.String,System.String)">
             <summary>
             Converts Guest Issuer token result to Teams token result.
             </summary>
@@ -2190,9 +2206,9 @@
             <param name="refreshedAt"><see cref="T:System.DateTime"/> when the token refreshed.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
         </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.getGuestTokenInfoAsync(System.String,System.String,System.DateTime,System.Nullable{System.Threading.CancellationToken})">
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.createGuestUserAsync(System.String,System.String,System.DateTime,System.Nullable{System.Threading.CancellationToken})">
             <summary>
-            Gets Guest Token info.
+            Creates a Guest user.
             </summary>
             <param name="subject">The subject of the token. A unique, public identifier for the end-user of the token. This claim may contain only letters, numbers, and hyphens.</param>
             <param name="name">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
@@ -2200,23 +2216,68 @@
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
         </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.GetGuestTokenInfoAsync(System.String,System.String,System.TimeSpan,System.Nullable{System.Threading.CancellationToken})">
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.CreateGuestUserAsync(System.String,System.String,System.TimeSpan,System.Nullable{System.Threading.CancellationToken})">
             <summary>
-            Gets Guest Token info.
+            Creates a Guest user.
             </summary>
-            <param name="subject">The subject of the token. A unique, public identifier for the end-user of the token. This claim may contain only letters, numbers, and hyphens.</param>
-            <param name="name">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
-            <param name="expiresIn">The expiration time of the token. Use the lowest practical value for the use of the token.</param>
+            <param name="guestUserId">You can specify a unique, public identifier for the guest user. This id may contain only letters, numbers, and hyphens. If the same guestUserId is used in the same Guest Issuer app, the guest user will be treated as the same user.</param>
+            <param name="displayName">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
+            <param name="internalTokenExpiresIn">The expiration time of the internal token. This is not the same as the Access token of guest user. The internal token is used when the method requests to create the guest user. Use the lowest practical value for the use of the internal token. Make sure your local clock is accurate or synced with NTP. Otherwise, the internal token may be already expired.</param>
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
         </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.GetGuestTokenInfoAsync(System.String,System.String,System.DateTime,System.Nullable{System.Threading.CancellationToken})">
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.CreateGuestUserAsync(System.String,System.String,System.DateTime,System.Nullable{System.Threading.CancellationToken})">
             <summary>
-            Gets Guest Token info.
+            Creates a Guest user.
             </summary>
-            <param name="subject">The subject of the token. A unique, public identifier for the end-user of the token. This claim may contain only letters, numbers, and hyphens.</param>
-            <param name="name">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
-            <param name="expiresAt">The expiration time of the token. Use the lowest practical value for the use of the token.</param>
+            <param name="guestUserId">You can specify a unique, public identifier for the guest user. This id may contain only letters, numbers, and hyphens. If the same guestUserId is used in the same Guest Issuer app, the guest user will be treated as the same user.</param>
+            <param name="displayName">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
+            <param name="internalTokenExpiresAt">The expiration time of the internal token. This is not the same as the Access token of guest user. The internal token is used when the method requests to create the guest user. Use the lowest practical value for the use of the internal token. Make sure your local clock is accurate or synced with NTP. Otherwise, the internal token may be already expired.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.CreateGuestUserAsync(System.String,System.String,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Creates a Guest user.
+            Make sure your local clock is accurate or synced with NTP. Otherwise, it may fail to create guest user because of expiration of internal token.
+            </summary>
+            <param name="guestUserId">You can specify a unique, public identifier for the guest user. This id may contain only letters, numbers, and hyphens. If the same guestUserId is used in the same Guest Issuer app, the guest user will be treated as the same user.</param>
+            <param name="displayName">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.CreateGuestUserAsync(System.String,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Creates a Guest user with a guest user id which is generated dynamically.
+            Make sure your local clock is accurate or synced with NTP. Otherwise, it may fail to create guest user because of expiration of internal token.
+            </summary>
+            <param name="displayName">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.RefreshGuestUserTokenAsync(Thrzn41.WebexTeams.Version1.GuestIssuer.GuestUserInfo,System.TimeSpan,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Refreshed the Guest user token.
+            </summary>
+            <param name="guestUserInfo"><see cref="T:Thrzn41.WebexTeams.Version1.GuestIssuer.GuestUserInfo"/> which the token will be refreshed.</param>
+            <param name="internalTokenExpiresIn">The expiration time of the internal token. This is not the same as the Access token of guest user. The internal token is used when the method requests to create the guest user. Use the lowest practical value for the use of the internal token. Make sure your local clock is accurate or synced with NTP. Otherwise, the internal token may be already expired.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.RefreshGuestUserTokenAsync(Thrzn41.WebexTeams.Version1.GuestIssuer.GuestUserInfo,System.DateTime,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Refreshed the Guest user token.
+            </summary>
+            <param name="guestUserInfo"><see cref="T:Thrzn41.WebexTeams.Version1.GuestIssuer.GuestUserInfo"/> which the token will be refreshed.</param>
+            <param name="internalTokenExpiresAt">The expiration time of the internal token. This is not the same as the Access token of guest user. The internal token is used when the method requests to create the guest user. Use the lowest practical value for the use of the internal token. Make sure your local clock is accurate or synced with NTP. Otherwise, the internal token may be already expired.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.RefreshGuestUserTokenAsync(Thrzn41.WebexTeams.Version1.GuestIssuer.GuestUserInfo,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Refreshed the Guest user token.
+            </summary>
+            <param name="guestUserInfo"><see cref="T:Thrzn41.WebexTeams.Version1.GuestIssuer.GuestUserInfo"/> which the token will be refreshed.</param>
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
         </member>

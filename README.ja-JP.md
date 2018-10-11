@@ -69,7 +69,8 @@ Webex Teams API Clientのサンプルは、 [こちらをクリック](https://g
 * Markdown builder。
 * エラーコードや詳細の取得。
 * Webhook secretの検証とWebhook notification manager、Webhook event handler。
-* OAuth2 helper
+* Guest Issuer helper。
+* OAuth2 helper。
 * 簡易Webhookサーバ機能(.NET Standard 2.0+, .NET Core 2.0+, .NET Framework 4.5.2+)。
 
 ### 基本機能
@@ -183,7 +184,11 @@ using Thrzn41.WebexTeams
 using Thrzn41.WebexTeams.Version1
 ```
 
-必要に応じて、`Thrzn41.WebexTeams.Version1.Admin`も利用可能です。
+必要に応じて、以下も利用可能です。
+* Guest Issuer helper利用時、`Thrzn41.WebexTeams.Version1.GuestIssuer`
+* OAuth2 helper利用時、`Thrzn41.WebexTeams.Version1.OAuth2`
+* Admin API利用時、`Thrzn41.WebexTeams.Version1.Admin`
+
 
 ### Webex Teams API Clientインスタンスの作成
 

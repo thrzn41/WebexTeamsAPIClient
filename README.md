@@ -70,6 +70,7 @@ Samples for Webex Teams API Client is available on [here](https://github.com/thr
 * Markdown builder.
 * Error code, error description.
 * Webhook secret validator, Webhook notification manager, Webhook event handler.
+* Guest Issuer helper.
 * OAuth2 helper.
 * Simple Webhook Listener/Server(.NET Standard 2.0+, .NET Core 2.0+, .NET Framework 4.5.2+).
 
@@ -195,7 +196,10 @@ using Thrzn41.WebexTeams
 using Thrzn41.WebexTeams.Version1
 ```
 
-You can also use `Thrzn41.WebexTeams.Version1.Admin` namespace, if needed.
+You can also use the following namespaces, if needed.
+* `Thrzn41.WebexTeams.Version1.GuestIssuer` to use Guest Issuer helper.
+* `Thrzn41.WebexTeams.Version1.OAuth2` to use OAuth2 helper.
+* `Thrzn41.WebexTeams.Version1.Admin` to use Admin APIs.
 
 ### Create a Webex Teams API Client instance
 
