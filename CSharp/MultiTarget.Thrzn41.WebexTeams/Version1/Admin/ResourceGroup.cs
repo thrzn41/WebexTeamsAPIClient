@@ -29,25 +29,32 @@ using System.Text;
 namespace Thrzn41.WebexTeams.Version1.Admin
 {
 
+
     /// <summary>
-    /// Cisco Webex Teams role object.
+    /// Cisco Webex Teams Resource Group object.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public class Role : TeamsData
+    public class ResourceGroup : TeamsData
     {
 
         /// <summary>
-        /// Id of the role.
+        /// Id of the Resource Group.
         /// </summary>
         [JsonProperty(PropertyName = "id")]
         public string Id { get; internal set; }
 
         /// <summary>
-        /// Name of the role.
+        /// Name of the Resource Group.
         /// </summary>
         [JsonProperty(PropertyName = "name")]
         public string Name { get; internal set; }
 
-    }
+        /// <summary>
+        /// ID of the organization to which this Resource Group belongs.
+        /// </summary>
+        [JsonProperty(PropertyName = "orgId")]
+        public string OrganizationId { get; internal set; }
 
+
+    }
 }

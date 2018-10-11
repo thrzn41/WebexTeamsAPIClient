@@ -1584,20 +1584,20 @@ namespace Thrzn41.WebexTeams.Version1
         /// </summary>
         /// <param name="name">A user-friendly name for this webhook.</param>
         /// <param name="targetUri">The URL that receives POST requests for each event.</param>
-        /// <param name="resouce">The resource type for the webhook. Creating a webhook requires 'read' scope on the resource the webhook is for.</param>
+        /// <param name="resource">The resource type for the webhook. Creating a webhook requires 'read' scope on the resource the webhook is for.</param>
         /// <param name="eventType">The event type for the webhook.</param>
         /// <param name="filters">The filter that defines the webhook scope.</param>
         /// <param name="secret">Secret used to generate payload signature.</param>
         /// <param name="secretLength">Secret length that is generated, if the secret parameter is null.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task< TeamsResult<Webhook> > CreateWebhookAsync(string name, Uri targetUri, EventResource resouce, EventType eventType, IEnumerable<EventFilter> filters = null, string secret = null, int secretLength = 64, CancellationToken? cancellationToken = null)
+        public async Task< TeamsResult<Webhook> > CreateWebhookAsync(string name, Uri targetUri, EventResource resource, EventType eventType, IEnumerable<EventFilter> filters = null, string secret = null, int secretLength = 64, CancellationToken? cancellationToken = null)
         {
             var webhook = new Webhook();
 
             webhook.Name          = name;
             webhook.TargetUrl     = targetUri.AbsoluteUri;
-            webhook.ResourceName  = resouce.Name;
+            webhook.ResourceName  = resource.Name;
             webhook.EventTypeName = eventType.Name;
 
             if(filters != null)
@@ -1606,7 +1606,7 @@ namespace Thrzn41.WebexTeams.Version1
 
                 foreach (var item in filters)
                 {
-                    if((item is EventFilter.SpaceTypeFilter) && (resouce == EventResource.Space))
+                    if((item is EventFilter.SpaceTypeFilter) && (resource == EventResource.Space))
                     {
                         nvc.Add("type", item.Value);
                     }

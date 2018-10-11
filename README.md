@@ -95,6 +95,8 @@ Samples for Webex Teams API Client is available on [here](https://github.com/thr
 | Organization    | List/Get                      | Available.                                      |
 | License         | List/Get                      | Available.                                      |
 | Role            | List/Get                      | Available.                                      |
+| GroupResource            | List/Get                      | Available.                                      |
+| GroupResourceMembership  | List/Get/Update                      | Available.                                      |
 
 ### Token encryption/decryption in storage
 `ProtectedString` provides token encryption/decryption.  
@@ -589,7 +591,7 @@ listener.AddNotification(
   {
     Console.WriteLine("Event is notified, id = {0}", eventData.Id);
 
-    if(eventData.Resouce == EventResouce.Message)
+    if(eventData.Resource == EventResource.Message)
     {
       Console.WriteLine("Message, id = {0}", eventData.MessageData.Id);
     }
@@ -662,7 +664,7 @@ listener.AddNotification(
   {
     Console.WriteLine("Event is notified, id = {0}", eventData.Id);
 
-    if(eventData.Resouce == EventResouce.Message)
+    if(eventData.Resource == EventResource.Message)
     {
       Console.WriteLine("Message, id = {0}", eventData.MessageData.Id);
     }

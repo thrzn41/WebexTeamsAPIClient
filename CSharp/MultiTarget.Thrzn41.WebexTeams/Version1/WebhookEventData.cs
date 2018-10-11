@@ -160,7 +160,7 @@ namespace Thrzn41.WebexTeams.Version1
         {
             get
             {
-                return this.checkAndGetResouceData<SpaceMembership>(EventResource.SpaceMembership);
+                return this.checkAndGetResourceData<SpaceMembership>(EventResource.SpaceMembership);
             }
         }
 
@@ -172,7 +172,7 @@ namespace Thrzn41.WebexTeams.Version1
         {
             get
             {
-                return this.checkAndGetResouceData<Message>(EventResource.Message);
+                return this.checkAndGetResourceData<Message>(EventResource.Message);
             }
         }
 
@@ -184,7 +184,7 @@ namespace Thrzn41.WebexTeams.Version1
         {
             get
             {
-                return this.checkAndGetResouceData<Space>(EventResource.Space);
+                return this.checkAndGetResourceData<Space>(EventResource.Space);
             }
         }
 
@@ -197,7 +197,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <typeparam name="TTeamsData">Type of resource data.</typeparam>
         /// <param name="eventResource"><see cref="EventResource"/> to be checked.</param>
         /// <returns>Resource data.</returns>
-        private TTeamsData checkAndGetResouceData<TTeamsData>(EventResource eventResource)
+        private TTeamsData checkAndGetResourceData<TTeamsData>(EventResource eventResource)
             where TTeamsData : TeamsData, new()
         {
             TTeamsData result;

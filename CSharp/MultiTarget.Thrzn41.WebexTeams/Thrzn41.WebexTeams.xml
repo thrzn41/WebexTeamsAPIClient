@@ -991,7 +991,7 @@
             Message resource data.
             </summary>
         </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.Admin.EventData.checkAndGetResouceData``1(Thrzn41.WebexTeams.Version1.EventResource)">
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.EventData.checkAndGetResourceData``1(Thrzn41.WebexTeams.Version1.EventResource)">
             <summary>
             Checks and gets resource data.
             </summary>
@@ -1066,6 +1066,165 @@
             <see cref="T:Thrzn41.WebexTeams.Version1.Admin.Organization"/> list.
             </summary>
         </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroup">
+            <summary>
+            Cisco Webex Teams Resource Group object.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Admin.ResourceGroup.Id">
+            <summary>
+            Id of the Resource Group.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Admin.ResourceGroup.Name">
+            <summary>
+            Name of the Resource Group.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Admin.ResourceGroup.OrganizationId">
+            <summary>
+            ID of the organization to which this Resource Group belongs.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupList">
+            <summary>
+            <see cref="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroup"/> list.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembership">
+            <summary>
+            Cisco Webex Teams Resource Group Membership object.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembership.Id">
+            <summary>
+            Id of the Resource Group Membership.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembership.ResourceGroupId">
+            <summary>
+            The ID of the resource group to which this resource group membership belongs.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembership.LicenseId">
+            <summary>
+            The license ID for the Hybrid Services licensed feature.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembership.PersonId">
+            <summary>
+            The ID of the person to which this resource group membership is associated.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembership.PersonOrganizationId">
+            <summary>
+            The Organization Id for the person.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembership.StatusName">
+            <summary>
+            Status string of the Resource Group Membership.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembership.Status">
+            <summary>
+            Status of the Resource Group Membership.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipList">
+            <summary>
+            <see cref="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembership"/> list.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus">
+            <summary>
+            Resource Group Membership status of Cisco Webex Teams.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus.Activated">
+            <summary>
+            Resource Group Membership is activated.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus.Pending">
+            <summary>
+            Resource Group Membership is pending.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus.Error">
+            <summary>
+            Resource Group Membership is error.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus.Unknown">
+            <summary>
+            Resource Group Membership is unknown.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus.RESOURCE_GROUP_MEMBERSHIP_STATUSES">
+            <summary>
+            Dictionary for Resource Group Membership status.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus.#cctor">
+            <summary>
+            Static constuctor.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus.Name">
+            <summary>
+            Name of the Resource Group Membership status.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus.#ctor(System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="name">Name of the Resource Group Membership status.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus.Parse(System.String)">
+            <summary>
+            Parse Resource Group Membership status.
+            </summary>
+            <param name="name">Name of the Resource Group Membership status.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus"/> for the name.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus.Equals(Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus)">
+            <summary>
+            Determines whether this instance and another specified <see cref="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus"/> object have the same value.
+            </summary>
+            <param name="value">The Resource Group Membership status to compare to this instance.</param>
+            <returns>true if the value of the parameter is the same as the value of this instance; otherwise, false. If value is null, the method returns false.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus.Equals(System.Object)">
+            <summary>
+            Determines whether this instance and a specified object, which must also be a <see cref="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus"/> object, have the same value.
+            </summary>
+            <param name="obj">The Resource Group Membership status to compare to this instance.</param>
+            <returns>true if obj is a <see cref="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus"/> and its value is the same as this instance; otherwise, false. If obj is null, the method returns false.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus.GetHashCode">
+            <summary>
+            Returns the hash code for this Resource Group Membership status.
+            </summary>
+            <returns>A 32-bit signed integer hash code.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus.op_Equality(Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus,Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus)">
+            <summary>
+            Determines whether two specified Resource Group Membership status have the same value.
+            </summary>
+            <param name="lhs">Left hand side value.</param>
+            <param name="rhs">Right hand side value.</param>
+            <returns>true if the two values have the same value.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus.op_Inequality(Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus,Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus)">
+            <summary>
+            Determines whether two specified Resource Group Membership status have the different value.
+            </summary>
+            <param name="lhs">Left hand side value.</param>
+            <param name="rhs">Right hand side value.</param>
+            <returns>true if the two values have the different value.</returns>
+        </member>
         <member name="T:Thrzn41.WebexTeams.Version1.Admin.Role">
             <summary>
             Cisco Webex Teams role object.
@@ -1111,6 +1270,16 @@
             Teams events API Path.
             </summary>
         </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.TEAMS_RESOURCE_GROUP_API_PATH">
+            <summary>
+            Teams Resource Group API Path.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.TEAMS_RESOURCE_GROUP_MEMBERSHIP_API_PATH">
+            <summary>
+            Teams Resource Group Membership API Path.
+            </summary>
+        </member>
         <member name="F:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.TEAMS_ORGANIZATION_API_URI">
             <summary>
             Teams organizations API Uri.
@@ -1129,6 +1298,16 @@
         <member name="F:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.TEAMS_EVENT_API_URI">
             <summary>
             Teams events API Uri.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.TEAMS_RESOURCE_GROUP_API_URI">
+            <summary>
+            Teams Resource Group API Uri.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.TEAMS_RESOURCE_GROUP_MEMBERSHIP_API_URI">
+            <summary>
+            Teams Resource Group Membership API Uri.
             </summary>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.#ctor(System.String)">
@@ -1289,6 +1468,117 @@
             Gets event detail.
             </summary>
             <param name="eventData"><see cref="T:Thrzn41.WebexTeams.Version1.Admin.EventData"/> that the detail info is gotten.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.ListResourceGroupsAsync(System.String,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Lists Resource Groups. 
+            </summary>
+            <param name="organizationId">Specify the organization.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.ListResourceGroupsAsync(Thrzn41.WebexTeams.Version1.Admin.Organization,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Lists Resource Groups. 
+            </summary>
+            <param name="organization">Specify the <see cref="T:Thrzn41.WebexTeams.Version1.Admin.Organization"/>.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.GetResourceGroupAsync(System.String,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Gets Resource Group detail.
+            </summary>
+            <param name="resourceGroupId">Resource Group id that the detail info is gotten.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.GetResourceGroupAsync(Thrzn41.WebexTeams.Version1.Admin.ResourceGroup,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Gets Resource Group detail.
+            </summary>
+            <param name="resourceGroup"><see cref="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroup"/> that the detail info is gotten.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.ListResourceGroupMembershipsAsync(System.String,System.String,System.String,Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus,System.Nullable{System.Int32},System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Lists Resource Group Memberships. 
+            </summary>
+            <param name="licenseId">List resource group memberships for a license, by ID.</param>
+            <param name="personId">List resource group memberships for a person, by ID.</param>
+            <param name="personOrganizationId">List resource group memberships for an organization, by ID.</param>
+            <param name="status">Limit resource group memberships to a specific status.</param>
+            <param name="max">Limit the maximum number of items in the response.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.ListResourceGroupMembershipsAsync(Thrzn41.WebexTeams.Version1.Admin.License,Thrzn41.WebexTeams.Version1.Person,Thrzn41.WebexTeams.Version1.Admin.Organization,Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus,System.Nullable{System.Int32},System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Lists Resource Group Memberships. 
+            </summary>
+            <param name="license">List resource group memberships for a license.</param>
+            <param name="person">List resource group memberships for a person.</param>
+            <param name="personOrganization">List resource group memberships for an organization.</param>
+            <param name="status">Limit resource group memberships to a specific status.</param>
+            <param name="max">Limit the maximum number of items in the response.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.GetResourceGroupMembershipAsync(System.String,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Gets Resource Group Membership detail.
+            </summary>
+            <param name="resourceGroupMembershipId">Resource Group Membership id that the detail info is gotten.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.GetResourceGroupMembershipAsync(Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembership,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Gets Resource Group Membership detail.
+            </summary>
+            <param name="resourceGroupMembership"><see cref="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembership"/> that the detail info is gotten.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.UpdateResourceGroupMembershipAsync(System.String,System.String,System.String,System.String,System.String,Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Updates Resource Group membership.
+            </summary>
+            <param name="resourceGroupMembershipId">The ID of the resource group membership.</param>
+            <param name="resourceGroupId">The ID of the resource group to which this resource group membership belongs.</param>
+            <param name="licenseId">The license ID for the Hybrid Services licensed feature.</param>
+            <param name="personId">The ID of the person to which this resource group membership is associated.</param>
+            <param name="personOrganizationId">The OrganizationId for the person.</param>
+            <param name="status">personOrganizationId</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.UpdateResourceGroupMembershipAsync(Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembership,System.String,System.String,System.String,System.String,Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Updates Resource Group membership.
+            </summary>
+            <param name="resourceGroupMembership"><see cref="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembership"/> to be updated.</param>
+            <param name="resourceGroupId">The ID of the resource group to which this resource group membership belongs.</param>
+            <param name="licenseId">The license ID for the Hybrid Services licensed feature.</param>
+            <param name="personId">The ID of the person to which this resource group membership is associated.</param>
+            <param name="personOrganizationId">The OrganizationId for the person.</param>
+            <param name="status">The activation status of the resource group membership.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.UpdateResourceGroupMembershipAsync(Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembership,Thrzn41.WebexTeams.Version1.Admin.ResourceGroup,Thrzn41.WebexTeams.Version1.Admin.License,Thrzn41.WebexTeams.Version1.Person,Thrzn41.WebexTeams.Version1.Admin.Organization,Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembershipStatus,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Updates Resource Group membership.
+            </summary>
+            <param name="resourceGroupMembership"><see cref="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroupMembership"/> to be updated.</param>
+            <param name="resourceGroup"><see cref="T:Thrzn41.WebexTeams.Version1.Admin.ResourceGroup"/> to which this resource group membership belongs.</param>
+            <param name="license"><see cref="T:Thrzn41.WebexTeams.Version1.Admin.License"/> for the Hybrid Services licensed feature.</param>
+            <param name="person"><see cref="T:Thrzn41.WebexTeams.Version1.Person"/> to which this resource group membership is associated.</param>
+            <param name="personOrganization"><see cref="T:Thrzn41.WebexTeams.Version1.Admin.Organization"/> for the person.</param>
+            <param name="status">The activation status of the resource group membership.</param>
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
         </member>
@@ -1516,32 +1806,32 @@
         </member>
         <member name="T:Thrzn41.WebexTeams.Version1.EventResource">
             <summary>
-            Event resouce of Cisco Webex Teams.
+            Event resource of Cisco Webex Teams.
             </summary>
         </member>
         <member name="F:Thrzn41.WebexTeams.Version1.EventResource.All">
             <summary>
-            All resouces.
+            All resources.
             </summary>
         </member>
         <member name="F:Thrzn41.WebexTeams.Version1.EventResource.SpaceMembership">
             <summary>
-            Space membership resouce.
+            Space membership resource.
             </summary>
         </member>
         <member name="F:Thrzn41.WebexTeams.Version1.EventResource.Message">
             <summary>
-            Message resouce.
+            Message resource.
             </summary>
         </member>
         <member name="F:Thrzn41.WebexTeams.Version1.EventResource.Space">
             <summary>
-            Space resouce.
+            Space resource.
             </summary>
         </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.EventResource.EVENT_RESOUCES">
+        <member name="F:Thrzn41.WebexTeams.Version1.EventResource.EVENT_RESOURCES">
             <summary>
-            Dictionary for event resouce.
+            Dictionary for event resource.
             </summary>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.EventResource.#cctor">
@@ -1551,45 +1841,45 @@
         </member>
         <member name="P:Thrzn41.WebexTeams.Version1.EventResource.Name">
             <summary>
-            Name of the event resouce.
+            Name of the event resource.
             </summary>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.EventResource.#ctor(System.String)">
             <summary>
             Constructor.
             </summary>
-            <param name="name">Name of the event resouce.</param>
+            <param name="name">Name of the event resource.</param>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.EventResource.Parse(System.String)">
             <summary>
-            Parse event resouce.
+            Parse event resource.
             </summary>
-            <param name="name">Name of the event resouce.</param>
+            <param name="name">Name of the event resource.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.Version1.EventResource"/> for the name.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.EventResource.Equals(Thrzn41.WebexTeams.Version1.EventResource)">
             <summary>
             Determines whether this instance and another specified <see cref="T:Thrzn41.WebexTeams.Version1.EventResource"/> object have the same value.
             </summary>
-            <param name="value">The event resouce to compare to this instance.</param>
+            <param name="value">The event resource to compare to this instance.</param>
             <returns>true if the value of the parameter is the same as the value of this instance; otherwise, false. If value is null, the method returns false.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.EventResource.Equals(System.Object)">
             <summary>
             Determines whether this instance and a specified object, which must also be a <see cref="T:Thrzn41.WebexTeams.Version1.EventResource"/> object, have the same value.
             </summary>
-            <param name="obj">The event resouce to compare to this instance.</param>
+            <param name="obj">The event resource to compare to this instance.</param>
             <returns>true if obj is a <see cref="T:Thrzn41.WebexTeams.Version1.EventResource"/> and its value is the same as this instance; otherwise, false. If obj is null, the method returns false.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.EventResource.GetHashCode">
             <summary>
-            Returns the hash code for this event resouce.
+            Returns the hash code for this event resource.
             </summary>
             <returns>A 32-bit signed integer hash code.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.EventResource.op_Equality(Thrzn41.WebexTeams.Version1.EventResource,Thrzn41.WebexTeams.Version1.EventResource)">
             <summary>
-            Determines whether two specified event resouce have the same value.
+            Determines whether two specified event resource have the same value.
             </summary>
             <param name="lhs">Left hand side value.</param>
             <param name="rhs">Right hand side value.</param>
@@ -1597,7 +1887,7 @@
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.EventResource.op_Inequality(Thrzn41.WebexTeams.Version1.EventResource,Thrzn41.WebexTeams.Version1.EventResource)">
             <summary>
-            Determines whether two specified event resouce have the different value.
+            Determines whether two specified event resource have the different value.
             </summary>
             <param name="lhs">Left hand side value.</param>
             <param name="rhs">Right hand side value.</param>
@@ -4327,7 +4617,7 @@
             </summary>
             <param name="name">A user-friendly name for this webhook.</param>
             <param name="targetUri">The URL that receives POST requests for each event.</param>
-            <param name="resouce">The resource type for the webhook. Creating a webhook requires 'read' scope on the resource the webhook is for.</param>
+            <param name="resource">The resource type for the webhook. Creating a webhook requires 'read' scope on the resource the webhook is for.</param>
             <param name="eventType">The event type for the webhook.</param>
             <param name="filters">The filter that defines the webhook scope.</param>
             <param name="secret">Secret used to generate payload signature.</param>
@@ -4669,7 +4959,7 @@
             Space resource data.
             </summary>
         </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookEventData.checkAndGetResouceData``1(Thrzn41.WebexTeams.Version1.EventResource)">
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookEventData.checkAndGetResourceData``1(Thrzn41.WebexTeams.Version1.EventResource)">
             <summary>
             Checks and gets resource data.
             </summary>

@@ -29,28 +29,28 @@ namespace Thrzn41.WebexTeams.Version1
 {
 
     /// <summary>
-    /// Event resouce of Cisco Webex Teams.
+    /// Event resource of Cisco Webex Teams.
     /// </summary>
     public class EventResource
     {
 
         /// <summary>
-        /// All resouces.
+        /// All resources.
         /// </summary>
         public static readonly EventResource All = new EventResource("all");
 
         /// <summary>
-        /// Space membership resouce.
+        /// Space membership resource.
         /// </summary>
         public static readonly EventResource SpaceMembership = new EventResource("memberships");
 
         /// <summary>
-        /// Message resouce.
+        /// Message resource.
         /// </summary>
         public static readonly EventResource Message = new EventResource("messages");
 
         /// <summary>
-        /// Space resouce.
+        /// Space resource.
         /// </summary>
         public static readonly EventResource Space = new EventResource("rooms");
 
@@ -58,26 +58,26 @@ namespace Thrzn41.WebexTeams.Version1
 
 
         /// <summary>
-        /// Dictionary for event resouce.
+        /// Dictionary for event resource.
         /// </summary>
-        private static readonly Dictionary<string, EventResource> EVENT_RESOUCES;
+        private static readonly Dictionary<string, EventResource> EVENT_RESOURCES;
 
         /// <summary>
         /// Static constuctor.
         /// </summary>
         static EventResource()
         {
-            EVENT_RESOUCES = new Dictionary<string, EventResource>();
+            EVENT_RESOURCES = new Dictionary<string, EventResource>();
 
-            EVENT_RESOUCES.Add(All.Name,             All);
-            EVENT_RESOUCES.Add(SpaceMembership.Name, SpaceMembership);
-            EVENT_RESOUCES.Add(Message.Name,         Message);
-            EVENT_RESOUCES.Add(Space.Name,           Space);
+            EVENT_RESOURCES.Add(All.Name,             All);
+            EVENT_RESOURCES.Add(SpaceMembership.Name, SpaceMembership);
+            EVENT_RESOURCES.Add(Message.Name,         Message);
+            EVENT_RESOURCES.Add(Space.Name,           Space);
         }
 
 
         /// <summary>
-        /// Name of the event resouce.
+        /// Name of the event resource.
         /// </summary>
         public string Name { get; private set; }
 
@@ -87,7 +87,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="name">Name of the event resouce.</param>
+        /// <param name="name">Name of the event resource.</param>
         private EventResource(string name)
         {
             this.Name = name;
@@ -95,15 +95,15 @@ namespace Thrzn41.WebexTeams.Version1
 
 
         /// <summary>
-        /// Parse event resouce.
+        /// Parse event resource.
         /// </summary>
-        /// <param name="name">Name of the event resouce.</param>
+        /// <param name="name">Name of the event resource.</param>
         /// <returns><see cref="EventResource"/> for the name.</returns>
         public static EventResource Parse(string name)
         {
             EventResource eventResource = null;
 
-            if ( name == null || !EVENT_RESOUCES.TryGetValue(name, out eventResource) )
+            if ( name == null || !EVENT_RESOURCES.TryGetValue(name, out eventResource) )
             {
                 eventResource = new EventResource(name);
             }
@@ -115,7 +115,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <summary>
         /// Determines whether this instance and another specified <see cref="EventResource"/> object have the same value.
         /// </summary>
-        /// <param name="value">The event resouce to compare to this instance.</param>
+        /// <param name="value">The event resource to compare to this instance.</param>
         /// <returns>true if the value of the parameter is the same as the value of this instance; otherwise, false. If value is null, the method returns false.</returns>
         public bool Equals(EventResource value)
         {
@@ -135,7 +135,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <summary>
         /// Determines whether this instance and a specified object, which must also be a <see cref="EventResource"/> object, have the same value.
         /// </summary>
-        /// <param name="obj">The event resouce to compare to this instance.</param>
+        /// <param name="obj">The event resource to compare to this instance.</param>
         /// <returns>true if obj is a <see cref="EventResource"/> and its value is the same as this instance; otherwise, false. If obj is null, the method returns false.</returns>
         public override bool Equals(object obj)
         {
@@ -143,7 +143,7 @@ namespace Thrzn41.WebexTeams.Version1
         }
 
         /// <summary>
-        /// Returns the hash code for this event resouce.
+        /// Returns the hash code for this event resource.
         /// </summary>
         /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()
@@ -153,7 +153,7 @@ namespace Thrzn41.WebexTeams.Version1
 
 
         /// <summary>
-        /// Determines whether two specified event resouce have the same value.
+        /// Determines whether two specified event resource have the same value.
         /// </summary>
         /// <param name="lhs">Left hand side value.</param>
         /// <param name="rhs">Right hand side value.</param>
@@ -174,7 +174,7 @@ namespace Thrzn41.WebexTeams.Version1
         }
 
         /// <summary>
-        /// Determines whether two specified event resouce have the different value.
+        /// Determines whether two specified event resource have the different value.
         /// </summary>
         /// <param name="lhs">Left hand side value.</param>
         /// <param name="rhs">Right hand side value.</param>
