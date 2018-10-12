@@ -10,7 +10,53 @@ Also, some useful features for developers are provided.
 
 ---
 By using `Webex Teams API Client`, you can invoke `Cisco Webex Teams REST API` easily.  
-For example, it is an example that facilitates [Pagination feature](https://developer.webex.com/pagination.html) of Webex Teams REST API.  
+
+* A Simple example to post a message as markdown.
+
+``` csharp
+// Load encrypted bot token from storage.
+ProtectedString token = LoadEncryptedBotToken();
+
+// Create a TeamsAPIClient instance.
+var teams = TeamsAPI.CreateVersion1Client(token);
+
+// Build markdown.
+var markdown = new MarkdownBuilder();
+markdown.Append("Hi, ").AppendBold("Webex Teams").Append("!!");
+
+// Post a message.
+var message = (await teams.CreateDirectMessageAsync("your_webex_teams_account@example.com", markdown.ToString())).GetData();
+
+Console.WriteLine("Message was posted: ID = {0}", message.Id);
+```
+
+* An example to use Guest Issuer
+
+It is an example that facilitates [Guest Issuer](https://developer.webex.com/guest-issuer.html) of Webex Teams.  
+
+``` csharp
+// Load encrypted Guest Issuer secret from storage.
+ProtectedString secret = LoadEncryptedGuestIssuerSecret();
+
+// Create a GuestIssuerClient instance.
+var guestIssuer = TeamsAPI.CreateVersion1GuestIssuerClient(secret, "your_guest_issuer_id");
+
+
+// Create a Guest User.
+var guest = (await guestIssuer.CreateGuestUserAsync("my-guest-id", "GuestUserName")).GetData();
+
+// Create a TeamsAPIClient instance for the Guest User.
+var teams = TeamsAPI.CreateVersion1Client(guest);
+
+// Post a message from the Guest User.
+var message = (await teams.CreateDirectMessageAsync("your_webex_teams_account@example.com", "Hello, I am a guest!!")).GetData();
+
+Console.WriteLine("Message was posted: ID = {0}", message.Id);
+```
+
+* An example to facilitate Pagination
+
+It is an example that facilitates [Pagination feature](https://developer.webex.com/pagination.html) of Webex Teams REST API.  
 It demonstrates to get and iterate for each 50 spaces, then say "Hello" to the specific named space.
 
 ``` csharp

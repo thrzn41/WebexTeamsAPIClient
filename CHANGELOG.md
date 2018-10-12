@@ -9,6 +9,14 @@
 > NOTE: Datetime format is `yyyy-MM-dd`.
 
 ---
+### [2018-10-12] Version 1.5.1
+
+#### [NEW FEATURES]
+
+* Guest Issuer feature.
+* GroupResource/GroupResourceMembership feature.
+
+---
 ### [2018-08-06] Version 1.4.1
 
 #### [NEW FEATURES]

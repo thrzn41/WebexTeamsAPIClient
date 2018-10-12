@@ -10,7 +10,54 @@
 
 ---
 `Webex Teams API Client`を使って、`Cisco Webex Teams REST API`を簡単に実行できます。  
-例えば、Webex Temas REST APIの[Pagination機能](https://developer.webex.com/pagination.html)の例が以下になります。  
+
+* Markdownでメッセージを投稿する簡単な例
+
+``` csharp
+// 暗号化されたトークンをストレージから読み込む。
+ProtectedString token = LoadEncryptedBotToken();
+
+// TeamsAPIClientのインスタンスを作成する。
+var teams = TeamsAPI.CreateVersion1Client(token);
+
+// Markdownを構成します。
+var markdown = new MarkdownBuilder();
+markdown.Append("こんにちは、").AppendBold("Webex Teams").Append("！！");
+
+// メッセージを投稿します。
+var message = (await teams.CreateDirectMessageAsync("your_webex_teams_account@example.com", markdown.ToString())).GetData();
+
+Console.WriteLine("メッセージが投稿されました: ID = {0}", message.Id);
+```
+
+* ゲストユーザ用のアカウントを発行して投稿する例
+
+Webex Teamsの[Guest Issuer機能](https://developer.webex.com/guest-issuer.html)を利用する例です。
+
+``` csharp
+// 暗号化されたGuest Issuer secretをストレージから読み込む。
+ProtectedString secret = LoadEncryptedGuestIssuerSecret();
+
+// GuestIssuerClientのインスタンスを作成する。
+var guestIssuer = TeamsAPI.CreateVersion1GuestIssuerClient(secret, "your_guest_issuer_id");
+
+
+// Guest Userを作成する。
+var guest = (await guestIssuer.CreateGuestUserAsync("my-guest-id", "ゲストユーザ名")).GetData();
+
+// ゲストユーザ用のTeamsAPIClientインスタンスを作成する。
+var teams = TeamsAPI.CreateVersion1Client(guest);
+
+// ゲストユーザからメッセージを投稿する。
+var message = (await teams.CreateDirectMessageAsync("your_webex_teams_account@example.com", "こんにちは、私はゲストユーザです！！")).GetData();
+
+Console.WriteLine("メッセージが投稿されました: ID = {0}", message.Id);
+```
+
+
+* Pagination機能を利用する例
+
+Webex Temas REST APIの[Pagination機能](https://developer.webex.com/pagination.html)の例が以下になります。  
 スペースを50個ずつ取得していって、特定の名前のスペースへ「こんにちは」を投稿します。
 
 ``` csharp
