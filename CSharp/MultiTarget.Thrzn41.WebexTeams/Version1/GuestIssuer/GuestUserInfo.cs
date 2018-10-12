@@ -31,11 +31,26 @@ namespace Thrzn41.WebexTeams.Version1.GuestIssuer
 
 
     /// <summary>
-    /// Cisco Webex Teams Guest Issuer token info.
+    /// Cisco Webex Teams Guest User info.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public class GuestTokenInfo : AccessTokenInfo
+    public class GuestUserInfo : AccessTokenInfo
     {
+
+
+        /// <summary>
+        /// A unique, public identifier for the Guest User.
+        /// </summary>
+        [JsonProperty(PropertyName = "userId")]
+        public string UserId { get; internal set; }
+
+        /// <summary>
+        /// The display name of the guest user.
+        /// This will be the name shown in Webex Teams clients.
+        /// </summary>
+        [JsonProperty(PropertyName = "displayName")]
+        public string DisplayName { get; internal set; }
+
     }
 
 }

@@ -68,6 +68,11 @@ namespace Thrzn41.WebexTeams.Version1.GuestIssuer
         /// </summary>
         private static readonly DateTime UNIX_TIME_BASE = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
+        /// <summary>
+        /// Default time of expiration of issuer token.
+        /// </summary>
+        private static readonly TimeSpan DEFAULT_ISSUER_TOKEN_EXPIRES_IN = TimeSpan.FromSeconds(90.0);
+
 
         /// <summary>
         /// HttpClient for Guest Issuer API.
@@ -137,10 +142,12 @@ namespace Thrzn41.WebexTeams.Version1.GuestIssuer
         /// </summary>
         /// <param name="source">Source result.</param>
         /// <param name="refreshedAt"><see cref="DateTime"/> when the token refreshed.</param>
+        /// <param name="guestUserId">Guest user id.</param>
+        /// <param name="displayName">Guest user display name.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        private static TeamsResult<GuestTokenInfo> convert(TeamsResult<GuestTokenInternalInfo> source, DateTime refreshedAt)
+        private static TeamsResult<GuestUserInfo> convert(TeamsResult<GuestTokenInternalInfo> source, DateTime refreshedAt, string guestUserId, string displayName)
         {
-            var result = new TeamsResult<GuestTokenInfo>();
+            var result = new TeamsResult<GuestUserInfo>();
 
             result.IsSuccessStatus = source.IsSuccessStatus;
             result.HttpStatusCode  = source.HttpStatusCode;
@@ -148,45 +155,48 @@ namespace Thrzn41.WebexTeams.Version1.GuestIssuer
             result.TrackingId      = source.TrackingId;
 
 
-            var tokenInfo = new GuestTokenInfo();
+            var guestUserInfo = new GuestUserInfo();
 
             var data = source.Data;
 
             if (result.IsSuccessStatus)
             {
-                tokenInfo.RefreshedAt = refreshedAt;
+                guestUserInfo.UserId      = guestUserId;
+                guestUserInfo.DisplayName = displayName;
 
-                tokenInfo.AccessToken = data.Token;
+                guestUserInfo.RefreshedAt = refreshedAt;
+
+                guestUserInfo.AccessToken = data.Token;
 
                 if (data.ExpiresIn.HasValue)
                 {
-                    tokenInfo.AccessTokenExpiresIn = TimeSpan.FromSeconds(data.ExpiresIn.Value);
-                    tokenInfo.AccessTokenExpiresAt = refreshedAt + tokenInfo.AccessTokenExpiresIn;
+                    guestUserInfo.AccessTokenExpiresIn = TimeSpan.FromSeconds(data.ExpiresIn.Value);
+                    guestUserInfo.AccessTokenExpiresAt = refreshedAt + guestUserInfo.AccessTokenExpiresIn;
                 }
             }
 
             if (data.HasExtensionData)
             {
-                tokenInfo.JsonExtensionData = data.JsonExtensionData;
+                guestUserInfo.JsonExtensionData = data.JsonExtensionData;
             }
 
-            tokenInfo.HasValues = data.HasValues;
+            guestUserInfo.HasValues = data.HasValues;
 
-            result.Data = tokenInfo;
+            result.Data = guestUserInfo;
 
             return result;
         }
 
 
         /// <summary>
-        /// Gets Guest Token info.
+        /// Creates a Guest user.
         /// </summary>
         /// <param name="subject">The subject of the token. A unique, public identifier for the end-user of the token. This claim may contain only letters, numbers, and hyphens.</param>
         /// <param name="name">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
         /// <param name="expiresAt">The expiration time of the token. Use the lowest practical value for the use of the token.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        private async Task< TeamsResult<GuestTokenInfo> > getGuestTokenInfoAsync(string subject, string name, DateTime expiresAt, CancellationToken? cancellationToken = null)
+        private async Task< TeamsResult<GuestUserInfo> > createGuestUserAsync(string subject, string name, DateTime expiresAt, CancellationToken? cancellationToken = null)
         {
             var expirationTime = expiresAt.ToUniversalTime() - UNIX_TIME_BASE;
 
@@ -220,34 +230,96 @@ namespace Thrzn41.WebexTeams.Version1.GuestIssuer
 
             result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
 
-            return convert(result, refreshedAt);
+            return convert(result, refreshedAt, subject, name);
         }
 
 
         /// <summary>
-        /// Gets Guest Token info.
+        /// Creates a Guest user.
         /// </summary>
-        /// <param name="subject">The subject of the token. A unique, public identifier for the end-user of the token. This claim may contain only letters, numbers, and hyphens.</param>
-        /// <param name="name">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
-        /// <param name="expiresIn">The expiration time of the token. Use the lowest practical value for the use of the token.</param>
+        /// <param name="guestUserId">You can specify a unique, public identifier for the guest user. This id may contain only letters, numbers, and hyphens. If the same guestUserId is used in the same Guest Issuer app, the guest user will be treated as the same user.</param>
+        /// <param name="displayName">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
+        /// <param name="issuerTokenExpiresIn">The expiration time of the issuer token. The issuer token is generated by the API client to create the guest user. The issuer token is NOT the same as the Access token of guest user. The issuer token is used on creating the guest user and should be available while this creation process. Use the lowest practical value for the use of the issuer token. Make sure your local clock is accurate or synced with NTP. Otherwise, the issuer token may be already expired now.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public Task< TeamsResult<GuestTokenInfo> > GetGuestTokenInfoAsync(string subject, string name, TimeSpan expiresIn, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<GuestUserInfo> > CreateGuestUserAsync(string guestUserId, string displayName, TimeSpan issuerTokenExpiresIn, CancellationToken? cancellationToken = null)
         {
-            return getGuestTokenInfoAsync(subject, name, (DateTime.UtcNow + expiresIn), cancellationToken);
+            return createGuestUserAsync(guestUserId, displayName, (DateTime.UtcNow + issuerTokenExpiresIn), cancellationToken);
         }
 
         /// <summary>
-        /// Gets Guest Token info.
+        /// Creates a Guest user.
         /// </summary>
-        /// <param name="subject">The subject of the token. A unique, public identifier for the end-user of the token. This claim may contain only letters, numbers, and hyphens.</param>
-        /// <param name="name">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
-        /// <param name="expiresAt">The expiration time of the token. Use the lowest practical value for the use of the token.</param>
+        /// <param name="guestUserId">You can specify a unique, public identifier for the guest user. This id may contain only letters, numbers, and hyphens. If the same guestUserId is used in the same Guest Issuer app, the guest user will be treated as the same user.</param>
+        /// <param name="displayName">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
+        /// <param name="issuerTokenExpiresAt">The expiration time of the issuer token. The issuer token is generated by the API client to create the guest user. The issuer token is NOT the same as the Access token of guest user. The issuer token is used on creating the guest user and should be available while this creation process. Use the lowest practical value for the use of the issuer token. Make sure your local clock is accurate or synced with NTP. Otherwise, the issuer token may be already expired now.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public Task< TeamsResult<GuestTokenInfo> > GetGuestTokenInfoAsync(string subject, string name, DateTime expiresAt, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<GuestUserInfo> > CreateGuestUserAsync(string guestUserId, string displayName, DateTime issuerTokenExpiresAt, CancellationToken? cancellationToken = null)
         {
-            return getGuestTokenInfoAsync(subject, name, expiresAt, cancellationToken);
+            return createGuestUserAsync(guestUserId, displayName, issuerTokenExpiresAt, cancellationToken);
+        }
+
+        /// <summary>
+        /// Creates a Guest user.
+        /// Make sure your local clock is accurate or synced with NTP. Otherwise, it may fail to create guest user because of expiration of internal token.
+        /// </summary>
+        /// <param name="guestUserId">You can specify a unique, public identifier for the guest user. This id may contain only letters, numbers, and hyphens. If the same guestUserId is used in the same Guest Issuer app, the guest user will be treated as the same user.</param>
+        /// <param name="displayName">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsResult<GuestUserInfo> > CreateGuestUserAsync(string guestUserId, string displayName, CancellationToken? cancellationToken = null)
+        {
+            return createGuestUserAsync(guestUserId, displayName, (DateTime.UtcNow + DEFAULT_ISSUER_TOKEN_EXPIRES_IN), cancellationToken);
+        }
+
+        /// <summary>
+        /// Creates a Guest user with a guest user id which is generated dynamically.
+        /// Make sure your local clock is accurate or synced with NTP. Otherwise, it may fail to create guest user because of expiration of issuer token.
+        /// </summary>
+        /// <param name="displayName">The display name of the guest user. This will be the name shown in Webex Teams clients.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsResult<GuestUserInfo> > CreateGuestUserAsync(string displayName, CancellationToken? cancellationToken = null)
+        {
+            return (CreateGuestUserAsync(Guid.NewGuid().ToString("D"), displayName, cancellationToken));
+        }
+
+
+        /// <summary>
+        /// Refreshed the Guest user token.
+        /// </summary>
+        /// <param name="guestUserInfo"><see cref="GuestUserInfo"/> which the token will be refreshed.</param>
+        /// <param name="issuerTokenExpiresIn">The expiration time of the issuer token. The issuer token is generated by the API client to create the guest user. The issuer token is NOT the same as the Access token of guest user. The issuer token is used on creating the guest user and should be available while this creation process. Use the lowest practical value for the use of the issuer token. Make sure your local clock is accurate or synced with NTP. Otherwise, the issuer token may be already expired now.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsResult<GuestUserInfo> > RefreshGuestUserTokenAsync(GuestUserInfo guestUserInfo, TimeSpan issuerTokenExpiresIn, CancellationToken? cancellationToken = null)
+        {
+            return (CreateGuestUserAsync(guestUserInfo.UserId, guestUserInfo.DisplayName, issuerTokenExpiresIn, cancellationToken));
+        }
+
+        /// <summary>
+        /// Refreshed the Guest user token.
+        /// </summary>
+        /// <param name="guestUserInfo"><see cref="GuestUserInfo"/> which the token will be refreshed.</param>
+        /// <param name="issuerTokenExpiresAt">The expiration time of the issuer token. The issuer token is generated by the API client to create the guest user. The issuer token is NOT the same as the Access token of guest user. The issuer token is used on creating the guest user and should be available while this creation process. Use the lowest practical value for the use of the issuer token. Make sure your local clock is accurate or synced with NTP. Otherwise, the issuer token may be already expired now.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsResult<GuestUserInfo> > RefreshGuestUserTokenAsync(GuestUserInfo guestUserInfo, DateTime issuerTokenExpiresAt, CancellationToken? cancellationToken = null)
+        {
+            return (CreateGuestUserAsync(guestUserInfo.UserId, guestUserInfo.DisplayName, issuerTokenExpiresAt, cancellationToken));
+        }
+
+        /// <summary>
+        /// Refreshed the Guest user token.
+        /// Make sure your local clock is accurate or synced with NTP. Otherwise, it may fail to create guest user because of expiration of issuer token.
+        /// </summary>
+        /// <param name="guestUserInfo"><see cref="GuestUserInfo"/> which the token will be refreshed.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsResult<GuestUserInfo> > RefreshGuestUserTokenAsync(GuestUserInfo guestUserInfo, CancellationToken? cancellationToken = null)
+        {
+            return (CreateGuestUserAsync(guestUserInfo.UserId, guestUserInfo.DisplayName, cancellationToken));
         }
 
 
