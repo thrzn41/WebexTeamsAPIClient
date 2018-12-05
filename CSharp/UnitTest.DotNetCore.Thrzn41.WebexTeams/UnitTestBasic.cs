@@ -8,6 +8,7 @@ using Thrzn41.WebexTeams.Version1;
 using Thrzn41.WebexTeams.Version1.OAuth2;
 using Thrzn41.Util;
 using System.Net;
+using System.Threading;
 
 namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 {
@@ -150,6 +151,10 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
             Assert.IsNotNull(r.Data.Id);
             Assert.IsNotNull(r.TrackingId);
+
+            Assert.AreNotEqual(Guid.Empty, r.TransactionId);
+
+            Assert.AreEqual("POST /v1/messages HTTP/1.1", r.RequestLine);
 
             Assert.AreEqual("Hello, Cisco Webex Teams!!", r.Data.Text);
 
@@ -467,6 +472,30 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                 Assert.IsTrue(sre.Message.StartsWith("The requested resource could not be found."));
                 Assert.IsNotNull(sre.TrackingId);
             }
+
+        }
+
+
+
+        [TestMethod]
+        public async Task TestCancellation()
+        {
+            var cancel = new CancellationTokenSource();
+            cancel.Cancel();
+
+            await Assert.ThrowsExceptionAsync<TaskCanceledException>(
+                async () =>
+                {
+                    var r = await this.teams.CreateMessageAsync(unitTestSpace.Id, "Hello, Cisco Webex Teams!!", cancellationToken: cancel.Token);
+                }
+            );
+
+            await Assert.ThrowsExceptionAsync<TaskCanceledException>(
+                async () =>
+                {
+                    var r = await this.teams.ListSpacesAsync(max: 1, cancellationToken: cancel.Token);
+                }
+            );
 
         }
 
