@@ -107,16 +107,75 @@ namespace Thrzn41.WebexTeams
         /// <param name="notificationFunc">A function to be notified when a retry is trying.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
+        internal async Task<TTeamsResult> requestAsync<TTeamsResult, TTeamsObject>(Func< Task<TTeamsResult> > teamsRequestFunc, Func<TeamsResultInfo, int, bool> notificationFunc = null, CancellationToken? cancellationToken = null)
+            where TTeamsResult : TeamsResult<TTeamsObject>, new()
+            where TTeamsObject : TeamsObject, new()
+        {
+            TTeamsResult result = null;
+            Guid guid = Guid.Empty;
+
+            for (int i = 0; i < this.trials; i++)
+            {
+                if (result != null)
+                {
+                    if (guid != Guid.Empty)
+                    {
+                        result.TransactionId = guid;
+                    }
+                    else
+                    {
+                        guid = result.TransactionId;
+                    }
+
+                    if ( (result.HasRetryAfter && result.RetryAfter.Delta.HasValue) &&
+                         ((notificationFunc == null) || notificationFunc(result, i)) )
+                    {
+                        await this.DelayAsync(result.RetryAfter.Delta.Value, cancellationToken);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                result = await teamsRequestFunc();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Requests with retry.
+        /// If you want to get notification on each retry, you can use notificationFunc function.
+        /// <see cref="TeamsResult{TTeamsObject}"/> and retry counter will be notified to the function.
+        /// You should retrun true, if you want to retry, otherwize the retry will be cancelled.
+        /// </summary>
+        /// <typeparam name="TTeamsResult">Type of TeamsResult to be returned.</typeparam>
+        /// <typeparam name="TTeamsObject">Type of TeamsObject to be returned.</typeparam>
+        /// <param name="teamsRequestFunc">A function to be requested with retry.</param>
+        /// <param name="notificationFunc">A function to be notified when a retry is trying.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
         internal async Task<TTeamsResult> requestAsync<TTeamsResult, TTeamsObject>(Func< Task<TTeamsResult> > teamsRequestFunc, Func<TTeamsResult, int, bool> notificationFunc = null, CancellationToken? cancellationToken = null)
             where TTeamsResult : TeamsResult<TTeamsObject>, new()
             where TTeamsObject : TeamsObject, new()
         {
             TTeamsResult result = null;
+            Guid         guid   = Guid.Empty;
 
             for(int i = 0; i < this.trials; i++)
             {
                 if(result != null)
                 {
+                    if(guid != Guid.Empty)
+                    {
+                        result.TransactionId = guid;
+                    }
+                    else
+                    {
+                        guid = result.TransactionId;
+                    }
+
                     if ( (result.HasRetryAfter && result.RetryAfter.Delta.HasValue) &&
                          ((notificationFunc == null) || notificationFunc(result, i)) )
                     {

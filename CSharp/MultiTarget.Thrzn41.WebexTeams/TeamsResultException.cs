@@ -36,16 +36,34 @@ namespace Thrzn41.WebexTeams
     public class TeamsResultException : TeamsException
     {
 
+
+        /// <summary>
+        /// Teams Result info related with this exception.
+        /// </summary>
+        public TeamsResultInfo ResultInfo { get; internal set; }
+
         /// <summary>
         /// Http status code returned on the API request.
         /// </summary>
-        public HttpStatusCode HttpStatusCode { get; internal set; }
+        public HttpStatusCode HttpStatusCode
+        {
+            get
+            {
+                return this.ResultInfo.HttpStatusCode;
+            }
+        }
 
         /// <summary>
         /// Tracking id of the request.
         /// This id can be used for technical support.
         /// </summary>
-        public string TrackingId { get; internal set; }
+        public string TrackingId
+        {
+            get
+            {
+                return this.ResultInfo.TrackingId;
+            }
+        }
 
         /// <summary>
         /// Indicates whether the result has tracking id or not.
@@ -54,14 +72,20 @@ namespace Thrzn41.WebexTeams
         {
             get
             {
-                return (!String.IsNullOrEmpty(this.TrackingId));
+                return this.ResultInfo.HasTrackingId;
             }
         }
 
         /// <summary>
         /// Retry-After header value.
         /// </summary>
-        public RetryConditionHeaderValue RetryAfter { get; internal set; }
+        public RetryConditionHeaderValue RetryAfter
+        {
+            get
+            {
+                return this.ResultInfo.RetryAfter;
+            }
+        }
 
         /// <summary>
         /// Indicates the request has Retry-After header value.
@@ -70,7 +94,7 @@ namespace Thrzn41.WebexTeams
         {
             get
             {
-                return (this.RetryAfter != null);
+                return this.ResultInfo.HasRetryAfter;
             }
         }
 
@@ -78,15 +102,11 @@ namespace Thrzn41.WebexTeams
         /// Creates <see cref="TeamsResultException"/>.
         /// </summary>
         /// <param name="message">A message that indicates this error.</param>
-        /// <param name="httpStatusCode">Http status code returned on the API request.</param>
-        /// <param name="trackingId">Tracking id of the request.</param>
-        /// <param name="retryAfter">Retry-After header value.</param>
-        public TeamsResultException(string message, HttpStatusCode httpStatusCode, string trackingId, RetryConditionHeaderValue retryAfter)
+        /// <param name="resultInfo">Teams Result info related with this exception.</param>
+        public TeamsResultException(string message, TeamsResultInfo resultInfo)
             : base(message)
         {
-            this.HttpStatusCode = httpStatusCode;
-            this.TrackingId     = trackingId;
-            this.RetryAfter     = retryAfter;
+            this.ResultInfo = resultInfo;
         }
 
     }
