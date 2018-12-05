@@ -184,6 +184,8 @@ namespace Thrzn41.WebexTeams
             {
                 var httpClient = selectHttpClient(request.RequestUri);
 
+                result.RequestInfo = new TeamsRequestInfo(request);
+
                 HttpResponseMessage response;
 
                 if (cancellationToken.HasValue)

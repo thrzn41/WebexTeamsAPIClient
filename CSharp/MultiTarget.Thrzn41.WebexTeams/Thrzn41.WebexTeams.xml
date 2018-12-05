@@ -730,6 +730,38 @@
             <param name="jsonString">Json style string to be converted.</param>
             <returns>Cisco Webex Teams object converted from Json string.</returns>
         </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsRequestInfo">
+            <summary>
+            The request info of Teams API.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsRequestInfo.#ctor(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Creates TeamsRequestInfo.
+            </summary>
+            <param name="request"><see cref="T:System.Net.Http.HttpRequestMessage"/> of this request.</param>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsRequestInfo.Uri">
+            <summary>
+            <see cref="P:Thrzn41.WebexTeams.TeamsRequestInfo.Uri"/> of this request.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsRequestInfo.HttpMethod">
+            <summary>
+            <see cref="P:Thrzn41.WebexTeams.TeamsRequestInfo.HttpMethod"/> of this request.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsRequestInfo.HttpVersion">
+            <summary>
+            <see cref="T:System.Version"/> of Http of this request.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsRequestInfo.GetRequestLine">
+            <summary>
+            Gets Request line.
+            </summary>
+            <returns>Request line of this request.</returns>
+        </member>
         <member name="T:Thrzn41.WebexTeams.TeamsResult`1">
             <summary>
             The result of Teams API request.
@@ -844,6 +876,16 @@
         <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.HasRetryAfter">
             <summary>
             Indicates the request has Retry-After header value.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.RequestInfo">
+            <summary>
+            <see cref="T:Thrzn41.WebexTeams.TeamsRequestInfo"/> for this request.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.RequestLine">
+            <summary>
+            Request line of this request.
             </summary>
         </member>
         <member name="T:Thrzn41.WebexTeams.TeamsRetry">
