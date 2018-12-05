@@ -732,7 +732,7 @@
         </member>
         <member name="T:Thrzn41.WebexTeams.TeamsResult`1">
             <summary>
-            The result of Cisco API request.
+            The result of Teams API request.
             </summary>
             <typeparam name="TTeamsObject">Teams Object that is returned on API request.</typeparam>
         </member>
@@ -741,56 +741,30 @@
             The Teams Object data that is returned on the API request.
             </summary>
         </member>
-        <member name="P:Thrzn41.WebexTeams.TeamsResult`1.IsSuccessStatus">
-            <summary>
-            Indicats the request has been succeeded or not.
-            </summary>
-        </member>
-        <member name="P:Thrzn41.WebexTeams.TeamsResult`1.HttpStatusCode">
-            <summary>
-            Http status code returned on the API request.
-            </summary>
-        </member>
-        <member name="P:Thrzn41.WebexTeams.TeamsResult`1.TrackingId">
-            <summary>
-            Tracking id of the request.
-            This id can be used for technical support.
-            </summary>
-        </member>
-        <member name="P:Thrzn41.WebexTeams.TeamsResult`1.HasTrackingId">
-            <summary>
-            Indicates whether the result has tracking id or not.
-            </summary>
-        </member>
-        <member name="P:Thrzn41.WebexTeams.TeamsResult`1.RetryAfter">
-            <summary>
-            Retry-After header value.
-            </summary>
-        </member>
-        <member name="P:Thrzn41.WebexTeams.TeamsResult`1.HasRetryAfter">
-            <summary>
-            Indicates the request has Retry-After header value.
-            </summary>
-        </member>
         <member name="M:Thrzn41.WebexTeams.TeamsResult`1.GetData(System.Boolean)">
             <summary>
             Gets the Teams Object data that is returned on the API request.
-            The <see cref="P:Thrzn41.WebexTeams.TeamsResult`1.Data"/> property can be used to get the same data if you checked <see cref="P:Thrzn41.WebexTeams.TeamsResult`1.IsSuccessStatus"/> property by yourself.
-            This method throws <see cref="T:Thrzn41.WebexTeams.TeamsResultException"/> when <see cref="P:Thrzn41.WebexTeams.TeamsResult`1.IsSuccessStatus"/> is false and throwTeamsResultExceptionOnErrors parameter is true.
+            The <see cref="P:Thrzn41.WebexTeams.TeamsResult`1.Data"/> property can be used to get the same data if you checked <see cref="P:Thrzn41.WebexTeams.TeamsResultInfo.IsSuccessStatus"/> property by yourself.
+            This method throws <see cref="T:Thrzn41.WebexTeams.TeamsResultException"/> when <see cref="P:Thrzn41.WebexTeams.TeamsResultInfo.IsSuccessStatus"/> is false and throwTeamsResultExceptionOnErrors parameter is true.
             </summary>
-            <param name="throwTeamsResultExceptionOnErrors">true to throw <see cref="T:Thrzn41.WebexTeams.TeamsResultException"/> when <see cref="P:Thrzn41.WebexTeams.TeamsResult`1.IsSuccessStatus"/> is true.</param>
+            <param name="throwTeamsResultExceptionOnErrors">true to throw <see cref="T:Thrzn41.WebexTeams.TeamsResultException"/> when <see cref="P:Thrzn41.WebexTeams.TeamsResultInfo.IsSuccessStatus"/> is true.</param>
             <returns>The Teams Object data that is returned on the API request.</returns>
-            <exception cref="T:Thrzn41.WebexTeams.TeamsResultException"><see cref="P:Thrzn41.WebexTeams.TeamsResult`1.IsSuccessStatus"/> is false.</exception>
+            <exception cref="T:Thrzn41.WebexTeams.TeamsResultException"><see cref="P:Thrzn41.WebexTeams.TeamsResultInfo.IsSuccessStatus"/> is false.</exception>
         </member>
         <member name="M:Thrzn41.WebexTeams.TeamsResult`1.ThrowTeamsResultExceptionOnErrors">
             <summary>
-            Throws <see cref="T:Thrzn41.WebexTeams.TeamsResultException"/> if <see cref="P:Thrzn41.WebexTeams.TeamsResult`1.IsSuccessStatus"/> is false.
+            Throws <see cref="T:Thrzn41.WebexTeams.TeamsResultException"/> if <see cref="P:Thrzn41.WebexTeams.TeamsResultInfo.IsSuccessStatus"/> is false.
             </summary>
-            <exception cref="T:Thrzn41.WebexTeams.TeamsResultException"><see cref="P:Thrzn41.WebexTeams.TeamsResult`1.IsSuccessStatus"/> is false.</exception>
+            <exception cref="T:Thrzn41.WebexTeams.TeamsResultException"><see cref="P:Thrzn41.WebexTeams.TeamsResultInfo.IsSuccessStatus"/> is false.</exception>
         </member>
         <member name="T:Thrzn41.WebexTeams.TeamsResultException">
             <summary>
             Represents errors that occur during a Cisco Webex Teams REST API request.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultException.ResultInfo">
+            <summary>
+            Teams Result info related with this exception.
             </summary>
         </member>
         <member name="P:Thrzn41.WebexTeams.TeamsResultException.HttpStatusCode">
@@ -819,14 +793,58 @@
             Indicates the request has Retry-After header value.
             </summary>
         </member>
-        <member name="M:Thrzn41.WebexTeams.TeamsResultException.#ctor(System.String,System.Net.HttpStatusCode,System.String,System.Net.Http.Headers.RetryConditionHeaderValue)">
+        <member name="M:Thrzn41.WebexTeams.TeamsResultException.#ctor(System.String,Thrzn41.WebexTeams.TeamsResultInfo)">
             <summary>
             Creates <see cref="T:Thrzn41.WebexTeams.TeamsResultException"/>.
             </summary>
             <param name="message">A message that indicates this error.</param>
-            <param name="httpStatusCode">Http status code returned on the API request.</param>
-            <param name="trackingId">Tracking id of the request.</param>
-            <param name="retryAfter">Retry-After header value.</param>
+            <param name="resultInfo">Teams Result info related with this exception.</param>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsResultInfo">
+            <summary>
+            The result info of Teams API request.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsResultInfo.#ctor">
+            <summary>
+            Creates TeamsResultInfo.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.TransactionId">
+            <summary>
+            Transaction id for this result.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.IsSuccessStatus">
+            <summary>
+            Indicats the request has been succeeded or not.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.HttpStatusCode">
+            <summary>
+            Http status code returned on the API request.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.TrackingId">
+            <summary>
+            Tracking id of the request.
+            This id can be used for technical support.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.HasTrackingId">
+            <summary>
+            Indicates whether the result has tracking id or not.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.RetryAfter">
+            <summary>
+            Retry-After header value.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.HasRetryAfter">
+            <summary>
+            Indicates the request has Retry-After header value.
+            </summary>
         </member>
         <member name="T:Thrzn41.WebexTeams.TeamsRetry">
             <summary>
@@ -877,6 +895,20 @@
             the retry will be sent after (retry-after + 250ms).
             </summary>
             <param name="retryMax">Max retry count.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsRetry.requestAsync``2(System.Func{System.Threading.Tasks.Task{``0}},System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean},System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Requests with retry.
+            If you want to get notification on each retry, you can use notificationFunc function.
+            <see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> and retry counter will be notified to the function.
+            You should retrun true, if you want to retry, otherwize the retry will be cancelled.
+            </summary>
+            <typeparam name="TTeamsResult">Type of TeamsResult to be returned.</typeparam>
+            <typeparam name="TTeamsObject">Type of TeamsObject to be returned.</typeparam>
+            <param name="teamsRequestFunc">A function to be requested with retry.</param>
+            <param name="notificationFunc">A function to be notified when a retry is trying.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> that represents result of API request.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.TeamsRetry.requestAsync``2(System.Func{System.Threading.Tasks.Task{``0}},System.Func{``0,System.Int32,System.Boolean},System.Nullable{System.Threading.CancellationToken})">
             <summary>

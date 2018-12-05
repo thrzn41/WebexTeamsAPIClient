@@ -23,8 +23,6 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http.Headers;
 using System.Text;
 using Thrzn41.WebexTeams.ResourceMessage;
 
@@ -32,10 +30,10 @@ namespace Thrzn41.WebexTeams
 {
 
     /// <summary>
-    /// The result of Cisco API request.
+    /// The result of Teams API request.
     /// </summary>
     /// <typeparam name="TTeamsObject">Teams Object that is returned on API request.</typeparam>
-    public class TeamsResult<TTeamsObject>
+    public class TeamsResult<TTeamsObject> : TeamsResultInfo
         where TTeamsObject : TeamsObject, new()
     {
 
@@ -44,59 +42,17 @@ namespace Thrzn41.WebexTeams
         /// </summary>
         public TTeamsObject Data { get; internal set; }
 
-        /// <summary>
-        /// Indicats the request has been succeeded or not.
-        /// </summary>
-        public bool IsSuccessStatus { get; internal set; }
-
-        /// <summary>
-        /// Http status code returned on the API request.
-        /// </summary>
-        public HttpStatusCode HttpStatusCode { get; internal set; }
-
-        /// <summary>
-        /// Tracking id of the request.
-        /// This id can be used for technical support.
-        /// </summary>
-        public string TrackingId { get; internal set; }
-
-        /// <summary>
-        /// Indicates whether the result has tracking id or not.
-        /// </summary>
-        public bool HasTrackingId
-        {
-            get
-            {
-                return ( !String.IsNullOrEmpty(this.TrackingId) );
-            }
-        }
-
-        /// <summary>
-        /// Retry-After header value.
-        /// </summary>
-        public RetryConditionHeaderValue RetryAfter { get; internal set; }
-
-        /// <summary>
-        /// Indicates the request has Retry-After header value.
-        /// </summary>
-        public bool HasRetryAfter {
-            get
-            {
-                return (this.RetryAfter != null);
-            }
-        }
-
 
 
 
         /// <summary>
         /// Gets the Teams Object data that is returned on the API request.
-        /// The <see cref="Data"/> property can be used to get the same data if you checked <see cref="IsSuccessStatus"/> property by yourself.
-        /// This method throws <see cref="TeamsResultException"/> when <see cref="IsSuccessStatus"/> is false and throwTeamsResultExceptionOnErrors parameter is true.
+        /// The <see cref="Data"/> property can be used to get the same data if you checked <see cref="TeamsResultInfo.IsSuccessStatus"/> property by yourself.
+        /// This method throws <see cref="TeamsResultException"/> when <see cref="TeamsResultInfo.IsSuccessStatus"/> is false and throwTeamsResultExceptionOnErrors parameter is true.
         /// </summary>
-        /// <param name="throwTeamsResultExceptionOnErrors">true to throw <see cref="TeamsResultException"/> when <see cref="IsSuccessStatus"/> is true.</param>
+        /// <param name="throwTeamsResultExceptionOnErrors">true to throw <see cref="TeamsResultException"/> when <see cref="TeamsResultInfo.IsSuccessStatus"/> is true.</param>
         /// <returns>The Teams Object data that is returned on the API request.</returns>
-        /// <exception cref="TeamsResultException"><see cref="IsSuccessStatus"/> is false.</exception>
+        /// <exception cref="TeamsResultException"><see cref="TeamsResultInfo.IsSuccessStatus"/> is false.</exception>
         public TTeamsObject GetData(bool throwTeamsResultExceptionOnErrors = true)
         {
             if(throwTeamsResultExceptionOnErrors)
@@ -108,9 +64,9 @@ namespace Thrzn41.WebexTeams
         }
 
         /// <summary>
-        /// Throws <see cref="TeamsResultException"/> if <see cref="IsSuccessStatus"/> is false.
+        /// Throws <see cref="TeamsResultException"/> if <see cref="TeamsResultInfo.IsSuccessStatus"/> is false.
         /// </summary>
-        /// <exception cref="TeamsResultException"><see cref="IsSuccessStatus"/> is false.</exception>
+        /// <exception cref="TeamsResultException"><see cref="TeamsResultInfo.IsSuccessStatus"/> is false.</exception>
         public void ThrowTeamsResultExceptionOnErrors()
         {
             if( !this.IsSuccessStatus )
@@ -122,7 +78,7 @@ namespace Thrzn41.WebexTeams
                     message = ErrorMessages.TeamsResultError;
                 }
 
-                throw new TeamsResultException(message, this.HttpStatusCode, this.TrackingId, this.RetryAfter);
+                throw new TeamsResultException(message, this);
             }
         }
 
