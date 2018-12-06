@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -36,7 +37,6 @@ namespace Thrzn41.WebexTeams
     /// </summary>
     public class TeamsResultInfo
     {
-
 
         /// <summary>
         /// Creates TeamsResultInfo.
@@ -109,7 +109,7 @@ namespace Thrzn41.WebexTeams
         {
             get
             {
-                if(this.RequestInfo == null)
+                if (this.RequestInfo == null)
                 {
                     return "UNKNOWN * HTTP/1.1";
                 }
@@ -119,5 +119,120 @@ namespace Thrzn41.WebexTeams
         }
 
 
+
+        /// <summary>
+        /// Path and resource.
+        /// </summary>
+        private class PathAndResource
+        {
+
+            /// <summary>
+            /// Requested path.
+            /// </summary>
+            public string Path { get; set; }
+
+            /// <summary>
+            /// Requested resource.
+            /// </summary>
+            public TeamsResource Resouce { get; set; }
+        }
+
+
+        /// <summary>
+        /// Path and resource list.
+        /// </summary>
+        private static readonly List<PathAndResource> PATH_AND_RESOURCES;
+
+
+        /// <summary>
+        /// Static constructor.
+        /// </summary>
+        static TeamsResultInfo()
+        {
+            PATH_AND_RESOURCES = new List<PathAndResource>()
+            {
+                new PathAndResource{ Path = "/v1/messages",                  Resouce = TeamsResource.Message                 },
+                new PathAndResource{ Path = "/v1/rooms",                     Resouce = TeamsResource.Space                   },
+                new PathAndResource{ Path = "/v1/memberships",               Resouce = TeamsResource.SpaceMembership         },
+                new PathAndResource{ Path = "/v1/teams",                     Resouce = TeamsResource.Team                    },
+                new PathAndResource{ Path = "/v1/team/memberships",          Resouce = TeamsResource.TeamMembership          },
+                new PathAndResource{ Path = "/v1/people",                    Resouce = TeamsResource.Person                  },
+                new PathAndResource{ Path = "/v1/webhooks",                  Resouce = TeamsResource.Webhook                 },
+                new PathAndResource{ Path = "/v1/events",                    Resouce = TeamsResource.Event                   },
+                new PathAndResource{ Path = "/v1/licenses",                  Resouce = TeamsResource.License                 },
+                new PathAndResource{ Path = "/v1/organizations",             Resouce = TeamsResource.Organization            },
+                new PathAndResource{ Path = "/v1/roles",                     Resouce = TeamsResource.Role                    },
+                new PathAndResource{ Path = "/v1/resourceGroups",            Resouce = TeamsResource.ResourceGroup           },
+                new PathAndResource{ Path = "/v1/resourceGroup/memberships", Resouce = TeamsResource.ResourceGroupMembership },
+                new PathAndResource{ Path = "/v1/access_token",              Resouce = TeamsResource.AccessToken             },
+                new PathAndResource{ Path = "/v1/jwt/login",                 Resouce = TeamsResource.GuestUser               },
+            };
+
+        }
+
+
+        /// <summary>
+        /// Parse the request into <see cref="TeamsResourceOperation"/>.
+        /// </summary>
+        /// <returns><see cref="TeamsResourceOperation"/> of the result.</returns>
+        public TeamsResourceOperation ParseResourceOperation()
+        {
+            TeamsResource  resource  = TeamsResource.Unknown;
+            TeamsOperation operation = TeamsOperation.Unknown;
+
+            if(this.RequestInfo != null)
+            {
+                var method = this.RequestInfo.HttpMethod;
+
+                if(method != null)
+                {
+                    if(method == HttpMethod.Post)
+                    {
+                        operation = TeamsOperation.Create;
+                    }
+                    else if(method == HttpMethod.Get)
+                    {
+                        operation = TeamsOperation.Get;
+                    }
+                    else if (method == HttpMethod.Put)
+                    {
+                        operation = TeamsOperation.Update;
+                    }
+                    else if (method == HttpMethod.Delete)
+                    {
+                        operation = TeamsOperation.Delete;
+                    }
+                }
+
+                string path = this.RequestInfo.Uri?.AbsolutePath;
+
+                if ( !String.IsNullOrEmpty(path) )
+                {
+                    foreach (var item in PATH_AND_RESOURCES)
+                    {
+                        if(path.StartsWith(item.Path))
+                        {
+                            resource = item.Resouce;
+
+                            if(resource == TeamsResource.AccessToken && operation == TeamsOperation.Create)
+                            {
+                                operation = TeamsOperation.Get;
+                            }
+                            else if(operation == TeamsOperation.Get && path.EndsWith(item.Path))
+                            {
+                                operation = TeamsOperation.List;
+                            }
+
+                            break;
+                        }
+                    }
+                }
+
+            }
+
+            return (new TeamsResourceOperation(resource, operation));
+        }
+
     }
+
 }

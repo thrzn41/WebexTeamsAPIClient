@@ -39,6 +39,22 @@ namespace Thrzn41.WebexTeams
         where TTeamsObject : TeamsObject, new()
     {
 
+
+        /// <summary>
+        /// Creates TeamsListResult.
+        /// </summary>
+        public TeamsListResult()
+        {
+            this.ListTransactionId = Guid.NewGuid();
+        }
+
+
+        /// <summary>
+        /// Transaction id for this list.
+        /// </summary>
+        public Guid ListTransactionId { get; internal set; }
+
+
         /// <summary>
         /// <see cref="TeamsHttpClient"/> to get next result.
         /// </summary>
@@ -80,6 +96,8 @@ namespace Thrzn41.WebexTeams
                                     null,
                                     null,
                                     cancellationToken);
+
+                result.ListTransactionId = this.ListTransactionId;
             }
             else
             {
