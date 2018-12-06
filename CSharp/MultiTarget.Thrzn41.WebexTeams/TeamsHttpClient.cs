@@ -92,6 +92,16 @@ namespace Thrzn41.WebexTeams
         private readonly Regex teamsAPIUriPattern;
 
 
+        /// <summary>
+        /// Executor for retry.
+        /// </summary>
+        private readonly TeamsRetry retryExecutor;
+
+        /// <summary>
+        /// Notification func for retry.
+        /// </summary>
+        private readonly Func<TeamsResultInfo, int, bool> retryNotificationFunc;
+
 
 
         /// <summary>
@@ -100,7 +110,9 @@ namespace Thrzn41.WebexTeams
         /// <param name="teamsToken">Cisco Webex Teams Token.</param>
         /// <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
         /// <param name="preAuthenticate">true if preAuthenticate is needed.</param>
-        internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern, bool preAuthenticate)
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func for retry.</param>
+        internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern, bool preAuthenticate, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc)
         {
             // HttpClient for Cisco Webex Teams API.
             // Teams Token MUST be sent to only Teams API https URL.
@@ -134,6 +146,22 @@ namespace Thrzn41.WebexTeams
 
             this.teamsAPIUriPattern = teamsAPIUriPattern;
 
+            this.retryExecutor         = retryExecutor;
+            this.retryNotificationFunc = retryNotificationFunc;
+
+        }
+
+
+
+        /// <summary>
+        /// TeamsHttpClient constructor.
+        /// </summary>
+        /// <param name="teamsToken">Cisco Webex Teams Token.</param>
+        /// <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
+        /// <param name="preAuthenticate">true if preAuthenticate is needed.</param>
+        internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern, bool preAuthenticate)
+            : this(teamsToken, teamsAPIUriPattern, preAuthenticate, null, null)
+        {
         }
 
         /// <summary>
@@ -145,6 +173,20 @@ namespace Thrzn41.WebexTeams
             : this(teamsToken, teamsAPIUriPattern, (teamsToken != null))
         {
         }
+
+        /// <summary>
+        /// TeamsHttpClient constructor.
+        /// </summary>
+        /// <param name="teamsToken">Cisco Webex Teams Token.</param>
+        /// <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func for retry.</param>
+        internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc)
+            : this(teamsToken, teamsAPIUriPattern, (teamsToken != null), retryExecutor, retryNotificationFunc)
+        {
+        }
+
+
 
 
         /// <summary>
@@ -164,6 +206,152 @@ namespace Thrzn41.WebexTeams
             return result;
         }
 
+        /// <summary>
+        /// Requests to Cisco Webex Teams API.
+        /// </summary>
+        /// <typeparam name="TTeamsResult">Type of TeamsResult to be returned.</typeparam>
+        /// <typeparam name="TTeamsObject">Type of TeamsObject to be returned.</typeparam>
+        /// <param name="request"><see cref="HttpRequestMessage"/> to be requested.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
+        private async Task<TTeamsResult> requestAsync<TTeamsResult, TTeamsObject>(HttpRequestMessage request, CancellationToken? cancellationToken = null)
+            where TTeamsResult : TeamsResult<TTeamsObject>, new()
+            where TTeamsObject : TeamsObject, new()
+        {
+            var result = new TTeamsResult();
+
+            var httpClient = selectHttpClient(request.RequestUri);
+
+            result.RequestInfo = new TeamsRequestInfo(request);
+
+            HttpResponseMessage response;
+
+            if (cancellationToken.HasValue)
+            {
+                response = await httpClient.SendAsync(request, cancellationToken.Value);
+            }
+            else
+            {
+                response = await httpClient.SendAsync(request);
+            }
+
+            using (response)
+            {
+                if (response.StatusCode != System.Net.HttpStatusCode.NoContent && response.Content != null)
+                {
+                    using (var content = response.Content)
+                    {
+                        var contentHeaders = content.Headers;
+
+                        if (contentHeaders.ContentType?.MediaType == MEDIA_TYPE_APPLICATION_JSON)
+                        {
+                            var body = await content.ReadAsStringAsync();
+
+                            if (!String.IsNullOrEmpty(body))
+                            {
+                                result.Data = TeamsObject.FromJsonString<TTeamsObject>(body);
+                            }
+                        }
+                        else
+                        {
+                            var info = new TTeamsObject() as TeamsFileInfo;
+
+                            if (info != null)
+                            {
+                                string fileName = contentHeaders.ContentDisposition?.FileName;
+
+                                if (fileName != null && fileName.StartsWith("\"") && fileName.EndsWith("\""))
+                                {
+                                    fileName = fileName.Substring(1, (fileName.Length - 2));
+                                }
+
+                                info.FileName      = fileName;
+                                info.MediaTypeName = contentHeaders.ContentType?.MediaType;
+                                info.Size          = contentHeaders.ContentLength;
+                            }
+
+                            var data = info as TeamsFileData;
+
+                            if (data != null)
+                            {
+                                data.Stream = new MemoryStream();
+
+                                await content.CopyToAsync(data.Stream);
+
+                                data.Stream.Position = 0;
+                            }
+
+                            result.Data = ((data != null) ? data : info) as TTeamsObject;
+                        }
+                    }
+                }
+
+
+                if (result.Data == null)
+                {
+                    result.Data = new TTeamsObject();
+
+                    result.Data.HasValues = false;
+                }
+
+
+                result.HttpStatusCode = response.StatusCode;
+
+                var headers = response.Headers;
+
+                if (headers.Contains(HEADER_NAME_TRACKING_ID))
+                {
+                    foreach (var item in headers.GetValues(HEADER_NAME_TRACKING_ID))
+                    {
+                        result.TrackingId = item;
+                        break;
+                    }
+                }
+
+                result.RetryAfter = headers.RetryAfter;
+
+
+                if (result is TeamsListResult<TTeamsObject>)
+                {
+                    if (headers.Contains(HEADER_NAME_LINK))
+                    {
+                        var listResult = result as TeamsListResult<TTeamsObject>;
+
+                        if (listResult != null)
+                        {
+                            foreach (var item in headers.GetValues(HEADER_NAME_LINK))
+                            {
+                                if (!String.IsNullOrEmpty(item))
+                                {
+                                    var m = LINK_NEXT_PATTERN.Match(item);
+
+                                    if (m.Success)
+                                    {
+                                        var g = m.Groups["NEXTURI"];
+
+                                        if (g != null && !String.IsNullOrEmpty(g.Value))
+                                        {
+                                            listResult.NextUri = new Uri(g.Value);
+                                            listResult.TeamsHttpClient = this;
+
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+                // Result status is once set based on Http Status code.
+                // The exact criteria differs in each API.
+                // This value will be adjusted in each TeamsAPIClient class.
+                result.IsSuccessStatus = response.IsSuccessStatusCode;
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// Requests to Cisco Webex Teams API.
@@ -177,139 +365,24 @@ namespace Thrzn41.WebexTeams
             where TTeamsResult : TeamsResult<TTeamsObject>, new()
             where TTeamsObject : TeamsObject, new()
         {
-            var result = new TTeamsResult();
+            TTeamsResult result = null;
 
             using (request)
             using (request.Content)
             {
-                var httpClient = selectHttpClient(request.RequestUri);
-
-                result.RequestInfo = new TeamsRequestInfo(request);
-
-                HttpResponseMessage response;
-
-                if (cancellationToken.HasValue)
+                if(this.retryExecutor == null)
                 {
-                    response = await httpClient.SendAsync(request, cancellationToken.Value);
+                    result = await requestAsync<TTeamsResult, TTeamsObject>(request, cancellationToken);
                 }
                 else
                 {
-                    response = await httpClient.SendAsync(request);
-                }
-
-                using (response)
-                {
-                    if (response.StatusCode != System.Net.HttpStatusCode.NoContent && response.Content != null)
-                    {
-                        using (var content = response.Content)
+                    result = await retryExecutor.requestAsync<TTeamsResult, TTeamsObject>(
+                        () =>
                         {
-                            var contentHeaders = content.Headers;
-
-                            if ( contentHeaders.ContentType?.MediaType == MEDIA_TYPE_APPLICATION_JSON )
-                            {
-                                var body = await content.ReadAsStringAsync();
-
-                                if ( !String.IsNullOrEmpty(body) )
-                                {
-                                    result.Data = TeamsObject.FromJsonString<TTeamsObject>(body);
-                                }
-                            }
-                            else
-                            {
-                                var info = new TTeamsObject() as TeamsFileInfo;
-
-                                if (info != null)
-                                {
-                                    string fileName = contentHeaders.ContentDisposition?.FileName;
-
-                                    if(fileName != null && fileName.StartsWith("\"") && fileName.EndsWith("\""))
-                                    {
-                                        fileName = fileName.Substring(1, (fileName.Length - 2));
-                                    }
-
-                                    info.FileName      = fileName;
-                                    info.MediaTypeName = contentHeaders.ContentType?.MediaType;
-                                    info.Size          = contentHeaders.ContentLength;
-                                }
-
-                                var data = info as TeamsFileData;
-
-                                if (data != null)
-                                {
-                                    data.Stream = new MemoryStream();
-
-                                    await content.CopyToAsync(data.Stream);
-
-                                    data.Stream.Position = 0;
-                                }
-
-                                result.Data = ((data != null) ? data : info) as TTeamsObject;
-                            }
-                        }
-                    }
-
-
-                    if(result.Data == null)
-                    {
-                        result.Data = new TTeamsObject();
-
-                        result.Data.HasValues = false;
-                    }
-
-
-                    result.HttpStatusCode = response.StatusCode;
-
-                    var headers = response.Headers;
-
-                    if (headers.Contains(HEADER_NAME_TRACKING_ID))
-                    {
-                        foreach (var item in headers.GetValues(HEADER_NAME_TRACKING_ID))
-                        {
-                            result.TrackingId = item;
-                            break;
-                        }
-                    }
-
-                    result.RetryAfter = headers.RetryAfter;
-
-
-                    if(result is TeamsListResult<TTeamsObject>)
-                    {
-                        if (headers.Contains(HEADER_NAME_LINK))
-                        {
-                            var listResult = result as TeamsListResult<TTeamsObject>;
-
-                            if (listResult != null)
-                            {
-                                foreach (var item in headers.GetValues(HEADER_NAME_LINK))
-                                {
-                                    if( !String.IsNullOrEmpty(item) )
-                                    {
-                                        var m = LINK_NEXT_PATTERN.Match(item);
-                                        
-                                        if(m.Success)
-                                        {
-                                            var g = m.Groups["NEXTURI"];
-
-                                            if( g != null && !String.IsNullOrEmpty(g.Value) )
-                                            {
-                                                listResult.NextUri         = new Uri(g.Value);
-                                                listResult.TeamsHttpClient = this;
-
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-
-                    // Result status is once set based on Http Status code.
-                    // The exact criteria differs in each API.
-                    // This value will be adjusted in each TeamsAPIClient class.
-                    result.IsSuccessStatus = response.IsSuccessStatusCode;
+                            return requestAsync<TTeamsResult, TTeamsObject>(request, cancellationToken);
+                        },
+                        retryNotificationFunc,
+                        cancellationToken);
                 }
             }
 

@@ -106,8 +106,10 @@ namespace Thrzn41.WebexTeams.Version1.Admin
         /// Constructor of TeamsAdminAPIClient.
         /// </summary>
         /// <param name="token">token of Teams API.</param>
-        internal TeamsAdminAPIClient(string token)
-            : base(token)
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func for retry.</param>
+        internal TeamsAdminAPIClient(string token, TeamsRetry retryExecutor = null, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
+            : base(token, retryExecutor, retryNotificationFunc)
         {
         }
 

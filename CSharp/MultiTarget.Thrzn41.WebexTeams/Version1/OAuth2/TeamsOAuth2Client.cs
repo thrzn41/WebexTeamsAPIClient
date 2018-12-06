@@ -74,9 +74,11 @@ namespace Thrzn41.WebexTeams.Version1.OAuth2
         /// </summary>
         /// <param name="clientSecret">Client secret key.</param>
         /// <param name="clientId">Client id.</param>
-        internal TeamsOAuth2Client(string clientSecret, string clientId)
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func for retry.</param>
+        internal TeamsOAuth2Client(string clientSecret, string clientId, TeamsRetry retryExecutor = null, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
         {
-            this.teamsHttpClient = new TeamsHttpClient(null, TeamsAPIClient.TEAMS_API_URI_PATTERN);
+            this.teamsHttpClient = new TeamsHttpClient(null, TeamsAPIClient.TEAMS_API_URI_PATTERN, retryExecutor, retryNotificationFunc);
 
             this.clientId     = clientId;
             this.clientSecret = clientSecret;

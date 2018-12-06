@@ -303,6 +303,26 @@
             Regex pattern to check if the Uri is Cisco Webex Teams API uris.
             </summary>
         </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.retryExecutor">
+            <summary>
+            Executor for retry.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.retryNotificationFunc">
+            <summary>
+            Notification func for retry.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.#ctor(System.String,System.Text.RegularExpressions.Regex,System.Boolean,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            TeamsHttpClient constructor.
+            </summary>
+            <param name="teamsToken">Cisco Webex Teams Token.</param>
+            <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
+            <param name="preAuthenticate">true if preAuthenticate is needed.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func for retry.</param>
+        </member>
         <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.#ctor(System.String,System.Text.RegularExpressions.Regex,System.Boolean)">
             <summary>
             TeamsHttpClient constructor.
@@ -318,12 +338,31 @@
             <param name="teamsToken">Cisco Webex Teams Token.</param>
             <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
         </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.#ctor(System.String,System.Text.RegularExpressions.Regex,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            TeamsHttpClient constructor.
+            </summary>
+            <param name="teamsToken">Cisco Webex Teams Token.</param>
+            <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func for retry.</param>
+        </member>
         <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.selectHttpClient(System.Uri)">
             <summary>
             Selects HttpClient for uri.
             </summary>
             <param name="uri">Uri to be requested.</param>
             <returns>HttpClient for uri.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.requestAsync``2(System.Net.Http.HttpRequestMessage,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Requests to Cisco Webex Teams API.
+            </summary>
+            <typeparam name="TTeamsResult">Type of TeamsResult to be returned.</typeparam>
+            <typeparam name="TTeamsObject">Type of TeamsObject to be returned.</typeparam>
+            <param name="request"><see cref="T:System.Net.Http.HttpRequestMessage"/> to be requested.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> that represents result of API request.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.RequestAsync``2(System.Net.Http.HttpRequestMessage,System.Nullable{System.Threading.CancellationToken})">
             <summary>
@@ -1637,11 +1676,13 @@
             Teams Resource Group Membership API Uri.
             </summary>
         </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.#ctor(System.String)">
+        <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.#ctor(System.String,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
             <summary>
             Constructor of TeamsAdminAPIClient.
             </summary>
             <param name="token">token of Teams API.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func for retry.</param>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient.CreatePersonAsync(System.String,System.String,System.String,System.String,System.Uri,System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},System.Nullable{System.Threading.CancellationToken})">
             <summary>
@@ -2504,12 +2545,14 @@
             Guest Issuer Id.
             </summary>
         </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.#ctor(System.String,System.String)">
+        <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.#ctor(System.String,System.String,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
             <summary>
             Constuctor of TeamsGuestIssuerClient.
             </summary>
             <param name="secret">Secret of the Guest Issuer.</param>
             <param name="guestIssuerId">Guest Issuer ID.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func for retry.</param>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient.encodeBase64Url(System.Byte[])">
             <summary>
@@ -3256,12 +3299,14 @@
             Client id.
             </summary>
         </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client.#ctor(System.String,System.String)">
+        <member name="M:Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client.#ctor(System.String,System.String,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
             <summary>
             Constuctor of TeamsOAuth2Client.
             </summary>
             <param name="clientSecret">Client secret key.</param>
             <param name="clientId">Client id.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func for retry.</param>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client.convert(Thrzn41.WebexTeams.TeamsResult{Thrzn41.WebexTeams.Version1.OAuth2.Oauth2TokenInternalInfo},System.DateTime)">
             <summary>
@@ -4385,11 +4430,13 @@
             My own info cache.
             </summary>
         </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.#ctor(System.String)">
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.#ctor(System.String,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
             <summary>
             Constructor of TeamsAPIClient.
             </summary>
             <param name="token">token of Teams API.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func for retry.</param>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.GetAPIPath(System.String)">
             <summary>

@@ -153,18 +153,20 @@ namespace Thrzn41.WebexTeams.Version1
         /// My own info cache.
         /// </summary>
         private TeamsResult<CachedPerson> cachedMe = null;
-        
+
 
 
         /// <summary>
         /// Constructor of TeamsAPIClient.
         /// </summary>
         /// <param name="token">token of Teams API.</param>
-        internal TeamsAPIClient(string token)
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func for retry.</param>
+        internal TeamsAPIClient(string token, TeamsRetry retryExecutor = null, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
         {
             this.lockForMyOwnPersonInfo = new SlimLock();
 
-            this.teamsHttpClient = new TeamsHttpClient(token, TEAMS_API_URI_PATTERN);
+            this.teamsHttpClient = new TeamsHttpClient(token, TEAMS_API_URI_PATTERN, retryExecutor, retryNotificationFunc);
         }
 
 
