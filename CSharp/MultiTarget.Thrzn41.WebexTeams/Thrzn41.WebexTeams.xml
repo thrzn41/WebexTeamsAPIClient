@@ -469,6 +469,16 @@
             </summary>
             <typeparam name="TTeamsObject">Teams Object that is returned on API request.</typeparam>
         </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsListResult`1.#ctor">
+            <summary>
+            Creates TeamsListResult.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsListResult`1.ListTransactionId">
+            <summary>
+            Transaction id for this list.
+            </summary>
+        </member>
         <member name="P:Thrzn41.WebexTeams.TeamsListResult`1.TeamsHttpClient">
             <summary>
             <see cref="P:Thrzn41.WebexTeams.TeamsListResult`1.TeamsHttpClient"/> to get next result.
@@ -762,6 +772,218 @@
             </summary>
             <returns>Request line of this request.</returns>
         </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsResource">
+            <summary>
+            Resouces of Webex Teams.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.Unknown">
+            <summary>
+            Unknown resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.Message">
+            <summary>
+            Message resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.Space">
+            <summary>
+            Space resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.SpaceMembership">
+            <summary>
+            Space membership resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.Team">
+            <summary>
+            Team resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.TeamMembership">
+            <summary>
+            Team membership resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.Person">
+            <summary>
+            Person resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.Webhook">
+            <summary>
+            Webhook resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.Event">
+            <summary>
+            Event resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.License">
+            <summary>
+            License resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.Organization">
+            <summary>
+            Organization resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.Role">
+            <summary>
+            Role resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.ResourceGroup">
+            <summary>
+            Resource group resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.ResourceGroupMembership">
+            <summary>
+            Resource group membership resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.AccessToken">
+            <summary>
+            Access token resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.GuestUser">
+            <summary>
+            Guest user resource.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsOperation">
+            <summary>
+            Operations of Webex Teams.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsOperation.Unknown">
+            <summary>
+            Unknown operation.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsOperation.Create">
+            <summary>
+            Create operation.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsOperation.Get">
+            <summary>
+            Get operation.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsOperation.List">
+            <summary>
+            List operation.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsOperation.Update">
+            <summary>
+            Update operation.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsOperation.Delete">
+            <summary>
+            Delete operation.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsResourceOperation">
+            <summary>
+            Resouce and Operation of Webex Teams.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResourceOperation.Resource">
+            <summary>
+            Resouce of Webex Teams.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResourceOperation.Operation">
+            <summary>
+            Operation of Webex Teams.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsResourceOperation.#ctor(Thrzn41.WebexTeams.TeamsResource,Thrzn41.WebexTeams.TeamsOperation)">
+            <summary>
+            Creates TeamsResourceOperation.
+            </summary>
+            <param name="resource">Resouce of Webex Teams.</param>
+            <param name="operation">Operation of Webex Teams.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsResourceOperation.GetResourceName(Thrzn41.WebexTeams.TeamsResource)">
+            <summary>
+            Gets resource name.
+            This method will be a little faster than <see cref="M:System.Enum.ToString"/>
+            </summary>
+            <param name="resource">Resouce of Webex Teams.</param>
+            <returns>Name of the resource.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsResourceOperation.GetOperationName(Thrzn41.WebexTeams.TeamsOperation)">
+            <summary>
+            Gets operation name.
+            This method will be a little faster than <see cref="M:System.Enum.ToString"/>
+            </summary>
+            <param name="operation">Operation of Webex Teams.</param>
+            <returns>Name of the operation.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsResourceOperation.GetResourceName">
+            <summary>
+            Gets resource name.
+            </summary>
+            <returns>Name of the resource.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsResourceOperation.GetOperationName">
+            <summary>
+            Gets operation name.
+            </summary>
+            <returns>Name of the operation.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsResourceOperation.Equals(Thrzn41.WebexTeams.TeamsResourceOperation)">
+            <summary>
+            Determines whether this instance and another specified <see cref="T:Thrzn41.WebexTeams.TeamsResourceOperation"/> object have the same value.
+            </summary>
+            <param name="value">The <see cref="T:Thrzn41.WebexTeams.TeamsResourceOperation"/> to compare to this instance.</param>
+            <returns>true if the value of the parameter is the same as the value of this instance; otherwise, false. If value is null, the method returns false.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsResourceOperation.Equals(System.Object)">
+            <summary>
+            Determines whether this instance and a specified object, which must also be a <see cref="T:Thrzn41.WebexTeams.TeamsResourceOperation"/> object, have the same value.
+            </summary>
+            <param name="obj">The event type to compare to this instance.</param>
+            <returns>true if obj is a <see cref="T:Thrzn41.WebexTeams.TeamsResourceOperation"/> and its value is the same as this instance; otherwise, false. If obj is null, the method returns false.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsResourceOperation.GetHashCode">
+            <summary>
+            Returns the hash code for this event type.
+            </summary>
+            <returns>A 32-bit signed integer hash code.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsResourceOperation.op_Equality(Thrzn41.WebexTeams.TeamsResourceOperation,Thrzn41.WebexTeams.TeamsResourceOperation)">
+            <summary>
+            Determines whether two specified <see cref="T:Thrzn41.WebexTeams.TeamsResourceOperation"/> have the same value.
+            </summary>
+            <param name="lhs">Left hand side value.</param>
+            <param name="rhs">Right hand side value.</param>
+            <returns>true if the two values have the same value.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsResourceOperation.op_Inequality(Thrzn41.WebexTeams.TeamsResourceOperation,Thrzn41.WebexTeams.TeamsResourceOperation)">
+            <summary>
+            Determines whether two specified <see cref="T:Thrzn41.WebexTeams.TeamsResourceOperation"/> have the different value.
+            </summary>
+            <param name="lhs">Left hand side value.</param>
+            <param name="rhs">Right hand side value.</param>
+            <returns>true if the two values have the different value.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsResourceOperation.ToString">
+            <summary>
+            Converts the value of this instance to its equivalent string representation.
+            </summary>
+            <returns>The string representation of the value of this instance.</returns>
+        </member>
         <member name="T:Thrzn41.WebexTeams.TeamsResult`1">
             <summary>
             The result of Teams API request.
@@ -887,6 +1109,37 @@
             <summary>
             Request line of this request.
             </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsResultInfo.PathAndResource">
+            <summary>
+            Path and resource.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.PathAndResource.Path">
+            <summary>
+            Requested path.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.PathAndResource.Resouce">
+            <summary>
+            Requested resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResultInfo.PATH_AND_RESOURCES">
+            <summary>
+            Path and resource list.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsResultInfo.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsResultInfo.ParseResourceOperation">
+            <summary>
+            Parse the request into <see cref="T:Thrzn41.WebexTeams.TeamsResourceOperation"/>.
+            </summary>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResourceOperation"/> of the result.</returns>
         </member>
         <member name="T:Thrzn41.WebexTeams.TeamsRetry">
             <summary>

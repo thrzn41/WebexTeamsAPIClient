@@ -158,6 +158,11 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
             Assert.AreEqual("Hello, Cisco Webex Teams!!", r.Data.Text);
 
+            var resourceOperation = r.ParseResourceOperation();
+            Assert.AreEqual(TeamsResource.Message, resourceOperation.Resource);
+            Assert.AreEqual(TeamsOperation.Create, resourceOperation.Operation);
+            Assert.AreEqual("CreateMessage", resourceOperation.ToString());
+
         }
 
         [TestMethod]
@@ -280,6 +285,11 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             Assert.IsTrue(rdm.IsSuccessStatus);
             Assert.IsFalse(rdm.Data.HasValues);
 
+            var resourceOperation = rdm.ParseResourceOperation();
+            Assert.AreEqual(TeamsResource.Message, resourceOperation.Resource);
+            Assert.AreEqual(TeamsOperation.Delete, resourceOperation.Operation);
+            Assert.AreEqual("DeleteMessage", resourceOperation.ToString());
+
         }
 
         [TestMethod]
@@ -363,11 +373,19 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             Assert.IsTrue(rls.HasNext);
             Assert.AreEqual(2, rls.Data.ItemCount);
 
+            var resourceOperation = rls.ParseResourceOperation();
+            Assert.AreEqual(TeamsResource.Space, resourceOperation.Resource);
+            Assert.AreEqual(TeamsOperation.List, resourceOperation.Operation);
+            Assert.AreEqual("ListSpace", resourceOperation.ToString());
+
+            var guid = rls.ListTransactionId;
+
             rls = await rls.ListNextAsync();
 
             Assert.IsTrue(rls.IsSuccessStatus);
             Assert.IsTrue(rls.HasNext);
             Assert.AreEqual(2, rls.Data.ItemCount);
+            Assert.AreEqual(guid, rls.ListTransactionId);
 
         }
 
@@ -383,6 +401,8 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             }
 
 
+            var guid = Guid.Empty;
+
             int counter = 0;
 
             var rls = await this.teams.ListSpacesAsync(max: 2);
@@ -396,6 +416,20 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                 Assert.IsTrue(rls.IsSuccessStatus);
                 Assert.IsTrue(rls.HasNext);
                 Assert.AreEqual(2, rls.Data.ItemCount);
+
+                var resourceOperation = rls.ParseResourceOperation();
+                Assert.AreEqual(TeamsResource.Space, resourceOperation.Resource);
+                Assert.AreEqual(TeamsOperation.List, resourceOperation.Operation);
+                Assert.AreEqual("ListSpace", resourceOperation.ToString());
+
+                if (guid != Guid.Empty)
+                {
+                    Assert.AreEqual(guid, rls.ListTransactionId);
+                }
+                else
+                {
+                    guid = rls.ListTransactionId;
+                }
 
                 if( ++counter >= 2 )
                 {
