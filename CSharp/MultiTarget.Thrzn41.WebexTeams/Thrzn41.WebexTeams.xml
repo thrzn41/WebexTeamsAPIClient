@@ -68,6 +68,46 @@
             <param name="tokenInfo">Teams API token info.</param>
             <returns>Teams API client for v1 API.</returns>
         </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1Client(Thrzn41.Util.ProtectedString,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            Creates Teams API client for v1 API with retry feature.
+            <see cref="T:Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+            </summary>
+            <param name="tokenProtected">Teams API token of <see cref="T:Thrzn41.Util.ProtectedString"/></param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+            <returns>Teams API client for v1 API.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1Client(System.Char[],Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            Creates Teams API client for v1 API with retry feature.
+            <see cref="T:Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+            </summary>
+            <param name="tokenChars">Teams API token of char array.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+            <returns>Teams API client for v1 API.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1Client(System.String,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            Creates Teams API client for v1 API with retry feature.
+            <see cref="T:Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+            </summary>
+            <param name="tokenString">Teams API token of string.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+            <returns>Teams API client for v1 API.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1Client(Thrzn41.WebexTeams.Version1.AccessTokenInfo,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            Creates Teams API client for v1 API with retry feature.
+            <see cref="T:Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+            </summary>
+            <param name="tokenInfo">Teams API token info.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+            <returns>Teams API client for v1 API.</returns>
+        </member>
         <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1AdminClient(Thrzn41.Util.ProtectedString)">
             <summary>
             Creates Teams Admin API client for v1 API.
@@ -96,6 +136,46 @@
             <param name="tokenInfo">Teams API token info.</param>
             <returns>Teams Admin API client for v1 API.</returns>
         </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1AdminClient(Thrzn41.Util.ProtectedString,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            Creates Teams Admin API client for v1 API with retry feature.
+            <see cref="T:Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+            </summary>
+            <param name="tokenProtected">Teams API token of <see cref="T:Thrzn41.Util.ProtectedString"/></param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+            <returns>Teams Admin API client for v1 API.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1AdminClient(System.Char[],Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            Creates Teams Admin API client for v1 API with retry feature.
+            <see cref="T:Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+            </summary>
+            <param name="tokenChars">Teams API token of char array.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+            <returns>Teams Admin API client for v1 API.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1AdminClient(System.String,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            Creates Teams Admin API client for v1 API with retry feature.
+            <see cref="T:Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+            </summary>
+            <param name="tokenString">Teams API token of string.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+            <returns>Teams Admin API client for v1 API.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1AdminClient(Thrzn41.WebexTeams.Version1.AccessTokenInfo,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            Creates Teams Admin API client for v1 API with retry feature.
+            <see cref="T:Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+            </summary>
+            <param name="tokenInfo">Teams API token info.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+            <returns>Teams Admin API client for v1 API.</returns>
+        </member>
         <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1OAuth2Client(Thrzn41.Util.ProtectedString,System.String)">
             <summary>
             Creates Teams OAuth2 client for v1 API.
@@ -120,6 +200,39 @@
             <param name="clientId">Client id.</param>
             <returns>Teams OAuth2 client for v1 API.</returns>
         </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1OAuth2Client(Thrzn41.Util.ProtectedString,System.String,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            Creates Teams OAuth2 client for v1 API with retry feature.
+            <see cref="T:Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+            </summary>
+            <param name="clientSecretProtected">Client secret of <see cref="T:Thrzn41.Util.ProtectedString"/>.</param>
+            <param name="clientId">Client id.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+            <returns>Teams OAuth2 client for v1 API.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1OAuth2Client(System.Char[],System.String,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            Creates Teams OAuth2 client for v1 API with retry feature.
+            <see cref="T:Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+            </summary>
+            <param name="clientSecretChars">Client secret of char array.</param>
+            <param name="clientId">Client id.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+            <returns>Teams OAuth2 client for v1 API.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1OAuth2Client(System.String,System.String,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            Creates Teams OAuth2 client for v1 API with retry feature.
+            <see cref="T:Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+            </summary>
+            <param name="clientSecretString">Client secret of string.</param>
+            <param name="clientId">Client id.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+            <returns>Teams OAuth2 client for v1 API.</returns>
+        </member>
         <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1GuestIssuerClient(Thrzn41.Util.ProtectedString,System.String)">
             <summary>
             Creates Teams Guest Issuer client for v1 API.
@@ -142,6 +255,39 @@
             </summary>
             <param name="secretString">Secret of string.</param>
             <param name="guestIssuerId">Guest Issuer Id.</param>
+            <returns>Teams Guest Issuer client for v1 API.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1GuestIssuerClient(Thrzn41.Util.ProtectedString,System.String,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            Creates Teams Guest Issuer client for v1 API with retry feature.
+            <see cref="T:Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+            </summary>
+            <param name="secretProtected">Secret of <see cref="T:Thrzn41.Util.ProtectedString"/>.</param>
+            <param name="guestIssuerId">Guest Issuer Id.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+            <returns>Teams Guest Issuer client for v1 API.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1GuestIssuerClient(System.Char[],System.String,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            Creates Teams Guest Issuer client for v1 API with retry feature.
+            <see cref="T:Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+            </summary>
+            <param name="secretChars">Secret of char array.</param>
+            <param name="guestIssuerId">Guest Issuer Id.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+            <returns>Teams Guest Issuer client for v1 API.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsAPI.CreateVersion1GuestIssuerClient(System.String,System.String,Thrzn41.WebexTeams.TeamsRetry,System.Func{Thrzn41.WebexTeams.TeamsResultInfo,System.Int32,System.Boolean})">
+            <summary>
+            Creates Teams Guest Issuer client for v1 API with retry feature.
+            <see cref="T:Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+            </summary>
+            <param name="secretString">Secret of string.</param>
+            <param name="guestIssuerId">Guest Issuer Id.</param>
+            <param name="retryExecutor">Executor for retry.</param>
+            <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
             <returns>Teams Guest Issuer client for v1 API.</returns>
         </member>
         <member name="T:Thrzn41.WebexTeams.TeamsException">
@@ -258,6 +404,207 @@
             HttpClient for Cisco Webex Teams API.
             </summary>
         </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest">
+            <summary>
+            Reusable Http request.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest.method">
+            <summary>
+            Http method.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest.uri">
+            <summary>
+            Request uri.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest.acceptCharsets">
+            <summary>
+            Accept charset list.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest.accepts">
+            <summary>
+            Accept list.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest.Authentication">
+            <summary>
+            Authentication info.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest.IsReadyToReuse">
+            <summary>
+            Is ready to reuse.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest.#ctor(System.Net.Http.HttpMethod,System.Uri)">
+            <summary>
+            Creates Reusable http request.
+            </summary>
+            <param name="method">Http method.</param>
+            <param name="uri">Request uri.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest.AddAcceptCharset(System.Net.Http.Headers.StringWithQualityHeaderValue)">
+            <summary>
+            Adds Accept charset item.
+            </summary>
+            <param name="item">Item to be added.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest.AddAccept(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue)">
+            <summary>
+            Adds Accept item.
+            </summary>
+            <param name="item">Item to be added.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest.CreateHttpRequestMessage">
+            <summary>
+            Creates <see cref="T:System.Net.Http.HttpRequestMessage"/>.
+            </summary>
+            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/>.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest.CreateRequest">
+            <summary>
+            Create <see cref="T:System.Net.Http.HttpRequestMessage"/>.
+            </summary>
+            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> to be used to request.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest.CreateRequestAsync(System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Create <see cref="T:System.Net.Http.HttpRequestMessage"/>.
+            </summary>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
+            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> to be used to request.</returns>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableStringHttpRequest">
+            <summary>
+            Reusable string http request.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableStringHttpRequest.text">
+            <summary>
+            Request body text.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableStringHttpRequest.encoding">
+            <summary>
+            Encoding of request body.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableStringHttpRequest.mediaType">
+            <summary>
+            MediaType of request body.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableStringHttpRequest.#ctor(System.Net.Http.HttpMethod,System.Uri,System.String,System.Text.Encoding,System.String)">
+            <summary>
+            Creates reusable string http request.
+            </summary>
+            <param name="method">Http method.</param>
+            <param name="uri">Request uri.</param>
+            <param name="text">Request body text.</param>
+            <param name="encoding">Encoding of request body.</param>
+            <param name="mediaType">MediaType of request body.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableStringHttpRequest.CreateRequest">
+            <summary>
+            Create <see cref="T:System.Net.Http.HttpRequestMessage"/>.
+            </summary>
+            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> to be used to request.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableStringHttpRequest.CreateRequestAsync(System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Create <see cref="T:System.Net.Http.HttpRequestMessage"/>.
+            </summary>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
+            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> to be used to request.</returns>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableFormDataHttpRequest">
+            <summary>
+            Reusable FormData http request.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableFormDataHttpRequest.stringData">
+            <summary>
+            String data for FormData.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableFormDataHttpRequest.#ctor(System.Net.Http.HttpMethod,System.Uri,System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+            <summary>
+            Creates reusable string http request.
+            </summary>
+            <param name="method">Http method.</param>
+            <param name="uri">Request uri.</param>
+            <param name="stringData">String data for FormData.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableFormDataHttpRequest.CreateRequest">
+            <summary>
+            Create <see cref="T:System.Net.Http.HttpRequestMessage"/>.
+            </summary>
+            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> to be used to request.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableFormDataHttpRequest.CreateRequestAsync(System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Create <see cref="T:System.Net.Http.HttpRequestMessage"/>.
+            </summary>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
+            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> to be used to request.</returns>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest">
+            <summary>
+            Reusable MultipartFormData http request.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.stringData">
+            <summary>
+            String data for FormData.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.fileData">
+            <summary>
+            Teams file data.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.isReuseRequired">
+            <summary>
+            Indicates reuse is required or not.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.byteData">
+            <summary>
+            Byte data of file.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.#ctor(System.Net.Http.HttpMethod,System.Uri,System.Collections.Specialized.NameValueCollection,Thrzn41.WebexTeams.TeamsFileData,System.Boolean)">
+            <summary>
+            Creates reusable string http request.
+            </summary>
+            <param name="method">Http method.</param>
+            <param name="uri">Request uri.</param>
+            <param name="stringData">String data for FormData.</param>
+            <param name="fileData">Teams file data.</param>
+            <param name="isReuseRequired">Indicates reuse is required or not.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.createRequest">
+            <summary>
+            Create <see cref="T:System.Net.Http.HttpRequestMessage"/>.
+            </summary>
+            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> to be used to request.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.CreateRequest">
+            <summary>
+            Create <see cref="T:System.Net.Http.HttpRequestMessage"/>.
+            </summary>
+            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> to be used to request.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.CreateRequestAsync(System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Create <see cref="T:System.Net.Http.HttpRequestMessage"/>.
+            </summary>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
+            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> to be used to request.</returns>
+        </member>
         <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.MEDIA_TYPE_APPLICATION_JSON">
             <summary>
             Media type value for application/json.
@@ -354,23 +701,23 @@
             <param name="uri">Uri to be requested.</param>
             <returns>HttpClient for uri.</returns>
         </member>
-        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.requestAsync``2(System.Net.Http.HttpRequestMessage,System.Nullable{System.Threading.CancellationToken})">
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.requestAsync``2(Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest,System.Nullable{System.Threading.CancellationToken})">
             <summary>
             Requests to Cisco Webex Teams API.
             </summary>
             <typeparam name="TTeamsResult">Type of TeamsResult to be returned.</typeparam>
             <typeparam name="TTeamsObject">Type of TeamsObject to be returned.</typeparam>
-            <param name="request"><see cref="T:System.Net.Http.HttpRequestMessage"/> to be requested.</param>
+            <param name="reusableRequest"><see cref="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest"/> to be requested.</param>
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> that represents result of API request.</returns>
         </member>
-        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.RequestAsync``2(System.Net.Http.HttpRequestMessage,System.Nullable{System.Threading.CancellationToken})">
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.RequestAsync``2(Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest,System.Nullable{System.Threading.CancellationToken})">
             <summary>
             Requests to Cisco Webex Teams API.
             </summary>
             <typeparam name="TTeamsResult">Type of TeamsResult to be returned.</typeparam>
             <typeparam name="TTeamsObject">Type of TeamsObject to be returned.</typeparam>
-            <param name="request"><see cref="T:System.Net.Http.HttpRequestMessage"/> to be requested.</param>
+            <param name="request"><see cref="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest"/> to be requested.</param>
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> that represents result of API request.</returns>
         </member>
@@ -442,54 +789,54 @@
         </member>
         <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.CreateJsonRequest(System.Net.Http.HttpMethod,System.Uri,System.Collections.Specialized.NameValueCollection,Thrzn41.WebexTeams.TeamsObject)">
             <summary>
-            Creates <see cref="T:System.Net.Http.HttpRequestMessage"/> to use for Json request.
+            Creates <see cref="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest"/> to use for Json request.
             </summary>
             <param name="method"><see cref="T:System.Net.Http.HttpMethod"/> to be used on requesting.</param>
             <param name="uri">Uri to be requested.</param>
             <param name="queryParameters">Query parameter collection.</param>
             <param name="objectToBePosted">Object inherited from <see cref="T:Thrzn41.WebexTeams.TeamsObject"/> to be sent to Teams API.</param>
-            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> that is created.</returns>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest"/> that is created.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.CreateJsonRequestWithBearerToken(System.Net.Http.HttpMethod,System.Uri,System.Collections.Specialized.NameValueCollection,Thrzn41.WebexTeams.TeamsObject,System.String)">
             <summary>
-            Creates <see cref="T:System.Net.Http.HttpRequestMessage"/> to use for Json request.
+            Creates <see cref="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest"/> to use for Json request.
             </summary>
             <param name="method"><see cref="T:System.Net.Http.HttpMethod"/> to be used on requesting.</param>
             <param name="uri">Uri to be requested.</param>
             <param name="queryParameters">Query parameter collection.</param>
             <param name="objectToBePosted">Object inherited from <see cref="T:Thrzn41.WebexTeams.TeamsObject"/> to be sent to Teams API.</param>
             <param name="token">Bearer token of this request.</param>
-            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> that is created.</returns>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest"/> that is created.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.CreateFileInfoRequest(System.Net.Http.HttpMethod,System.Uri,System.Collections.Specialized.NameValueCollection)">
             <summary>
-            Creates <see cref="T:System.Net.Http.HttpRequestMessage"/> to use for File info request.
+            Creates <see cref="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest"/> to use for File info request.
             </summary>
             <param name="method"><see cref="T:System.Net.Http.HttpMethod"/> to be used on requesting.</param>
             <param name="uri">Uri to be requested.</param>
             <param name="queryParameters">Query parameter collection.</param>
-            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> that is created.</returns>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest"/> that is created.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.CreateMultipartFormDataRequest(System.Net.Http.HttpMethod,System.Uri,System.Collections.Specialized.NameValueCollection,System.Collections.Specialized.NameValueCollection,Thrzn41.WebexTeams.TeamsFileData)">
             <summary>
-            Creates <see cref="T:System.Net.Http.HttpRequestMessage"/> to use for MultipartFormData request.
+            Creates <see cref="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest"/> to use for MultipartFormData request.
             </summary>
             <param name="method"><see cref="T:System.Net.Http.HttpMethod"/> to be used on requesting.</param>
             <param name="uri">Uri to be requested.</param>
             <param name="queryParameters">Query parameter collection.</param>
             <param name="stringData">String data collection.</param>
             <param name="fileData">File data list.</param>
-            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> that is created.</returns>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest"/> that is created.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.CreateFormDataRequest(System.Net.Http.HttpMethod,System.Uri,System.Collections.Specialized.NameValueCollection,System.Collections.Specialized.NameValueCollection)">
             <summary>
-            Creates <see cref="T:System.Net.Http.HttpRequestMessage"/> to use for FormData request.
+            Creates <see cref="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest"/> to use for FormData request.
             </summary>
             <param name="method"><see cref="T:System.Net.Http.HttpMethod"/> to be used on requesting.</param>
             <param name="uri">Uri to be requested.</param>
             <param name="queryParameters">Query parameter collection.</param>
             <param name="stringData">String data collection.</param>
-            <returns><see cref="T:System.Net.Http.HttpRequestMessage"/> that is created.</returns>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest"/> that is created.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.Dispose(System.Boolean)">
             <summary>

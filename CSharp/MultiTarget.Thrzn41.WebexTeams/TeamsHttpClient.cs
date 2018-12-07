@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -40,6 +41,416 @@ namespace Thrzn41.WebexTeams
     /// </summary>
     public class TeamsHttpClient : IDisposable
     {
+
+
+        /// <summary>
+        /// Reusable Http request.
+        /// </summary>
+        private abstract class ReusableHttpRequest
+        {
+
+            /// <summary>
+            /// Http method.
+            /// </summary>
+            private HttpMethod method;
+
+            /// <summary>
+            /// Request uri.
+            /// </summary>
+            private Uri uri;
+
+            /// <summary>
+            /// Accept charset list.
+            /// </summary>
+            private List<StringWithQualityHeaderValue> acceptCharsets;
+
+            /// <summary>
+            /// Accept list.
+            /// </summary>
+            private List<MediaTypeWithQualityHeaderValue> accepts;
+
+            /// <summary>
+            /// Authentication info.
+            /// </summary>
+            public AuthenticationHeaderValue Authentication { get; set; }
+
+
+
+
+            /// <summary>
+            /// Is ready to reuse.
+            /// </summary>
+            public bool IsReadyToReuse { get; protected set; }
+
+
+
+
+            /// <summary>
+            /// Creates Reusable http request.
+            /// </summary>
+            /// <param name="method">Http method.</param>
+            /// <param name="uri">Request uri.</param>
+            public ReusableHttpRequest(HttpMethod method, Uri uri)
+            {
+                this.method  = method;
+                this.uri     = uri;
+
+                this.acceptCharsets = new List<StringWithQualityHeaderValue>();
+                this.accepts        = new List<MediaTypeWithQualityHeaderValue>();
+
+                this.Authentication = null;
+
+                this.IsReadyToReuse = false;
+            }
+
+
+            /// <summary>
+            /// Adds Accept charset item.
+            /// </summary>
+            /// <param name="item">Item to be added.</param>
+            public void AddAcceptCharset(StringWithQualityHeaderValue item)
+            {
+                this.acceptCharsets.Add(item);
+            }
+
+            /// <summary>
+            /// Adds Accept item.
+            /// </summary>
+            /// <param name="item">Item to be added.</param>
+            public void AddAccept(MediaTypeWithQualityHeaderValue item)
+            {
+                this.accepts.Add(item);
+            }
+
+
+            /// <summary>
+            /// Creates <see cref="HttpRequestMessage"/>.
+            /// </summary>
+            /// <returns><see cref="HttpRequestMessage"/>.</returns>
+            protected HttpRequestMessage CreateHttpRequestMessage()
+            {
+                var request = new HttpRequestMessage(this.method, this.uri);
+
+                var headers = request.Headers;
+
+                foreach (var item in this.acceptCharsets)
+                {
+                    headers.AcceptCharset.Add(item);
+                }
+
+                foreach (var item in this.accepts)
+                {
+                    headers.Accept.Add(item);
+                }
+
+                if(this.Authentication != null)
+                {
+                    headers.Authorization = this.Authentication;
+                }
+
+                return request;
+            }
+
+
+            /// <summary>
+            /// Create <see cref="HttpRequestMessage"/>.
+            /// </summary>
+            /// <returns><see cref="HttpRequestMessage"/> to be used to request.</returns>
+            public abstract HttpRequestMessage CreateRequest();
+
+            /// <summary>
+            /// Create <see cref="HttpRequestMessage"/>.
+            /// </summary>
+            /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
+            /// <returns><see cref="HttpRequestMessage"/> to be used to request.</returns>
+            public abstract Task<HttpRequestMessage> CreateRequestAsync(CancellationToken? cancellationToken = null);
+        }
+
+        /// <summary>
+        /// Reusable string http request.
+        /// </summary>
+        private class ReusableStringHttpRequest : ReusableHttpRequest
+        {
+
+            /// <summary>
+            /// Request body text.
+            /// </summary>
+            private string text;
+
+            /// <summary>
+            /// Encoding of request body.
+            /// </summary>
+            private Encoding encoding;
+
+            /// <summary>
+            /// MediaType of request body.
+            /// </summary>
+            private string mediaType;
+
+
+            /// <summary>
+            /// Creates reusable string http request.
+            /// </summary>
+            /// <param name="method">Http method.</param>
+            /// <param name="uri">Request uri.</param>
+            /// <param name="text">Request body text.</param>
+            /// <param name="encoding">Encoding of request body.</param>
+            /// <param name="mediaType">MediaType of request body.</param>
+            internal ReusableStringHttpRequest(HttpMethod method, Uri uri, string text = null, Encoding encoding = null, string mediaType = null)
+                : base(method, uri)
+            {
+                this.text      = text;
+                this.encoding  = encoding;
+                this.mediaType = mediaType;
+
+                this.IsReadyToReuse = true;
+            }
+
+            /// <summary>
+            /// Create <see cref="HttpRequestMessage"/>.
+            /// </summary>
+            /// <returns><see cref="HttpRequestMessage"/> to be used to request.</returns>
+            public override HttpRequestMessage CreateRequest()
+            {
+                var request = CreateHttpRequestMessage();
+
+                if(this.text != null && this.encoding != null && this.mediaType != null)
+                {
+                    request.Content = new StringContent(this.text, this.encoding, this.mediaType);
+                }
+                else if (this.text != null && this.encoding != null)
+                {
+                    request.Content = new StringContent(this.text, this.encoding);
+                }
+                else if (this.text != null)
+                {
+                    request.Content = new StringContent(this.text);
+                }
+
+                return request;
+            }
+
+            /// <summary>
+            /// Create <see cref="HttpRequestMessage"/>.
+            /// </summary>
+            /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
+            /// <returns><see cref="HttpRequestMessage"/> to be used to request.</returns>
+            public override Task<HttpRequestMessage> CreateRequestAsync(CancellationToken? cancellationToken = null)
+            {
+                return Task.FromResult(CreateRequest());
+            }
+        }
+
+        /// <summary>
+        /// Reusable FormData http request.
+        /// </summary>
+        private class ReusableFormDataHttpRequest : ReusableHttpRequest
+        {
+
+
+            /// <summary>
+            /// String data for FormData.
+            /// </summary>
+            private List< KeyValuePair<string, string> > stringData;
+
+
+            /// <summary>
+            /// Creates reusable string http request.
+            /// </summary>
+            /// <param name="method">Http method.</param>
+            /// <param name="uri">Request uri.</param>
+            /// <param name="stringData">String data for FormData.</param>
+            internal ReusableFormDataHttpRequest(HttpMethod method, Uri uri, List< KeyValuePair<string, string> > stringData = null)
+                : base(method, uri)
+            {
+                this.stringData = stringData;
+
+                this.IsReadyToReuse = true;
+            }
+
+            /// <summary>
+            /// Create <see cref="HttpRequestMessage"/>.
+            /// </summary>
+            /// <returns><see cref="HttpRequestMessage"/> to be used to request.</returns>
+            public override HttpRequestMessage CreateRequest()
+            {
+                var request = CreateHttpRequestMessage();
+
+                if(this.stringData != null)
+                {
+                    request.Content = new FormUrlEncodedContent(this.stringData);
+                }
+
+                return request;
+            }
+
+            /// <summary>
+            /// Create <see cref="HttpRequestMessage"/>.
+            /// </summary>
+            /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
+            /// <returns><see cref="HttpRequestMessage"/> to be used to request.</returns>
+            public override Task<HttpRequestMessage> CreateRequestAsync(CancellationToken? cancellationToken = null)
+            {
+                return Task.FromResult(CreateRequest());
+            }
+        }
+
+        /// <summary>
+        /// Reusable MultipartFormData http request.
+        /// </summary>
+        private class ReusableMultipartFormDataHttpRequest : ReusableHttpRequest
+        {
+
+
+            /// <summary>
+            /// String data for FormData.
+            /// </summary>
+            private NameValueCollection stringData;
+
+            /// <summary>
+            /// Teams file data.
+            /// </summary>
+            private TeamsFileData fileData;
+
+            /// <summary>
+            /// Indicates reuse is required or not.
+            /// </summary>
+            private bool isReuseRequired;
+
+            /// <summary>
+            /// Byte data of file.
+            /// </summary>
+            private byte[] byteData;
+
+
+            /// <summary>
+            /// Creates reusable string http request.
+            /// </summary>
+            /// <param name="method">Http method.</param>
+            /// <param name="uri">Request uri.</param>
+            /// <param name="stringData">String data for FormData.</param>
+            /// <param name="fileData">Teams file data.</param>
+            /// <param name="isReuseRequired">Indicates reuse is required or not.</param>
+            internal ReusableMultipartFormDataHttpRequest(HttpMethod method, Uri uri, NameValueCollection stringData = null, TeamsFileData fileData = null, bool isReuseRequired = false)
+                : base(method, uri)
+            {
+                this.stringData = stringData;
+                this.fileData   = fileData;
+
+                this.isReuseRequired = isReuseRequired;
+
+                this.byteData     = null;
+
+                this.IsReadyToReuse = false;
+            }
+
+            /// <summary>
+            /// Create <see cref="HttpRequestMessage"/>.
+            /// </summary>
+            /// <returns><see cref="HttpRequestMessage"/> to be used to request.</returns>
+            private HttpRequestMessage createRequest()
+            {
+                var request = CreateHttpRequestMessage();
+
+                var content = new MultipartFormDataContent();
+
+
+                if (this.stringData != null)
+                {
+                    foreach (var key in this.stringData.AllKeys)
+                    {
+                        var values = stringData.GetValues(key);
+
+                        if (values != null)
+                        {
+                            foreach (var item in values)
+                            {
+                                if (item != null)
+                                {
+                                    content.Add(new StringContent(item, ENCODING), key);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (this.fileData != null)
+                {
+                    HttpContent fileContent;
+
+                    if (this.byteData != null)
+                    {
+                        fileContent = new ByteArrayContent(byteData);
+                    }
+                    else
+                    {
+                        fileContent = new StreamContent(fileData.Stream);
+                    }
+
+                    fileContent.Headers.ContentType = new MediaTypeHeaderValue(fileData.MediaTypeName);
+
+                    content.Add(fileContent, "files", fileData.FileName);
+                }
+
+                request.Content = content;
+
+                return request;
+            }
+
+            /// <summary>
+            /// Create <see cref="HttpRequestMessage"/>.
+            /// </summary>
+            /// <returns><see cref="HttpRequestMessage"/> to be used to request.</returns>
+            public override HttpRequestMessage CreateRequest()
+            {
+                if( !this.IsReadyToReuse && this.isReuseRequired && this.byteData == null )
+                {
+                    using (var memory = new MemoryStream())
+                    {
+                        fileData.Stream.CopyTo(memory);
+
+                        byteData = memory.ToArray();
+                    }
+
+                    this.IsReadyToReuse = true;
+                }
+
+                return createRequest();
+            }
+
+            /// <summary>
+            /// Create <see cref="HttpRequestMessage"/>.
+            /// </summary>
+            /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
+            /// <returns><see cref="HttpRequestMessage"/> to be used to request.</returns>
+            public override async Task<HttpRequestMessage> CreateRequestAsync(CancellationToken? cancellationToken = null)
+            {
+                if ( !this.IsReadyToReuse && this.isReuseRequired && this.byteData == null )
+                {
+                    using (var memory = new MemoryStream())
+                    {
+                        if (cancellationToken.HasValue)
+                        {
+                            await fileData.Stream.CopyToAsync(memory, 81920, cancellationToken.Value);
+                        }
+                        else
+                        {
+                            await fileData.Stream.CopyToAsync(memory);
+                        }
+
+                        byteData = memory.ToArray();
+                    }
+
+                    this.IsReadyToReuse = true;
+                }
+
+
+                return createRequest();
+            }
+
+        }
+
+
 
         /// <summary>
         /// Media type value for application/json.
@@ -211,143 +622,159 @@ namespace Thrzn41.WebexTeams
         /// </summary>
         /// <typeparam name="TTeamsResult">Type of TeamsResult to be returned.</typeparam>
         /// <typeparam name="TTeamsObject">Type of TeamsObject to be returned.</typeparam>
-        /// <param name="request"><see cref="HttpRequestMessage"/> to be requested.</param>
+        /// <param name="reusableRequest"><see cref="ReusableHttpRequest"/> to be requested.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
-        private async Task<TTeamsResult> requestAsync<TTeamsResult, TTeamsObject>(HttpRequestMessage request, CancellationToken? cancellationToken = null)
+        private async Task<TTeamsResult> requestAsync<TTeamsResult, TTeamsObject>(ReusableHttpRequest reusableRequest, CancellationToken? cancellationToken = null)
             where TTeamsResult : TeamsResult<TTeamsObject>, new()
             where TTeamsObject : TeamsObject, new()
         {
             var result = new TTeamsResult();
 
-            var httpClient = selectHttpClient(request.RequestUri);
+            HttpRequestMessage request;
 
-            result.RequestInfo = new TeamsRequestInfo(request);
-
-            HttpResponseMessage response;
-
-            if (cancellationToken.HasValue)
+            if(reusableRequest.IsReadyToReuse)
             {
-                response = await httpClient.SendAsync(request, cancellationToken.Value);
+                request = reusableRequest.CreateRequest();
             }
             else
             {
-                response = await httpClient.SendAsync(request);
+                request = await reusableRequest.CreateRequestAsync(cancellationToken);
             }
 
-            using (response)
+            using (request)
+            using (request.Content)
             {
-                if (response.StatusCode != System.Net.HttpStatusCode.NoContent && response.Content != null)
+
+                var httpClient = selectHttpClient(request.RequestUri);
+
+                result.RequestInfo = new TeamsRequestInfo(request);
+
+                HttpResponseMessage response;
+
+                if (cancellationToken.HasValue)
                 {
-                    using (var content = response.Content)
+                    response = await httpClient.SendAsync(request, cancellationToken.Value);
+                }
+                else
+                {
+                    response = await httpClient.SendAsync(request);
+                }
+
+                using (response)
+                {
+                    if (response.StatusCode != System.Net.HttpStatusCode.NoContent && response.Content != null)
                     {
-                        var contentHeaders = content.Headers;
-
-                        if (contentHeaders.ContentType?.MediaType == MEDIA_TYPE_APPLICATION_JSON)
+                        using (var content = response.Content)
                         {
-                            var body = await content.ReadAsStringAsync();
+                            var contentHeaders = content.Headers;
 
-                            if (!String.IsNullOrEmpty(body))
+                            if (contentHeaders.ContentType?.MediaType == MEDIA_TYPE_APPLICATION_JSON)
                             {
-                                result.Data = TeamsObject.FromJsonString<TTeamsObject>(body);
-                            }
-                        }
-                        else
-                        {
-                            var info = new TTeamsObject() as TeamsFileInfo;
+                                var body = await content.ReadAsStringAsync();
 
-                            if (info != null)
-                            {
-                                string fileName = contentHeaders.ContentDisposition?.FileName;
-
-                                if (fileName != null && fileName.StartsWith("\"") && fileName.EndsWith("\""))
+                                if (!String.IsNullOrEmpty(body))
                                 {
-                                    fileName = fileName.Substring(1, (fileName.Length - 2));
+                                    result.Data = TeamsObject.FromJsonString<TTeamsObject>(body);
+                                }
+                            }
+                            else
+                            {
+                                var info = new TTeamsObject() as TeamsFileInfo;
+
+                                if (info != null)
+                                {
+                                    string fileName = contentHeaders.ContentDisposition?.FileName;
+
+                                    if (fileName != null && fileName.StartsWith("\"") && fileName.EndsWith("\""))
+                                    {
+                                        fileName = fileName.Substring(1, (fileName.Length - 2));
+                                    }
+
+                                    info.FileName      = fileName;
+                                    info.MediaTypeName = contentHeaders.ContentType?.MediaType;
+                                    info.Size          = contentHeaders.ContentLength;
                                 }
 
-                                info.FileName      = fileName;
-                                info.MediaTypeName = contentHeaders.ContentType?.MediaType;
-                                info.Size          = contentHeaders.ContentLength;
+                                var data = info as TeamsFileData;
+
+                                if (data != null)
+                                {
+                                    data.Stream = new MemoryStream();
+
+                                    await content.CopyToAsync(data.Stream);
+
+                                    data.Stream.Position = 0;
+                                }
+
+                                result.Data = ((data != null) ? data : info) as TTeamsObject;
                             }
-
-                            var data = info as TeamsFileData;
-
-                            if (data != null)
-                            {
-                                data.Stream = new MemoryStream();
-
-                                await content.CopyToAsync(data.Stream);
-
-                                data.Stream.Position = 0;
-                            }
-
-                            result.Data = ((data != null) ? data : info) as TTeamsObject;
                         }
                     }
-                }
 
 
-                if (result.Data == null)
-                {
-                    result.Data = new TTeamsObject();
-
-                    result.Data.HasValues = false;
-                }
-
-
-                result.HttpStatusCode = response.StatusCode;
-
-                var headers = response.Headers;
-
-                if (headers.Contains(HEADER_NAME_TRACKING_ID))
-                {
-                    foreach (var item in headers.GetValues(HEADER_NAME_TRACKING_ID))
+                    if (result.Data == null)
                     {
-                        result.TrackingId = item;
-                        break;
+                        result.Data = new TTeamsObject();
+
+                        result.Data.HasValues = false;
                     }
-                }
-
-                result.RetryAfter = headers.RetryAfter;
 
 
-                if (result is TeamsListResult<TTeamsObject>)
-                {
-                    if (headers.Contains(HEADER_NAME_LINK))
+                    result.HttpStatusCode = response.StatusCode;
+
+                    var headers = response.Headers;
+
+                    if (headers.Contains(HEADER_NAME_TRACKING_ID))
                     {
-                        var listResult = result as TeamsListResult<TTeamsObject>;
-
-                        if (listResult != null)
+                        foreach (var item in headers.GetValues(HEADER_NAME_TRACKING_ID))
                         {
-                            foreach (var item in headers.GetValues(HEADER_NAME_LINK))
+                            result.TrackingId = item;
+                            break;
+                        }
+                    }
+
+                    result.RetryAfter = headers.RetryAfter;
+
+
+                    if (result is TeamsListResult<TTeamsObject>)
+                    {
+                        if (headers.Contains(HEADER_NAME_LINK))
+                        {
+                            var listResult = result as TeamsListResult<TTeamsObject>;
+
+                            if (listResult != null)
                             {
-                                if (!String.IsNullOrEmpty(item))
+                                foreach (var item in headers.GetValues(HEADER_NAME_LINK))
                                 {
-                                    var m = LINK_NEXT_PATTERN.Match(item);
-
-                                    if (m.Success)
+                                    if (!String.IsNullOrEmpty(item))
                                     {
-                                        var g = m.Groups["NEXTURI"];
+                                        var m = LINK_NEXT_PATTERN.Match(item);
 
-                                        if (g != null && !String.IsNullOrEmpty(g.Value))
+                                        if (m.Success)
                                         {
-                                            listResult.NextUri = new Uri(g.Value);
-                                            listResult.TeamsHttpClient = this;
+                                            var g = m.Groups["NEXTURI"];
 
-                                            break;
+                                            if (g != null && !String.IsNullOrEmpty(g.Value))
+                                            {
+                                                listResult.NextUri         = new Uri(g.Value);
+                                                listResult.TeamsHttpClient = this;
+
+                                                break;
+                                            }
                                         }
                                     }
                                 }
                             }
+
                         }
-
                     }
-                }
 
-                // Result status is once set based on Http Status code.
-                // The exact criteria differs in each API.
-                // This value will be adjusted in each TeamsAPIClient class.
-                result.IsSuccessStatus = response.IsSuccessStatusCode;
+                    // Result status is once set based on Http Status code.
+                    // The exact criteria differs in each API.
+                    // This value will be adjusted in each TeamsAPIClient class.
+                    result.IsSuccessStatus = response.IsSuccessStatusCode;
+                }
             }
 
             return result;
@@ -358,32 +785,28 @@ namespace Thrzn41.WebexTeams
         /// </summary>
         /// <typeparam name="TTeamsResult">Type of TeamsResult to be returned.</typeparam>
         /// <typeparam name="TTeamsObject">Type of TeamsObject to be returned.</typeparam>
-        /// <param name="request"><see cref="HttpRequestMessage"/> to be requested.</param>
+        /// <param name="request"><see cref="ReusableHttpRequest"/> to be requested.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
-        public async Task<TTeamsResult> RequestAsync<TTeamsResult, TTeamsObject>(HttpRequestMessage request, CancellationToken? cancellationToken = null)
+        private Task<TTeamsResult> RequestAsync<TTeamsResult, TTeamsObject>(ReusableHttpRequest request, CancellationToken? cancellationToken = null)
             where TTeamsResult : TeamsResult<TTeamsObject>, new()
             where TTeamsObject : TeamsObject, new()
         {
-            TTeamsResult result = null;
+            Task<TTeamsResult> result;
 
-            using (request)
-            using (request.Content)
+            if(this.retryExecutor == null)
             {
-                if(this.retryExecutor == null)
-                {
-                    result = await requestAsync<TTeamsResult, TTeamsObject>(request, cancellationToken);
-                }
-                else
-                {
-                    result = await retryExecutor.requestAsync<TTeamsResult, TTeamsObject>(
-                        () =>
-                        {
-                            return requestAsync<TTeamsResult, TTeamsObject>(request, cancellationToken);
-                        },
-                        retryNotificationFunc,
-                        cancellationToken);
-                }
+                result = requestAsync<TTeamsResult, TTeamsObject>(request, cancellationToken);
+            }
+            else
+            {
+                result = retryExecutor.requestAsync<TTeamsResult, TTeamsObject>(
+                    () =>
+                    {
+                        return requestAsync<TTeamsResult, TTeamsObject>(request, cancellationToken);
+                    },
+                    retryNotificationFunc,
+                    cancellationToken);
             }
 
             return result;
@@ -484,63 +907,50 @@ namespace Thrzn41.WebexTeams
 
 
         /// <summary>
-        /// Creates <see cref="HttpRequestMessage"/> to use for Json request.
+        /// Creates <see cref="ReusableHttpRequest"/> to use for Json request.
         /// </summary>
         /// <param name="method"><see cref="HttpMethod"/> to be used on requesting.</param>
         /// <param name="uri">Uri to be requested.</param>
         /// <param name="queryParameters">Query parameter collection.</param>
         /// <param name="objectToBePosted">Object inherited from <see cref="TeamsObject"/> to be sent to Teams API.</param>
-        /// <returns><see cref="HttpRequestMessage"/> that is created.</returns>
-        public HttpRequestMessage CreateJsonRequest(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, TeamsObject objectToBePosted = null)
+        /// <returns><see cref="ReusableHttpRequest"/> that is created.</returns>
+        private ReusableHttpRequest CreateJsonRequest(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, TeamsObject objectToBePosted = null)
         {
-            var request = new HttpRequestMessage(method, HttpUtils.BuildUri(uri, queryParameters));
+            ReusableHttpRequest request;
 
-            var headers = request.Headers;
-
-            headers.AcceptCharset.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue(ENCODING.WebName));
-            headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(MEDIA_TYPE_APPLICATION_JSON));
-
-            if (objectToBePosted != null)
+            if(objectToBePosted != null)
             {
-                request.Content = new StringContent(
-                    objectToBePosted.ToJsonString(),
-                    ENCODING,
-                    MEDIA_TYPE_APPLICATION_JSON);
+                request = new ReusableStringHttpRequest(
+                    method, HttpUtils.BuildUri(uri, queryParameters), 
+                    objectToBePosted.ToJsonString(), ENCODING, MEDIA_TYPE_APPLICATION_JSON);
             }
+            else
+            {
+                request = new ReusableStringHttpRequest(method, HttpUtils.BuildUri(uri, queryParameters));
+            }
+
+            request.AddAcceptCharset(new StringWithQualityHeaderValue(ENCODING.WebName));
+            request.AddAccept(new MediaTypeWithQualityHeaderValue(MEDIA_TYPE_APPLICATION_JSON));
 
             return request;
         }
 
         /// <summary>
-        /// Creates <see cref="HttpRequestMessage"/> to use for Json request.
+        /// Creates <see cref="ReusableHttpRequest"/> to use for Json request.
         /// </summary>
         /// <param name="method"><see cref="HttpMethod"/> to be used on requesting.</param>
         /// <param name="uri">Uri to be requested.</param>
         /// <param name="queryParameters">Query parameter collection.</param>
         /// <param name="objectToBePosted">Object inherited from <see cref="TeamsObject"/> to be sent to Teams API.</param>
         /// <param name="token">Bearer token of this request.</param>
-        /// <returns><see cref="HttpRequestMessage"/> that is created.</returns>
-        public HttpRequestMessage CreateJsonRequestWithBearerToken(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, TeamsObject objectToBePosted = null, string token = null)
+        /// <returns><see cref="ReusableHttpRequest"/> that is created.</returns>
+        private ReusableHttpRequest CreateJsonRequestWithBearerToken(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, TeamsObject objectToBePosted = null, string token = null)
         {
-            var request = new HttpRequestMessage(method, HttpUtils.BuildUri(uri, queryParameters));
-
-            var headers = request.Headers;
-
-            headers.AcceptCharset.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue(ENCODING.WebName));
-            headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(MEDIA_TYPE_APPLICATION_JSON));
+            var request = CreateJsonRequest(method, uri, queryParameters, objectToBePosted);
 
             if(token != null)
             {
-                headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            }
-            
-
-            if (objectToBePosted != null)
-            {
-                request.Content = new StringContent(
-                    objectToBePosted.ToJsonString(),
-                    ENCODING,
-                    MEDIA_TYPE_APPLICATION_JSON);
+                request.Authentication = new AuthenticationHeaderValue("Bearer", token);
             }
 
             return request;
@@ -548,97 +958,54 @@ namespace Thrzn41.WebexTeams
 
 
         /// <summary>
-        /// Creates <see cref="HttpRequestMessage"/> to use for File info request.
+        /// Creates <see cref="ReusableHttpRequest"/> to use for File info request.
         /// </summary>
         /// <param name="method"><see cref="HttpMethod"/> to be used on requesting.</param>
         /// <param name="uri">Uri to be requested.</param>
         /// <param name="queryParameters">Query parameter collection.</param>
-        /// <returns><see cref="HttpRequestMessage"/> that is created.</returns>
-        public HttpRequestMessage CreateFileInfoRequest(HttpMethod method, Uri uri, NameValueCollection queryParameters = null)
+        /// <returns><see cref="ReusableHttpRequest"/> that is created.</returns>
+        private ReusableHttpRequest CreateFileInfoRequest(HttpMethod method, Uri uri, NameValueCollection queryParameters = null)
         {
-            var request = new HttpRequestMessage(method, HttpUtils.BuildUri(uri, queryParameters));
+            var request = new ReusableStringHttpRequest(method, HttpUtils.BuildUri(uri, queryParameters));
 
-            var headers = request.Headers;
-
-            headers.AcceptCharset.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue(ENCODING.WebName));
-            headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(MEDIA_TYPE_APPLICATION_JSON));
-            headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(MEDIA_TYPE_ANY));
+            request.AddAcceptCharset(new StringWithQualityHeaderValue(ENCODING.WebName));
+            request.AddAccept(new MediaTypeWithQualityHeaderValue(MEDIA_TYPE_APPLICATION_JSON));
+            request.AddAccept(new MediaTypeWithQualityHeaderValue(MEDIA_TYPE_ANY));
 
             return request;
         }
 
 
         /// <summary>
-        /// Creates <see cref="HttpRequestMessage"/> to use for MultipartFormData request.
+        /// Creates <see cref="ReusableHttpRequest"/> to use for MultipartFormData request.
         /// </summary>
         /// <param name="method"><see cref="HttpMethod"/> to be used on requesting.</param>
         /// <param name="uri">Uri to be requested.</param>
         /// <param name="queryParameters">Query parameter collection.</param>
         /// <param name="stringData">String data collection.</param>
         /// <param name="fileData">File data list.</param>
-        /// <returns><see cref="HttpRequestMessage"/> that is created.</returns>
-        public HttpRequestMessage CreateMultipartFormDataRequest(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, NameValueCollection stringData = null, TeamsFileData fileData = null)
+        /// <returns><see cref="ReusableHttpRequest"/> that is created.</returns>
+        private ReusableHttpRequest CreateMultipartFormDataRequest(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, NameValueCollection stringData = null, TeamsFileData fileData = null)
         {
-            var request = new HttpRequestMessage(method, HttpUtils.BuildUri(uri, queryParameters));
+            var request = new ReusableMultipartFormDataHttpRequest(method, HttpUtils.BuildUri(uri, queryParameters), stringData, fileData, (this.retryExecutor != null));
 
-            var headers = request.Headers;
-
-            headers.AcceptCharset.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue(ENCODING.WebName));
-            headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(MEDIA_TYPE_APPLICATION_JSON));
-
-            var content = new MultipartFormDataContent();
-
-            if(stringData != null)
-            {
-                foreach (var key in stringData.AllKeys)
-                {
-                    var values = stringData.GetValues(key);
-
-                    if (values != null)
-                    {
-                        foreach (var item in values)
-                        {
-                            if (item != null)
-                            {
-                                content.Add(new StringContent(item, ENCODING), key);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if(fileData != null)
-            {
-                var sc = new StreamContent(fileData.Stream);
-
-                sc.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(fileData.MediaTypeName);
-
-                content.Add(sc, "files", fileData.FileName);
-            }
-
-            request.Content = content;
+            request.AddAcceptCharset(new StringWithQualityHeaderValue(ENCODING.WebName));
+            request.AddAccept(new MediaTypeWithQualityHeaderValue(MEDIA_TYPE_APPLICATION_JSON));
 
             return request;
         }
 
         /// <summary>
-        /// Creates <see cref="HttpRequestMessage"/> to use for FormData request.
+        /// Creates <see cref="ReusableHttpRequest"/> to use for FormData request.
         /// </summary>
         /// <param name="method"><see cref="HttpMethod"/> to be used on requesting.</param>
         /// <param name="uri">Uri to be requested.</param>
         /// <param name="queryParameters">Query parameter collection.</param>
         /// <param name="stringData">String data collection.</param>
-        /// <returns><see cref="HttpRequestMessage"/> that is created.</returns>
-        public HttpRequestMessage CreateFormDataRequest(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, NameValueCollection stringData = null)
+        /// <returns><see cref="ReusableHttpRequest"/> that is created.</returns>
+        private ReusableHttpRequest CreateFormDataRequest(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, NameValueCollection stringData = null)
         {
-            var request = new HttpRequestMessage(method, HttpUtils.BuildUri(uri, queryParameters));
-
-            var headers = request.Headers;
-
-            headers.AcceptCharset.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue(ENCODING.WebName));
-            headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue(MEDIA_TYPE_APPLICATION_JSON));
-
-            var list = new List< KeyValuePair<string, string> >();
+            var list = new List<KeyValuePair<string, string>>();
 
             if (stringData != null)
             {
@@ -659,7 +1026,10 @@ namespace Thrzn41.WebexTeams
                 }
             }
 
-            request.Content = new FormUrlEncodedContent(list);
+            var request = new ReusableFormDataHttpRequest(method, HttpUtils.BuildUri(uri, queryParameters), list);
+
+            request.AddAcceptCharset(new StringWithQualityHeaderValue(ENCODING.WebName));
+            request.AddAccept(new MediaTypeWithQualityHeaderValue(MEDIA_TYPE_APPLICATION_JSON));
 
             return request;
         }

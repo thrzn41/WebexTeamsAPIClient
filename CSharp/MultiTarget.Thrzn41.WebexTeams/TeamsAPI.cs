@@ -35,6 +35,11 @@ namespace Thrzn41.WebexTeams
     public static class TeamsAPI
     {
 
+
+
+
+        #region Teams v1 API Client
+
         /// <summary>
         /// Creates Teams API client for v1 API.
         /// </summary>
@@ -75,6 +80,69 @@ namespace Thrzn41.WebexTeams
             return new Thrzn41.WebexTeams.Version1.TeamsAPIClient(tokenInfo.AccessToken);
         }
 
+        #endregion
+
+
+        #region Teams v1 API Client with Retry
+
+        /// <summary>
+        /// Creates Teams API client for v1 API with retry feature.
+        /// <see cref="Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+        /// </summary>
+        /// <param name="tokenProtected">Teams API token of <see cref="ProtectedString"/></param>
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+        /// <returns>Teams API client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.TeamsAPIClient CreateVersion1Client(ProtectedString tokenProtected, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
+        {
+            return CreateVersion1Client(tokenProtected.DecryptToString(), retryExecutor, retryNotificationFunc);
+        }
+
+        /// <summary>
+        /// Creates Teams API client for v1 API with retry feature.
+        /// <see cref="Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+        /// </summary>
+        /// <param name="tokenChars">Teams API token of char array.</param>
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+        /// <returns>Teams API client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.TeamsAPIClient CreateVersion1Client(char[] tokenChars, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
+        {
+            return CreateVersion1Client(new String(tokenChars), retryExecutor, retryNotificationFunc);
+        }
+
+        /// <summary>
+        /// Creates Teams API client for v1 API with retry feature.
+        /// <see cref="Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+        /// </summary>
+        /// <param name="tokenString">Teams API token of string.</param>
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+        /// <returns>Teams API client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.TeamsAPIClient CreateVersion1Client(string tokenString, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
+        {
+            return new Thrzn41.WebexTeams.Version1.TeamsAPIClient(tokenString, retryExecutor, retryNotificationFunc);
+        }
+
+        /// <summary>
+        /// Creates Teams API client for v1 API with retry feature.
+        /// <see cref="Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+        /// </summary>
+        /// <param name="tokenInfo">Teams API token info.</param>
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+        /// <returns>Teams API client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.TeamsAPIClient CreateVersion1Client(Thrzn41.WebexTeams.Version1.AccessTokenInfo tokenInfo, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
+        {
+            return new Thrzn41.WebexTeams.Version1.TeamsAPIClient(tokenInfo.AccessToken, retryExecutor, retryNotificationFunc);
+        }
+
+        #endregion
+
+
+
+
+        #region Teams v1 Admin API Client
 
         /// <summary>
         /// Creates Teams Admin API client for v1 API.
@@ -116,6 +184,69 @@ namespace Thrzn41.WebexTeams
             return new Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient(tokenInfo.AccessToken);
         }
 
+        #endregion
+
+
+        #region Teams v1 Admin API Client with Retry
+
+        /// <summary>
+        /// Creates Teams Admin API client for v1 API with retry feature.
+        /// <see cref="Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+        /// </summary>
+        /// <param name="tokenProtected">Teams API token of <see cref="ProtectedString"/></param>
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+        /// <returns>Teams Admin API client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient CreateVersion1AdminClient(ProtectedString tokenProtected, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
+        {
+            return CreateVersion1AdminClient(tokenProtected.DecryptToString(), retryExecutor, retryNotificationFunc);
+        }
+
+        /// <summary>
+        /// Creates Teams Admin API client for v1 API with retry feature.
+        /// <see cref="Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+        /// </summary>
+        /// <param name="tokenChars">Teams API token of char array.</param>
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+        /// <returns>Teams Admin API client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient CreateVersion1AdminClient(char[] tokenChars, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
+        {
+            return CreateVersion1AdminClient(new String(tokenChars), retryExecutor, retryNotificationFunc);
+        }
+
+        /// <summary>
+        /// Creates Teams Admin API client for v1 API with retry feature.
+        /// <see cref="Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+        /// </summary>
+        /// <param name="tokenString">Teams API token of string.</param>
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+        /// <returns>Teams Admin API client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient CreateVersion1AdminClient(string tokenString, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
+        {
+            return new Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient(tokenString, retryExecutor, retryNotificationFunc);
+        }
+
+        /// <summary>
+        /// Creates Teams Admin API client for v1 API with retry feature.
+        /// <see cref="Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+        /// </summary>
+        /// <param name="tokenInfo">Teams API token info.</param>
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+        /// <returns>Teams Admin API client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient CreateVersion1AdminClient(Thrzn41.WebexTeams.Version1.AccessTokenInfo tokenInfo, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
+        {
+            return new Thrzn41.WebexTeams.Version1.Admin.TeamsAdminAPIClient(tokenInfo.AccessToken, retryExecutor, retryNotificationFunc);
+        }
+
+        #endregion
+
+
+
+
+        #region Teams v1 OAuth2 Client
 
         /// <summary>
         /// Creates Teams OAuth2 client for v1 API.
@@ -150,6 +281,60 @@ namespace Thrzn41.WebexTeams
             return new Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client(clientSecretString, clientId);
         }
 
+        #endregion
+
+
+        #region Teams v1 OAuth2 Client with Retry
+
+        /// <summary>
+        /// Creates Teams OAuth2 client for v1 API with retry feature.
+        /// <see cref="Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+        /// </summary>
+        /// <param name="clientSecretProtected">Client secret of <see cref="ProtectedString"/>.</param>
+        /// <param name="clientId">Client id.</param>
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+        /// <returns>Teams OAuth2 client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client CreateVersion1OAuth2Client(ProtectedString clientSecretProtected, string clientId, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
+        {
+            return new Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client(clientSecretProtected.DecryptToString(), clientId, retryExecutor, retryNotificationFunc);
+        }
+
+        /// <summary>
+        /// Creates Teams OAuth2 client for v1 API with retry feature.
+        /// <see cref="Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+        /// </summary>
+        /// <param name="clientSecretChars">Client secret of char array.</param>
+        /// <param name="clientId">Client id.</param>
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+        /// <returns>Teams OAuth2 client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client CreateVersion1OAuth2Client(char[] clientSecretChars, string clientId, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
+        {
+            return new Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client(new string(clientSecretChars), clientId, retryExecutor, retryNotificationFunc);
+        }
+
+        /// <summary>
+        /// Creates Teams OAuth2 client for v1 API with retry feature.
+        /// <see cref="Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+        /// </summary>
+        /// <param name="clientSecretString">Client secret of string.</param>
+        /// <param name="clientId">Client id.</param>
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+        /// <returns>Teams OAuth2 client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client CreateVersion1OAuth2Client(string clientSecretString, string clientId, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
+        {
+            return new Thrzn41.WebexTeams.Version1.OAuth2.TeamsOAuth2Client(clientSecretString, clientId, retryExecutor, retryNotificationFunc);
+        }
+
+        #endregion
+
+
+
+
+
+        #region Teams v1 Guest Issuer Client
 
         /// <summary>
         /// Creates Teams Guest Issuer client for v1 API.
@@ -183,6 +368,55 @@ namespace Thrzn41.WebexTeams
         {
             return new Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient(secretString, guestIssuerId);
         }
+
+        #endregion
+
+
+        #region Teams v1 Guest Issuer Client with Retry
+
+        /// <summary>
+        /// Creates Teams Guest Issuer client for v1 API with retry feature.
+        /// <see cref="Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+        /// </summary>
+        /// <param name="secretProtected">Secret of <see cref="ProtectedString"/>.</param>
+        /// <param name="guestIssuerId">Guest Issuer Id.</param>
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+        /// <returns>Teams Guest Issuer client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient CreateVersion1GuestIssuerClient(ProtectedString secretProtected, string guestIssuerId, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
+        {
+            return new Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient(secretProtected.DecryptToString(), guestIssuerId, retryExecutor, retryNotificationFunc);
+        }
+
+        /// <summary>
+        /// Creates Teams Guest Issuer client for v1 API with retry feature.
+        /// <see cref="Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+        /// </summary>
+        /// <param name="secretChars">Secret of char array.</param>
+        /// <param name="guestIssuerId">Guest Issuer Id.</param>
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+        /// <returns>Teams Guest Issuer client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient CreateVersion1GuestIssuerClient(char[] secretChars, string guestIssuerId, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
+        {
+            return new Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient(new string(secretChars), guestIssuerId, retryExecutor, retryNotificationFunc);
+        }
+
+        /// <summary>
+        /// Creates Teams Guest Issuer client for v1 API with retry feature.
+        /// <see cref="Thrzn41.WebexTeams.Version1.RetryExecutor"/> can be specified so that the client can retry on HTTP 429 response.
+        /// </summary>
+        /// <param name="secretString">Secret of string.</param>
+        /// <param name="guestIssuerId">Guest Issuer Id.</param>
+        /// <param name="retryExecutor">Executor for retry.</param>
+        /// <param name="retryNotificationFunc">Notification func where is notified before a retry. The func receives <see cref="TeamsResultInfo"/> for response info and int for trial counter. If the func returns false, the retry is cancelled.</param>
+        /// <returns>Teams Guest Issuer client for v1 API.</returns>
+        public static Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient CreateVersion1GuestIssuerClient(string secretString, string guestIssuerId, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
+        {
+            return new Thrzn41.WebexTeams.Version1.GuestIssuer.TeamsGuestIssuerClient(secretString, guestIssuerId, retryExecutor, retryNotificationFunc);
+        }
+
+        #endregion
 
 
     }
