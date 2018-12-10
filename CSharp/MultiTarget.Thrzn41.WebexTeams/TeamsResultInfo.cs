@@ -166,6 +166,7 @@ namespace Thrzn41.WebexTeams
                 new PathAndResource{ Path = "/v1/resourceGroup/memberships", Resouce = TeamsResource.ResourceGroupMembership },
                 new PathAndResource{ Path = "/v1/access_token",              Resouce = TeamsResource.AccessToken             },
                 new PathAndResource{ Path = "/v1/jwt/login",                 Resouce = TeamsResource.GuestUser               },
+                new PathAndResource{ Path = "/v1/contents",                  Resouce = TeamsResource.FileData                },
             };
 
         }
@@ -202,6 +203,10 @@ namespace Thrzn41.WebexTeams
                     {
                         operation = TeamsOperation.Delete;
                     }
+                    else if (method == HttpMethod.Head)
+                    {
+                        operation = TeamsOperation.GetHeader;
+                    }
                 }
 
                 string path = this.RequestInfo.Uri?.AbsolutePath;
@@ -218,7 +223,7 @@ namespace Thrzn41.WebexTeams
                             {
                                 operation = TeamsOperation.Get;
                             }
-                            else if(operation == TeamsOperation.Get && path.EndsWith(item.Path))
+                            else if (operation == TeamsOperation.Get && path.EndsWith(item.Path))
                             {
                                 operation = TeamsOperation.List;
                             }
@@ -228,6 +233,11 @@ namespace Thrzn41.WebexTeams
                     }
                 }
 
+                if(resource == TeamsResource.FileData && operation == TeamsOperation.GetHeader)
+                {
+                    operation = TeamsOperation.Get;
+                    resource  = TeamsResource.FileInfo;
+                }
             }
 
             return (new TeamsResourceOperation(resource, operation));

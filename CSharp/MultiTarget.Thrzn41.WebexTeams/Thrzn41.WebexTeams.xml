@@ -1243,6 +1243,16 @@
             Guest user resource.
             </summary>
         </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.FileData">
+            <summary>
+            File data resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.FileInfo">
+            <summary>
+            File info resource.
+            </summary>
+        </member>
         <member name="T:Thrzn41.WebexTeams.TeamsOperation">
             <summary>
             Operations of Webex Teams.
@@ -1276,6 +1286,11 @@
         <member name="F:Thrzn41.WebexTeams.TeamsOperation.Delete">
             <summary>
             Delete operation.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsOperation.GetHeader">
+            <summary>
+            Get header operation.
             </summary>
         </member>
         <member name="T:Thrzn41.WebexTeams.TeamsResourceOperation">

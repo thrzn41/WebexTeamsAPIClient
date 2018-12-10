@@ -320,6 +320,12 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             Assert.AreEqual(TeamsMediaType.ImagePNG, r1.Data.MediaType);
             Assert.AreEqual(34991, r1.Data.Size);
 
+            var resourceOperation = r1.ParseResourceOperation();
+            Assert.AreEqual(TeamsResource.FileInfo, resourceOperation.Resource);
+            Assert.AreEqual(TeamsOperation.Get, resourceOperation.Operation);
+            Assert.AreEqual("GetFileInfo", resourceOperation.ToString());
+
+
 
             var r2 = await this.teams.GetFileDataAsync(fileUri);
             Assert.IsTrue(r2.IsSuccessStatus);
@@ -328,6 +334,11 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             Assert.AreEqual("mypng.png", r2.Data.FileName);
             Assert.AreEqual(TeamsMediaType.ImagePNG, r2.Data.MediaType);
             Assert.AreEqual(34991, r2.Data.Size);
+
+            resourceOperation = r2.ParseResourceOperation();
+            Assert.AreEqual(TeamsResource.FileData, resourceOperation.Resource);
+            Assert.AreEqual(TeamsOperation.Get, resourceOperation.Operation);
+            Assert.AreEqual("GetFileData", resourceOperation.ToString());
 
             using (var data = r2.Data.Stream)
             {
