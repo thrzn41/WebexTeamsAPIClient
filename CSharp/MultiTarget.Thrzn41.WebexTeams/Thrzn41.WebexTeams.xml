@@ -556,6 +556,94 @@
             Reusable MultipartFormData http request.
             </summary>
         </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.ReusableStream">
+            <summary>
+            Reusable stream.
+            The internal stream is not disposed even after this stream is disposed.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.ReusableStream.stream">
+            <summary>
+            Internal stream.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.ReusableStream.initialPosition">
+            <summary>
+            Initial position.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.ReusableStream.#ctor(System.IO.Stream)">
+            <summary>
+            Creates instance.
+            </summary>
+            <param name="stream">Internal stream.</param>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.ReusableStream.CanRead">
+            <summary>
+            true if the stream supports reading; otherwise, false.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.ReusableStream.CanSeek">
+            <summary>
+            true if the stream supports seeking; otherwise, false.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.ReusableStream.CanWrite">
+            <summary>
+            true if the stream supports writing; otherwise, false.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.ReusableStream.Length">
+            <summary>
+            A long value representing the length of the stream in bytes.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.ReusableStream.Position">
+            <summary>
+            The current position within the stream.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.ReusableStream.Flush">
+            <summary>
+            Clears all buffers for this stream and causes any buffered data to be written to the underlying device.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.ReusableStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
+            </summary>
+            <param name="buffer">An array of bytes. When this method returns, the buffer contains the specified byte array with the values between offset and (offset + count - 1) replaced by the bytes read from the current source.</param>
+            <param name="offset">The zero-based byte offset in buffer at which to begin storing the data read from the current stream.</param>
+            <param name="count">The maximum number of bytes to be read from the current stream.</param>
+            <returns>The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.ReusableStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Sets the position within the current stream.
+            </summary>
+            <param name="offset">A byte offset relative to the origin parameter.</param>
+            <param name="origin">A value of type <see cref="T:System.IO.SeekOrigin"/> indicating the reference point used to obtain the new position.</param>
+            <returns>The new position within the current stream.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.ReusableStream.SetLength(System.Int64)">
+            <summary>
+            Sets the length of the current stream.
+            </summary>
+            <param name="value">The desired length of the current stream in bytes.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.ReusableStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
+            </summary>
+            <param name="buffer">An array of bytes. This method copies count bytes from buffer to the current stream.</param>
+            <param name="offset">The zero-based byte offset in buffer at which to begin copying bytes to the current stream.</param>
+            <param name="count">The number of bytes to be written to the current stream.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.ReusableStream.ResetPosition">
+            <summary>
+            Resets position.
+            </summary>
+        </member>
         <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.stringData">
             <summary>
             String data for FormData.
@@ -569,6 +657,11 @@
         <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.isReuseRequired">
             <summary>
             Indicates reuse is required or not.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.stream">
+            <summary>
+            Stream of the file.
             </summary>
         </member>
         <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.ReusableMultipartFormDataHttpRequest.byteData">

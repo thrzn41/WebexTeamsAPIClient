@@ -52,22 +52,22 @@ namespace Thrzn41.WebexTeams
             /// <summary>
             /// Http method.
             /// </summary>
-            private HttpMethod method;
+            private readonly HttpMethod method;
 
             /// <summary>
             /// Request uri.
             /// </summary>
-            private Uri uri;
+            private readonly Uri uri;
 
             /// <summary>
             /// Accept charset list.
             /// </summary>
-            private List<StringWithQualityHeaderValue> acceptCharsets;
+            private readonly List<StringWithQualityHeaderValue> acceptCharsets;
 
             /// <summary>
             /// Accept list.
             /// </summary>
-            private List<MediaTypeWithQualityHeaderValue> accepts;
+            private readonly List<MediaTypeWithQualityHeaderValue> accepts;
 
             /// <summary>
             /// Authentication info.
@@ -175,17 +175,17 @@ namespace Thrzn41.WebexTeams
             /// <summary>
             /// Request body text.
             /// </summary>
-            private string text;
+            private readonly string text;
 
             /// <summary>
             /// Encoding of request body.
             /// </summary>
-            private Encoding encoding;
+            private readonly Encoding encoding;
 
             /// <summary>
             /// MediaType of request body.
             /// </summary>
-            private string mediaType;
+            private readonly string mediaType;
 
 
             /// <summary>
@@ -251,7 +251,7 @@ namespace Thrzn41.WebexTeams
             /// <summary>
             /// String data for FormData.
             /// </summary>
-            private List< KeyValuePair<string, string> > stringData;
+            private readonly List< KeyValuePair<string, string> > stringData;
 
 
             /// <summary>
@@ -301,21 +301,184 @@ namespace Thrzn41.WebexTeams
         private class ReusableMultipartFormDataHttpRequest : ReusableHttpRequest
         {
 
+            /// <summary>
+            /// Reusable stream.
+            /// The internal stream is not disposed even after this stream is disposed.
+            /// </summary>
+            private class ReusableStream : Stream
+            {
+                /// <summary>
+                /// Internal stream.
+                /// </summary>
+                private readonly Stream stream;
+
+                /// <summary>
+                /// Initial position.
+                /// </summary>
+                private readonly long initialPosition;
+
+
+                /// <summary>
+                /// Creates instance.
+                /// </summary>
+                /// <param name="stream">Internal stream.</param>
+                public ReusableStream(Stream stream)
+                {
+                    this.stream = stream;
+
+                    if(this.stream.CanSeek)
+                    {
+                        this.initialPosition = this.stream.Position;
+                    }
+                }
+
+
+                /// <summary>
+                /// true if the stream supports reading; otherwise, false.
+                /// </summary>
+                public override bool CanRead
+                {
+                    get
+                    {
+                        return this.stream.CanRead;
+                    }
+                }
+
+                /// <summary>
+                /// true if the stream supports seeking; otherwise, false.
+                /// </summary>
+                public override bool CanSeek
+                {
+                    get
+                    {
+                        return this.stream.CanSeek;
+                    }
+                }
+
+                /// <summary>
+                /// true if the stream supports writing; otherwise, false.
+                /// </summary>
+                public override bool CanWrite
+                {
+                    get
+                    {
+                        return this.stream.CanWrite;
+                    }
+                }
+
+                /// <summary>
+                /// A long value representing the length of the stream in bytes.
+                /// </summary>
+                public override long Length
+                {
+                    get
+                    {
+                        return this.stream.Length;
+                    }
+                }
+
+                /// <summary>
+                /// The current position within the stream.
+                /// </summary>
+                public override long Position
+                {
+                    get
+                    {
+                        return this.stream.Position;
+                    }
+                    set
+                    {
+                        this.stream.Position = value;
+                    }
+                }
+
+
+                /// <summary>
+                /// Clears all buffers for this stream and causes any buffered data to be written to the underlying device.
+                /// </summary>
+                public override void Flush()
+                {
+                    this.stream.Flush();
+                }
+
+                /// <summary>
+                /// Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
+                /// </summary>
+                /// <param name="buffer">An array of bytes. When this method returns, the buffer contains the specified byte array with the values between offset and (offset + count - 1) replaced by the bytes read from the current source.</param>
+                /// <param name="offset">The zero-based byte offset in buffer at which to begin storing the data read from the current stream.</param>
+                /// <param name="count">The maximum number of bytes to be read from the current stream.</param>
+                /// <returns>The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.</returns>
+                public override int Read(byte[] buffer, int offset, int count)
+                {
+                    return this.stream.Read(buffer, offset, count);
+                }
+
+                /// <summary>
+                /// Sets the position within the current stream.
+                /// </summary>
+                /// <param name="offset">A byte offset relative to the origin parameter.</param>
+                /// <param name="origin">A value of type <see cref="SeekOrigin"/> indicating the reference point used to obtain the new position.</param>
+                /// <returns>The new position within the current stream.</returns>
+                public override long Seek(long offset, SeekOrigin origin)
+                {
+                    return this.stream.Seek(offset, origin);
+                }
+
+                /// <summary>
+                /// Sets the length of the current stream.
+                /// </summary>
+                /// <param name="value">The desired length of the current stream in bytes.</param>
+                public override void SetLength(long value)
+                {
+                    this.stream.SetLength(value);
+                }
+
+                /// <summary>
+                /// Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
+                /// </summary>
+                /// <param name="buffer">An array of bytes. This method copies count bytes from buffer to the current stream.</param>
+                /// <param name="offset">The zero-based byte offset in buffer at which to begin copying bytes to the current stream.</param>
+                /// <param name="count">The number of bytes to be written to the current stream.</param>
+                public override void Write(byte[] buffer, int offset, int count)
+                {
+                    this.stream.Write(buffer, offset, count);
+                }
+
+
+                /// <summary>
+                /// Resets position.
+                /// </summary>
+                public void ResetPosition()
+                {
+                    if(this.stream.CanSeek && this.stream.Position != this.initialPosition)
+                    {
+                        this.stream.Position = this.initialPosition;
+                    }
+                }
+            }
+
+
+
 
             /// <summary>
             /// String data for FormData.
             /// </summary>
-            private NameValueCollection stringData;
+            private readonly NameValueCollection stringData;
 
             /// <summary>
             /// Teams file data.
             /// </summary>
-            private TeamsFileData fileData;
+            private readonly TeamsFileData fileData;
 
             /// <summary>
             /// Indicates reuse is required or not.
             /// </summary>
-            private bool isReuseRequired;
+            private readonly bool isReuseRequired;
+
+            /// <summary>
+            /// Stream of the file.
+            /// </summary>
+            private ReusableStream stream;
 
             /// <summary>
             /// Byte data of file.
@@ -339,7 +502,8 @@ namespace Thrzn41.WebexTeams
 
                 this.isReuseRequired = isReuseRequired;
 
-                this.byteData     = null;
+                this.stream   = null;
+                this.byteData = null;
 
                 this.IsReadyToReuse = false;
             }
@@ -376,20 +540,26 @@ namespace Thrzn41.WebexTeams
 
                 if (this.fileData != null)
                 {
-                    HttpContent fileContent;
+                    HttpContent fileContent = null;
 
-                    if (this.byteData != null)
+                    if(this.stream != null)
+                    {
+                        this.stream.ResetPosition();
+
+                        fileContent = new StreamContent(this.stream);
+                    }
+                    else if (this.byteData != null)
                     {
                         fileContent = new ByteArrayContent(byteData);
                     }
-                    else
+
+                    if (fileContent != null)
                     {
-                        fileContent = new StreamContent(fileData.Stream);
+
+                        fileContent.Headers.ContentType = new MediaTypeHeaderValue(fileData.MediaTypeName);
+
+                        content.Add(fileContent, "files", fileData.FileName);
                     }
-
-                    fileContent.Headers.ContentType = new MediaTypeHeaderValue(fileData.MediaTypeName);
-
-                    content.Add(fileContent, "files", fileData.FileName);
                 }
 
                 request.Content = content;
@@ -403,13 +573,23 @@ namespace Thrzn41.WebexTeams
             /// <returns><see cref="HttpRequestMessage"/> to be used to request.</returns>
             public override HttpRequestMessage CreateRequest()
             {
-                if( !this.IsReadyToReuse && this.isReuseRequired && this.byteData == null )
+                if( !this.IsReadyToReuse )
                 {
-                    using (var memory = new MemoryStream())
+                    if((this.fileData != null) && (this.stream == null) && (this.byteData == null))
                     {
-                        fileData.Stream.CopyTo(memory);
+                        if( this.isReuseRequired && !this.fileData.Stream.CanSeek )
+                        {
+                            using (var memory = new MemoryStream())
+                            {
+                                fileData.Stream.CopyTo(memory);
 
-                        byteData = memory.ToArray();
+                                this.byteData = memory.ToArray();
+                            }
+                        }
+                        else
+                        {
+                            this.stream = new ReusableStream(fileData.Stream);
+                        }
                     }
 
                     this.IsReadyToReuse = true;
@@ -425,30 +605,39 @@ namespace Thrzn41.WebexTeams
             /// <returns><see cref="HttpRequestMessage"/> to be used to request.</returns>
             public override async Task<HttpRequestMessage> CreateRequestAsync(CancellationToken? cancellationToken = null)
             {
-                if ( !this.IsReadyToReuse && this.isReuseRequired && this.byteData == null )
+                if (!this.IsReadyToReuse)
                 {
-                    using (var memory = new MemoryStream())
+                    if ((this.fileData != null) && (this.stream == null) && (this.byteData == null))
                     {
-                        if (cancellationToken.HasValue)
+                        if (this.isReuseRequired && !this.fileData.Stream.CanSeek)
                         {
-                            await fileData.Stream.CopyToAsync(memory, 81920, cancellationToken.Value);
+                            using (var memory = new MemoryStream())
+                            {
+                                if (cancellationToken.HasValue)
+                                {
+                                    await fileData.Stream.CopyToAsync(memory, 81920, cancellationToken.Value);
+                                }
+                                else
+                                {
+                                    await fileData.Stream.CopyToAsync(memory);
+                                }
+
+                                this.byteData = memory.ToArray();
+                            }
                         }
                         else
                         {
-                            await fileData.Stream.CopyToAsync(memory);
+                            this.stream = new ReusableStream(fileData.Stream);
                         }
-
-                        byteData = memory.ToArray();
                     }
 
                     this.IsReadyToReuse = true;
                 }
 
-
                 return createRequest();
             }
-
         }
+
 
 
 
