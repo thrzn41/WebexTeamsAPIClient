@@ -58,7 +58,7 @@ namespace Thrzn41.WebexTeams.Version1.OAuth2
         /// <summary>
         /// <see cref="TimeSpan"/> till the refresh token will expire.
         /// </summary>
-        [JsonProperty(PropertyName = "refreshTokenTimeLeft")]
+        [JsonIgnore]
         public TimeSpan? RefreshTokenTimeLeft
         {
             get
