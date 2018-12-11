@@ -57,7 +57,7 @@ namespace Thrzn41.WebexTeams
             /// <summary>
             /// Request uri.
             /// </summary>
-            private readonly Uri uri;
+            public Uri Uri { get; private set; }
 
             /// <summary>
             /// Accept charset list.
@@ -74,8 +74,16 @@ namespace Thrzn41.WebexTeams
             /// </summary>
             public AuthenticationHeaderValue Authentication { get; set; }
 
-
-
+            /// <summary>
+            /// true if the request has authentication.
+            /// </summary>
+            public bool HasAuthentication
+            {
+                get
+                {
+                    return (this.Authentication != null);
+                }
+            }
 
             /// <summary>
             /// Is ready to reuse.
@@ -93,7 +101,7 @@ namespace Thrzn41.WebexTeams
             public ReusableHttpRequest(HttpMethod method, Uri uri)
             {
                 this.method  = method;
-                this.uri     = uri;
+                this.Uri     = uri;
 
                 this.acceptCharsets = new List<StringWithQualityHeaderValue>();
                 this.accepts        = new List<MediaTypeWithQualityHeaderValue>();
@@ -129,7 +137,7 @@ namespace Thrzn41.WebexTeams
             /// <returns><see cref="HttpRequestMessage"/>.</returns>
             protected HttpRequestMessage CreateHttpRequestMessage()
             {
-                var request = new HttpRequestMessage(this.method, this.uri);
+                var request = new HttpRequestMessage(this.method, this.Uri);
 
                 var headers = request.Headers;
 
@@ -676,15 +684,9 @@ namespace Thrzn41.WebexTeams
 
 
         /// <summary>
-        /// HttpClient to access Cisco Webex Teams API uris.
+        /// Teams Authentication.
         /// </summary>
-        private readonly HttpClient httpClientForTeamsAPI;
-
-        /// <summary>
-        /// HttpClient to access non-Cisco Webex Teams API uris.
-        /// </summary>
-        private readonly HttpClient httpClientForNonTeamsAPI;
-
+        private readonly AuthenticationHeaderValue teamsAuthentication;
 
         /// <summary>
         /// Regex pattern to check if the Uri is Cisco Webex Teams API uris.
@@ -709,60 +711,22 @@ namespace Thrzn41.WebexTeams
         /// </summary>
         /// <param name="teamsToken">Cisco Webex Teams Token.</param>
         /// <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
-        /// <param name="preAuthenticate">true if preAuthenticate is needed.</param>
         /// <param name="retryExecutor">Executor for retry.</param>
         /// <param name="retryNotificationFunc">Notification func for retry.</param>
-        internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern, bool preAuthenticate, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc)
+        internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc)
         {
-            // HttpClient for Cisco Webex Teams API.
-            // Teams Token MUST be sent to only Teams API https URL.
-            // NEVER SEND Token to other URLs or non-secure http URL.
-            this.httpClientForTeamsAPI = new HttpClient(
-                    new HttpClientHandler
-                    {
-                        AllowAutoRedirect = false,
-                        PreAuthenticate   = preAuthenticate,
-                    },
-                    true
-                );
-
-            // HttpClient for non-Cisco Webex Teams API URL.
-            // An avator image path is well-known case.
-            this.httpClientForNonTeamsAPI = new HttpClient(
-                    new HttpClientHandler
-                    {
-                        AllowAutoRedirect = false,
-                        PreAuthenticate   = false,
-                    },
-                    true
-                );
-
-
-            if (teamsToken != null)
+            if(teamsToken != null)
             {
-                // For Cisco Webex Teams API https path, the token is added.
-                this.httpClientForTeamsAPI.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", teamsToken);
+                this.teamsAuthentication = new AuthenticationHeaderValue("Bearer", teamsToken);
             }
 
             this.teamsAPIUriPattern = teamsAPIUriPattern;
 
             this.retryExecutor         = retryExecutor;
             this.retryNotificationFunc = retryNotificationFunc;
-
         }
 
 
-
-        /// <summary>
-        /// TeamsHttpClient constructor.
-        /// </summary>
-        /// <param name="teamsToken">Cisco Webex Teams Token.</param>
-        /// <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
-        /// <param name="preAuthenticate">true if preAuthenticate is needed.</param>
-        internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern, bool preAuthenticate)
-            : this(teamsToken, teamsAPIUriPattern, preAuthenticate, null, null)
-        {
-        }
 
         /// <summary>
         /// TeamsHttpClient constructor.
@@ -770,41 +734,12 @@ namespace Thrzn41.WebexTeams
         /// <param name="teamsToken">Cisco Webex Teams Token.</param>
         /// <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
         internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern)
-            : this(teamsToken, teamsAPIUriPattern, (teamsToken != null))
-        {
-        }
-
-        /// <summary>
-        /// TeamsHttpClient constructor.
-        /// </summary>
-        /// <param name="teamsToken">Cisco Webex Teams Token.</param>
-        /// <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
-        /// <param name="retryExecutor">Executor for retry.</param>
-        /// <param name="retryNotificationFunc">Notification func for retry.</param>
-        internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc)
-            : this(teamsToken, teamsAPIUriPattern, (teamsToken != null), retryExecutor, retryNotificationFunc)
+            : this(teamsToken, teamsAPIUriPattern, null, null)
         {
         }
 
 
 
-
-        /// <summary>
-        /// Selects HttpClient for uri.
-        /// </summary>
-        /// <param name="uri">Uri to be requested.</param>
-        /// <returns>HttpClient for uri.</returns>
-        private HttpClient selectHttpClient(Uri uri)
-        {
-            var result = this.httpClientForNonTeamsAPI;
-
-            if(this.teamsAPIUriPattern.IsMatch(uri.AbsoluteUri))
-            {
-                result = this.httpClientForTeamsAPI;
-            }
-
-            return result;
-        }
 
         /// <summary>
         /// Requests to Cisco Webex Teams API.
@@ -822,6 +757,11 @@ namespace Thrzn41.WebexTeams
 
             HttpRequestMessage request;
 
+            if (this.teamsAuthentication != null && !reusableRequest.HasAuthentication && this.teamsAPIUriPattern != null && this.teamsAPIUriPattern.IsMatch(reusableRequest.Uri.AbsoluteUri))
+            {
+                reusableRequest.Authentication = this.teamsAuthentication;
+            }
+
             if(reusableRequest.IsReadyToReuse)
             {
                 request = reusableRequest.CreateRequest();
@@ -835,7 +775,7 @@ namespace Thrzn41.WebexTeams
             using (request.Content)
             {
 
-                var httpClient = selectHttpClient(request.RequestUri);
+                var httpClient = TeamsStaticHttpClients.SelectHttpClient(request.RequestUri, this.teamsAPIUriPattern);
 
                 result.RequestInfo = new TeamsRequestInfo(request);
 
@@ -1237,11 +1177,7 @@ namespace Thrzn41.WebexTeams
             {
                 if (disposing)
                 {
-                    using (this.httpClientForTeamsAPI)
-                    using (this.httpClientForNonTeamsAPI)
-                    {
-                        // disposed.
-                    }
+                    // disposed.
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

@@ -102,7 +102,7 @@ namespace Thrzn41.WebexTeams.Version1.GuestIssuer
         /// <param name="retryNotificationFunc">Notification func for retry.</param>
         internal TeamsGuestIssuerClient(string secret, string guestIssuerId, TeamsRetry retryExecutor = null, Func<TeamsResultInfo, int, bool> retryNotificationFunc = null)
         {
-            this.teamsHttpClient = new TeamsHttpClient(null, TeamsAPIClient.TEAMS_API_URI_PATTERN, true, retryExecutor, retryNotificationFunc);
+            this.teamsHttpClient = new TeamsHttpClient(null, TeamsAPIClient.TEAMS_API_URI_PATTERN, retryExecutor, retryNotificationFunc);
 
             // For now, Webex Teams Guest Issuer uses HMAC-SHA256 for JWT signature.
             this.jwtSigner = new HMACSHA256( Convert.FromBase64String(secret) );
