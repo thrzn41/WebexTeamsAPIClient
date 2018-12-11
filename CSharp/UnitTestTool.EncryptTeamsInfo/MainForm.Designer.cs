@@ -1,4 +1,4 @@
-﻿namespace UnitTestTool.EncryptWebexTeamsTokenForm
+﻿namespace UnitTestTool.EncryptTeamsInfo
 {
     partial class MainForm
     {
@@ -32,8 +32,8 @@
             this.labelToken = new System.Windows.Forms.Label();
             this.textBoxPath = new System.Windows.Forms.TextBox();
             this.labelPath = new System.Windows.Forms.Label();
-            this.maskedTextBoxToken = new System.Windows.Forms.MaskedTextBox();
             this.buttonExportToken = new System.Windows.Forms.Button();
+            this.textBoxToken = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // labelToken
@@ -52,12 +52,6 @@
             resources.ApplyResources(this.labelPath, "labelPath");
             this.labelPath.Name = "labelPath";
             // 
-            // maskedTextBoxToken
-            // 
-            resources.ApplyResources(this.maskedTextBoxToken, "maskedTextBoxToken");
-            this.maskedTextBoxToken.Name = "maskedTextBoxToken";
-            this.maskedTextBoxToken.UseSystemPasswordChar = true;
-            // 
             // buttonExportToken
             // 
             resources.ApplyResources(this.buttonExportToken, "buttonExportToken");
@@ -65,12 +59,17 @@
             this.buttonExportToken.UseVisualStyleBackColor = true;
             this.buttonExportToken.Click += new System.EventHandler(this.buttonExportToken_Click);
             // 
+            // textBoxToken
+            // 
+            resources.ApplyResources(this.textBoxToken, "textBoxToken");
+            this.textBoxToken.Name = "textBoxToken";
+            // 
             // MainForm
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.textBoxToken);
             this.Controls.Add(this.buttonExportToken);
-            this.Controls.Add(this.maskedTextBoxToken);
             this.Controls.Add(this.textBoxPath);
             this.Controls.Add(this.labelPath);
             this.Controls.Add(this.labelToken);
@@ -87,8 +86,8 @@
         private System.Windows.Forms.Label labelToken;
         private System.Windows.Forms.TextBox textBoxPath;
         private System.Windows.Forms.Label labelPath;
-        private System.Windows.Forms.MaskedTextBox maskedTextBoxToken;
         private System.Windows.Forms.Button buttonExportToken;
+        private System.Windows.Forms.TextBox textBoxToken;
     }
 }
 

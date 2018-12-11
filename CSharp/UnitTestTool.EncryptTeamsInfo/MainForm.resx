@@ -117,11 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="buttonExportToken.TabIndex" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;labelToken.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="&gt;&gt;labelPath.Type" xml:space="preserve">
+  <data name="&gt;&gt;labelToken.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
@@ -131,23 +130,18 @@
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 12</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="labelPath.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
   <data name="&gt;&gt;textBoxPath.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="maskedTextBoxToken.Location" type="System.Drawing.Point, System.Drawing">
-    <value>154, 20</value>
+  <data name="&gt;&gt;labelPath.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;maskedTextBoxToken.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>Encrypt Cisco Webex Teams API Token</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="textBoxToken.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
   </data>
   <data name="labelToken.Location" type="System.Drawing.Point, System.Drawing">
     <value>13, 23</value>
@@ -156,10 +150,19 @@
     <value>1</value>
   </data>
   <data name="buttonExportToken.Size" type="System.Drawing.Size, System.Drawing">
-    <value>189, 23</value>
+    <value>142, 23</value>
+  </data>
+  <data name="labelToken.Text" xml:space="preserve">
+    <value>Teams API Token:</value>
   </data>
   <data name="labelToken.Size" type="System.Drawing.Size, System.Drawing">
-    <value>135, 12</value>
+    <value>98, 12</value>
+  </data>
+  <data name="textBoxToken.Location" type="System.Drawing.Point, System.Drawing">
+    <value>117, 15</value>
+  </data>
+  <data name="labelPath.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 60</value>
   </data>
   <data name="labelPath.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -167,17 +170,14 @@
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>496, 172</value>
   </data>
-  <data name="&gt;&gt;maskedTextBoxToken.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="textBoxPath.Location" type="System.Drawing.Point, System.Drawing">
     <value>86, 57</value>
   </data>
   <data name="&gt;&gt;labelPath.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;textBoxPath.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="&gt;&gt;labelPath.Name" xml:space="preserve">
+    <value>labelPath</value>
   </data>
   <data name="&gt;&gt;labelPath.ZOrder" xml:space="preserve">
     <value>3</value>
@@ -185,11 +185,11 @@
   <data name="labelToken.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="maskedTextBoxToken.Size" type="System.Drawing.Size, System.Drawing">
-    <value>330, 19</value>
+  <data name="&gt;&gt;buttonExportToken.Name" xml:space="preserve">
+    <value>buttonExportToken</value>
   </data>
-  <data name="&gt;&gt;labelPath.Name" xml:space="preserve">
-    <value>labelPath</value>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="labelPath.Text" xml:space="preserve">
     <value>Export Path:</value>
@@ -197,17 +197,17 @@
   <data name="&gt;&gt;buttonExportToken.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;labelToken.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;textBoxToken.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="labelToken.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="&gt;&gt;maskedTextBoxToken.Type" xml:space="preserve">
-    <value>System.Windows.Forms.MaskedTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="labelPath.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 12</value>
   </data>
-  <data name="&gt;&gt;buttonExportToken.Name" xml:space="preserve">
-    <value>buttonExportToken</value>
+  <data name="&gt;&gt;buttonExportToken.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="&gt;&gt;labelToken.Parent" xml:space="preserve">
     <value>$this</value>
@@ -218,32 +218,35 @@
   <data name="&gt;&gt;textBoxPath.Name" xml:space="preserve">
     <value>textBoxPath</value>
   </data>
-  <data name="&gt;&gt;labelToken.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;textBoxToken.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="buttonExportToken.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
-  <data name="labelPath.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 60</value>
-  </data>
   <data name="buttonExportToken.Text" xml:space="preserve">
-    <value>Export Encrypted Token Data</value>
+    <value>Export Encrypted Info</value>
   </data>
   <data name="buttonExportToken.Location" type="System.Drawing.Point, System.Drawing">
-    <value>295, 95</value>
+    <value>342, 95</value>
   </data>
-  <data name="labelToken.Text" xml:space="preserve">
-    <value>Webex Teams API Token:</value>
+  <data name="textBoxToken.Size" type="System.Drawing.Size, System.Drawing">
+    <value>367, 19</value>
+  </data>
+  <data name="&gt;&gt;textBoxPath.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="&gt;&gt;labelToken.Name" xml:space="preserve">
     <value>labelToken</value>
   </data>
-  <data name="labelPath.Size" type="System.Drawing.Size, System.Drawing">
-    <value>67, 12</value>
+  <data name="&gt;&gt;textBoxToken.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
-  <data name="&gt;&gt;buttonExportToken.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="&gt;&gt;textBoxToken.Name" xml:space="preserve">
+    <value>textBoxToken</value>
   </data>
-  <data name="maskedTextBoxToken.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Encrypt Teams Info</value>
   </data>
   <data name="&gt;&gt;buttonExportToken.Parent" xml:space="preserve">
     <value>$this</value>
@@ -251,13 +254,7 @@
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>MainForm</value>
   </data>
-  <data name="&gt;&gt;maskedTextBoxToken.Name" xml:space="preserve">
-    <value>maskedTextBoxToken</value>
-  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </metadata>
-  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>ja-JP</value>
   </metadata>
 </root>

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UnitTestTool.EncryptWebexTeamsTokenForm.ResourceMessage {
+namespace UnitTestTool.EncryptTeamsInfo.ResourceMessage {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace UnitTestTool.EncryptWebexTeamsTokenForm.ResourceMessage {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("UnitTestTool.EncryptWebexTeamsTokenForm.ResourceMessage.AppMessages", typeof(AppMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("UnitTestTool.EncryptTeamsInfo.ResourceMessage.AppMessages", typeof(AppMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,11 +61,11 @@ namespace UnitTestTool.EncryptWebexTeamsTokenForm.ResourceMessage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Encrypted Webex Teams API token was exported..
+        ///   Looks up a localized string similar to Encrypted Teams info was exported..
         /// </summary>
-        internal static string TeamsTokenExported {
+        internal static string TeamsInfoExported {
             get {
-                return ResourceManager.GetString("TeamsTokenExported", resourceCulture);
+                return ResourceManager.GetString("TeamsInfoExported", resourceCulture);
             }
         }
     }
