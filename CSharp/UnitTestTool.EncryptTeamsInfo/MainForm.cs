@@ -34,14 +34,21 @@ namespace UnitTestTool.EncryptTeamsInfo
         {
             DirectoryInfo exportDir = this.dirInfo.CreateSubdirectory(".thrzn41").CreateSubdirectory("unittest").CreateSubdirectory("teams");
 
-            LocalProtectedString ps = LocalProtectedString.FromString(this.textBoxToken.Text);
+            var info = new TeamsInfo
+            {
+                APIToken          = this.textBoxToken.Text,
+                GuestIssuerId     = this.textBoxGuestIssuerId.Text,
+                GuestIssuerSecret = this.textBoxGuestIssuerSecret.Text,
+            };
 
-            using (var fs = new FileStream(String.Format("{0}{1}teamstoken.dat", exportDir.FullName, Path.DirectorySeparatorChar), FileMode.Create, FileAccess.Write, FileShare.Read))
+            LocalProtectedString ps = LocalProtectedString.FromString(info.ToJsonString());
+
+            using (var fs = new FileStream(String.Format("{0}{1}teamsinfo.dat", exportDir.FullName, Path.DirectorySeparatorChar), FileMode.Create, FileAccess.Write, FileShare.Read))
             {
                 await fs.WriteAsync(ps.EncryptedData, 0, ps.EncryptedData.Length);
             }
 
-            using (var fs = new FileStream(String.Format("{0}{1}tokenentropy.dat", exportDir.FullName, Path.DirectorySeparatorChar), FileMode.Create, FileAccess.Write, FileShare.Read))
+            using (var fs = new FileStream(String.Format("{0}{1}infoentropy.dat", exportDir.FullName, Path.DirectorySeparatorChar), FileMode.Create, FileAccess.Write, FileShare.Read))
             {
                 await fs.WriteAsync(ps.Entropy, 0, ps.Entropy.Length);
             }

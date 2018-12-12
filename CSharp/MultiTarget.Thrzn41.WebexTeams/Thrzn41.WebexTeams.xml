@@ -1610,6 +1610,12 @@
             </summary>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResourceOperation"/> of the result.</returns>
         </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsResultInfo.CopyInfoTo(Thrzn41.WebexTeams.TeamsResultInfo)">
+            <summary>
+            Copies Info to ather <see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/>.
+            </summary>
+            <param name="destination"><see cref="T:Thrzn41.WebexTeams.TeamsResultInfo"/> to be copied.</param>
+        </member>
         <member name="T:Thrzn41.WebexTeams.TeamsRetry">
             <summary>
             Class to retry requests.
@@ -5870,154 +5876,6 @@
             <see cref="T:Thrzn41.WebexTeams.Version1.Webhook"/> list.
             </summary>
         </member>
-        <member name="T:Thrzn41.WebexTeams.Version1.WebhookListener">
-            <summary>
-            Provides simple webhook listener.
-            This listener is NOT INTENDED TO BE USED IN PRODUCTION ENVIRONMENT.
-            Mainly focus on use in quick testing or trying webhook.
-            This listner consumes user thread pool.
-            </summary>
-            <remarks>
-            This listener is NOT INTENDED TO BE USED IN PRODUCTION ENVIRONMENT.
-            Mainly focus on use in quick testing or trying webhook.
-            This listner consumes user thread pool.
-            </remarks>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.DEFAULT_DATA_BUFFER_SIZE">
-            <summary>
-            Default data buffue bytes size for event data.
-            The 2048 bytes will be reasonable size for most event data.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.DEFAULT_NUMBER_OF_THREADS">
-            <summary>
-            Default number of listener threads.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.PATH_PREFIX_PATTERN">
-            <summary>
-            Path prefix pattern of path in uri.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.PATH_PATTERN">
-            <summary>
-            Pattern of path in uri.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.DEFAULT_ENCODING">
-            <summary>
-            Default encoding.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.slimLock">
-            <summary>
-            Slim lock.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.notificationManager">
-            <summary>
-            Notification manager.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.httpListener">
-            <summary>
-            Http listner.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.numberOfThreads">
-            <summary>
-            Number of listner threads.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.pathPrefix">
-            <summary>
-            Path prefix that is listened.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.activeThreadCount">
-            <summary>
-            Thread count that is now active.
-            </summary>
-        </member>
-        <member name="P:Thrzn41.WebexTeams.Version1.WebhookListener.ActiveThreadCount">
-            <summary>
-            Thread count that is now active.
-            </summary>
-        </member>
-        <member name="P:Thrzn41.WebexTeams.Version1.WebhookListener.Path">
-            <summary>
-            Path that is listened.
-            </summary>
-        </member>
-        <member name="P:Thrzn41.WebexTeams.Version1.WebhookListener.IsListening">
-            <summary>
-            true if the WebhookListener was started; otherwise, false.
-            </summary>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.#ctor(System.Int32)">
-            <summary>
-            Creates webhook listner.
-            </summary>
-            <param name="numberOfThreads">Number of listener threads.</param>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.AddListenerEndpoint(System.String,System.UInt16,System.Boolean)">
-            <summary>
-            Adds listening host and port.
-            If you expose the server for public, you should use https.
-            You need to bind the host and port with TLS certificates in your environment.
-            </summary>
-            <param name="hostnameOrIPAddress">Hostname or IP address of local machine.</param>
-            <param name="port">Port number of the listening port.</param>
-            <param name="useHttps">true if the listening uri uses https.</param>
-            <returns><see cref="T:System.Uri"/> that is added.</returns>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.AddNotification(Thrzn41.WebexTeams.Version1.Webhook,System.Action{Thrzn41.WebexTeams.Version1.WebhookEventData})">
-            <summary>
-            Adds event notification to the listner.
-            </summary>
-            <param name="webhook">Webhook to be added.</param>
-            <param name="func">Function to be notified on receiving event.</param>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.AddNotification(Thrzn41.WebexTeams.Version1.Webhook,System.Func{Thrzn41.WebexTeams.Version1.WebhookEventData,System.Threading.Tasks.Task})">
-            <summary>
-            Adds event notification to the listner.
-            </summary>
-            <param name="webhook">Webhook to be added.</param>
-            <param name="funcAsync">Async function to be notified on receiving event.</param>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.RemoveNotification(Thrzn41.WebexTeams.Version1.Webhook)">
-            <summary>
-            Removes notification info.
-            </summary>
-            <param name="webhook">Webhook to be removed.</param>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.startListening">
-            <summary>
-            Starts listening.
-            </summary>
-            <returns><see cref="T:System.Threading.Tasks.Task"/>.</returns>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.Start">
-            <summary>
-            Starts listening.
-            </summary>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.Stop">
-            <summary>
-            Stop listening.
-            </summary>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.Dispose(System.Boolean)">
-            <summary>
-            Dispose.
-            </summary>
-            <param name="disposing">disposing.</param>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.Dispose">
-            <summary>
-            Dispose.
-            </summary>
-        </member>
         <member name="T:Thrzn41.WebexTeams.Version1.WebhookNotificationManager">
             <summary>
             Webhook notification manager.
@@ -6073,6 +5931,132 @@
             </summary>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.AddNotification(Thrzn41.WebexTeams.Version1.Webhook,System.Action{Thrzn41.WebexTeams.Version1.WebhookEventData})">
+            <summary>
+            Adds notification to the manager.
+            </summary>
+            <param name="webhook">Webhook to be added.</param>
+            <param name="func">Function to be notified on receiving event.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.AddNotification(Thrzn41.WebexTeams.Version1.Webhook,System.Func{Thrzn41.WebexTeams.Version1.WebhookEventData,System.Threading.Tasks.Task})">
+            <summary>
+            Adds notification to the manager.
+            </summary>
+            <param name="webhook">Webhook to be added.</param>
+            <param name="funcAsync">Async function to be notified on receiving event.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.RemoveNotification(Thrzn41.WebexTeams.Version1.Webhook)">
+            <summary>
+            Removes notification info.
+            </summary>
+            <param name="webhook">Webhook to be removed.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.ValidateAndNotify(System.Byte[],System.String,System.Text.Encoding)">
+            <summary>
+            Validates and notifies event.
+            </summary>
+            <param name="data">The data to be validated and notified.</param>
+            <param name="xTeamsSignature">Signature that is notified on event.</param>
+            <param name="encoding">Encoding of data.</param>
+            <returns>true if the data is valid, false if the data is invalid.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">disposing.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.WebhookStatus">
+            <summary>
+            Webhook status of Cisco Webex Teams.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookStatus.Active">
+            <summary>
+            Webhook is active.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookStatus.Inactive">
+            <summary>
+            Webhook is inactive.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookStatus.Unknown">
+            <summary>
+            Webhook is unknown status.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookStatus.WEBHOOK_STATUSES">
+            <summary>
+            Dictionary for webhook status.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.#cctor">
+            <summary>
+            Static constuctor.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.WebhookStatus.Name">
+            <summary>
+            Name of the webhook status.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.#ctor(System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="name">Name of the webhook status.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.Parse(System.String)">
+            <summary>
+            Parse webhook status.
+            </summary>
+            <param name="name">Name of the webhook status.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.Version1.WebhookStatus"/> for the name.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.Equals(Thrzn41.WebexTeams.Version1.WebhookStatus)">
+            <summary>
+            Determines whether this instance and another specified <see cref="T:Thrzn41.WebexTeams.Version1.WebhookStatus"/> object have the same value.
+            </summary>
+            <param name="value">The webhook status to compare to this instance.</param>
+            <returns>true if the value of the parameter is the same as the value of this instance; otherwise, false. If value is null, the method returns false.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.Equals(System.Object)">
+            <summary>
+            Determines whether this instance and a specified object, which must also be a <see cref="T:Thrzn41.WebexTeams.Version1.WebhookStatus"/> object, have the same value.
+            </summary>
+            <param name="obj">The webhook status to compare to this instance.</param>
+            <returns>true if obj is a <see cref="T:Thrzn41.WebexTeams.Version1.WebhookStatus"/> and its value is the same as this instance; otherwise, false. If obj is null, the method returns false.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.GetHashCode">
+            <summary>
+            Returns the hash code for this webhook status.
+            </summary>
+            <returns>A 32-bit signed integer hash code.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.op_Equality(Thrzn41.WebexTeams.Version1.WebhookStatus,Thrzn41.WebexTeams.Version1.WebhookStatus)">
+            <summary>
+            Determines whether two specified webhook status have the same value.
+            </summary>
+            <param name="lhs">Left hand side value.</param>
+            <param name="rhs">Right hand side value.</param>
+            <returns>true if the two values have the same value.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.op_Inequality(Thrzn41.WebexTeams.Version1.WebhookStatus,Thrzn41.WebexTeams.Version1.WebhookStatus)">
+            <summary>
+            Determines whether two specified webhook status have the different value.
+            </summary>
+            <param name="lhs">Left hand side value.</param>
+            <param name="rhs">Right hand side value.</param>
+            <returns>true if the two values have the different value.</returns>
+        </member>
+    </members>
+</doc>
+r name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.AddNotification(Thrzn41.WebexTeams.Version1.Webhook,System.Action{Thrzn41.WebexTeams.Version1.WebhookEventData})">
             <summary>
             Adds notification to the manager.
             </summary>

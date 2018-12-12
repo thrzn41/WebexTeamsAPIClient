@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Security" />
@@ -62,6 +65,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="TeamsInfo.cs" />
     <EmbeddedResource Include="MainForm.ja-JP.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -96,6 +100,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MultiTarget.Thrzn41.WebexTeams\MultiTarget.Thrzn41.WebexTeams.csproj">
+      <Project>{ee5349c9-e454-44bc-9719-98518ae8f67d}</Project>
+      <Name>MultiTarget.Thrzn41.WebexTeams</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

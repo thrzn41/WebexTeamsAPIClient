@@ -151,10 +151,7 @@ namespace Thrzn41.WebexTeams.Version1.GuestIssuer
         {
             var result = new TeamsResult<GuestUserInfo>();
 
-            result.IsSuccessStatus = source.IsSuccessStatus;
-            result.HttpStatusCode  = source.HttpStatusCode;
-            result.RetryAfter      = source.RetryAfter;
-            result.TrackingId      = source.TrackingId;
+            source.CopyInfoTo(result);
 
 
             var guestUserInfo = new GuestUserInfo();

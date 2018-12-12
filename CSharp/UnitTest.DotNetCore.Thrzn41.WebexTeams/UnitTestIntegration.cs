@@ -13,7 +13,7 @@ using System.Threading;
 namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 {
     [TestClass]
-    public class UnitTestBasicWithRetry
+    public class UnitTestIntegration
     {
         private const string UNIT_TEST_SPACE_TAG = "#webexteamsapiclientunittestspace";
 
@@ -34,11 +34,12 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
             try
             {
+
                 string userDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
                 var dirInfo = new DirectoryInfo(String.Format("{0}{1}.thrzn41{1}unittest{1}teams", userDir, Path.DirectorySeparatorChar));
 
-                using (var stream = new FileStream(String.Format("{0}{1}teamsinfo.dat", dirInfo.FullName, Path.DirectorySeparatorChar), FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (var stream = new FileStream(String.Format("{0}{1}teamsintegration.dat", dirInfo.FullName, Path.DirectorySeparatorChar), FileMode.Open, FileAccess.Read, FileShare.Read))
                 using (var memory = new MemoryStream())
                 {
                     stream.CopyTo(memory);
@@ -46,7 +47,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                     encryptedInfo = memory.ToArray();
                 }
 
-                using (var stream = new FileStream(String.Format("{0}{1}infoentropy.dat", dirInfo.FullName, Path.DirectorySeparatorChar), FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (var stream = new FileStream(String.Format("{0}{1}integrationentropy.dat", dirInfo.FullName, Path.DirectorySeparatorChar), FileMode.Open, FileAccess.Read, FileShare.Read))
                 using (var memory = new MemoryStream())
                 {
                     stream.CopyTo(memory);
@@ -54,9 +55,9 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                     entropy = memory.ToArray();
                 }
 
-                var info = TeamsObject.FromJsonString<TeamsInfo>(LocalProtectedString.FromEncryptedData(encryptedInfo, entropy).DecryptToString());
+                var token = TeamsObject.FromJsonString<TeamsIntegrationInfo>(LocalProtectedString.FromEncryptedData(encryptedInfo, entropy).DecryptToString());
 
-                teams = TeamsAPI.CreateVersion1Client(info.APIToken, RetryExecutor.One);
+                teams = TeamsAPI.CreateVersion1Client(token.TokenInfo, RetryExecutor.One);
 
                 var rMe = await teams.GetMeAsync();
 
@@ -92,7 +93,6 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             }
             catch (DirectoryNotFoundException) { }
             catch (FileNotFoundException) { }
-
 
             checkTeamsAPIClient(me);
             checkUnitTestSpace();

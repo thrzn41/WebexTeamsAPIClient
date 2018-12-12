@@ -243,6 +243,21 @@ namespace Thrzn41.WebexTeams
             return (new TeamsResourceOperation(resource, operation));
         }
 
+
+        /// <summary>
+        /// Copies Info to ather <see cref="TeamsResultInfo"/>.
+        /// </summary>
+        /// <param name="destination"><see cref="TeamsResultInfo"/> to be copied.</param>
+        internal void CopyInfoTo(TeamsResultInfo destination)
+        {
+            destination.TransactionId   = this.TransactionId;
+            destination.IsSuccessStatus = this.IsSuccessStatus;
+            destination.HttpStatusCode  = this.HttpStatusCode;
+            destination.RequestInfo     = this.RequestInfo;
+            destination.RetryAfter      = this.RetryAfter;
+            destination.TrackingId      = this.TrackingId;
+        }
+
     }
 
 }

@@ -28,28 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AuthForm));
             this.webBrowserAuth = new System.Windows.Forms.WebBrowser();
+            this.buttonClose = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // webBrowserAuth
             // 
-            this.webBrowserAuth.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webBrowserAuth.Location = new System.Drawing.Point(0, 0);
-            this.webBrowserAuth.MinimumSize = new System.Drawing.Size(20, 20);
+            resources.ApplyResources(this.webBrowserAuth, "webBrowserAuth");
+            this.webBrowserAuth.AllowWebBrowserDrop = false;
             this.webBrowserAuth.Name = "webBrowserAuth";
-            this.webBrowserAuth.Size = new System.Drawing.Size(724, 601);
-            this.webBrowserAuth.TabIndex = 0;
             this.webBrowserAuth.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowserAuth_DocumentCompleted);
+            // 
+            // buttonClose
+            // 
+            resources.ApplyResources(this.buttonClose, "buttonClose");
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
             // AuthForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(724, 601);
+            this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.webBrowserAuth);
-            this.MinimumSize = new System.Drawing.Size(256, 256);
             this.Name = "AuthForm";
-            this.Text = "AuthForm";
             this.Load += new System.EventHandler(this.AuthForm_Load);
             this.ResumeLayout(false);
 
@@ -58,5 +62,6 @@
         #endregion
 
         private System.Windows.Forms.WebBrowser webBrowserAuth;
+        private System.Windows.Forms.Button buttonClose;
     }
 }

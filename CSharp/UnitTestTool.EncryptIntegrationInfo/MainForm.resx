@@ -117,4 +117,316 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="&gt;&gt;labelClientId.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="labelRedirectUri.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="textBoxOAuthUrl.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="textBoxOAuthUrl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>154, 72</value>
+  </data>
+  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>256, 256</value>
+  </data>
+  <data name="labelClientId.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;labelClientId.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;labelRedirectUri.Name" xml:space="preserve">
+    <value>labelRedirectUri</value>
+  </data>
+  <data name="&gt;&gt;labelClientSecret.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;textBoxRedirectUri.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="buttonCreate.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>MainForm</value>
+  </data>
+  <data name="labelRedirectUri.Size" type="System.Drawing.Size, System.Drawing">
+    <value>73, 12</value>
+  </data>
+  <data name="labelExportPath.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;buttonCreate.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="labelOauthUrl.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;labelOauthUrl.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="labelOauthUrl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 79</value>
+  </data>
+  <data name="&gt;&gt;textBoxOAuthUrl.Name" xml:space="preserve">
+    <value>textBoxOAuthUrl</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="textBoxExportPath.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 12</value>
+  </data>
+  <data name="labelClientSecret.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 12</value>
+  </data>
+  <data name="&gt;&gt;labelClientSecret.Name" xml:space="preserve">
+    <value>labelClientSecret</value>
+  </data>
+  <data name="&gt;&gt;textBoxRedirectUri.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="textBoxOAuthUrl.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;labelClientSecret.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="textBoxClientSecret.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;textBoxExportPath.Name" xml:space="preserve">
+    <value>textBoxExportPath</value>
+  </data>
+  <data name="&gt;&gt;textBoxClientSecret.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;textBoxClientId.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="textBoxClientId.Location" type="System.Drawing.Point, System.Drawing">
+    <value>154, 20</value>
+  </data>
+  <data name="&gt;&gt;textBoxClientSecret.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelRedirectUri.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="labelClientSecret.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 54</value>
+  </data>
+  <data name="labelOauthUrl.Text" xml:space="preserve">
+    <value>OAuth Authorization URL:</value>
+  </data>
+  <data name="labelClientId.Size" type="System.Drawing.Size, System.Drawing">
+    <value>52, 12</value>
+  </data>
+  <data name="&gt;&gt;textBoxClientSecret.Name" xml:space="preserve">
+    <value>textBoxClientSecret</value>
+  </data>
+  <data name="&gt;&gt;textBoxOAuthUrl.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="textBoxRedirectUri.Size" type="System.Drawing.Size, System.Drawing">
+    <value>538, 19</value>
+  </data>
+  <data name="&gt;&gt;labelExportPath.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;textBoxRedirectUri.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="textBoxRedirectUri.Location" type="System.Drawing.Point, System.Drawing">
+    <value>154, 97</value>
+  </data>
+  <data name="&gt;&gt;textBoxClientSecret.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="labelClientId.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="textBoxClientSecret.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;buttonCreate.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="textBoxClientSecret.Location" type="System.Drawing.Point, System.Drawing">
+    <value>154, 47</value>
+  </data>
+  <data name="labelOauthUrl.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="labelClientSecret.Text" xml:space="preserve">
+    <value>Client Secret:</value>
+  </data>
+  <data name="&gt;&gt;textBoxOAuthUrl.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="textBoxRedirectUri.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="labelClientSecret.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;textBoxClientId.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="labelClientSecret.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="textBoxClientSecret.Size" type="System.Drawing.Size, System.Drawing">
+    <value>538, 19</value>
+  </data>
+  <data name="textBoxClientId.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="textBoxClientId.Size" type="System.Drawing.Size, System.Drawing">
+    <value>538, 19</value>
+  </data>
+  <data name="textBoxExportPath.Size" type="System.Drawing.Size, System.Drawing">
+    <value>538, 19</value>
+  </data>
+  <data name="&gt;&gt;labelOauthUrl.Name" xml:space="preserve">
+    <value>labelOauthUrl</value>
+  </data>
+  <data name="labelExportPath.Location" type="System.Drawing.Point, System.Drawing">
+    <value>15, 134</value>
+  </data>
+  <data name="&gt;&gt;textBoxClientId.Name" xml:space="preserve">
+    <value>textBoxClientId</value>
+  </data>
+  <data name="&gt;&gt;textBoxClientId.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="buttonCreate.Text" xml:space="preserve">
+    <value>CREATE</value>
+  </data>
+  <data name="labelRedirectUri.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 104</value>
+  </data>
+  <data name="labelExportPath.Text" xml:space="preserve">
+    <value>Export Path:</value>
+  </data>
+  <data name="labelExportPath.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;labelClientId.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;textBoxExportPath.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="textBoxRedirectUri.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="textBoxClientId.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;textBoxExportPath.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelExportPath.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 12</value>
+  </data>
+  <data name="textBoxExportPath.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="buttonCreate.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Encrypt Integration Info</value>
+  </data>
+  <data name="labelRedirectUri.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;labelClientSecret.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;textBoxExportPath.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;labelExportPath.Name" xml:space="preserve">
+    <value>labelExportPath</value>
+  </data>
+  <data name="&gt;&gt;buttonCreate.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;labelExportPath.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="buttonCreate.Size" type="System.Drawing.Size, System.Drawing">
+    <value>117, 23</value>
+  </data>
+  <data name="&gt;&gt;labelRedirectUri.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;labelExportPath.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelOauthUrl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>136, 12</value>
+  </data>
+  <data name="textBoxRedirectUri.Text" xml:space="preserve">
+    <value>urn:ietf:wg:oauth:2.0:oob</value>
+  </data>
+  <data name="&gt;&gt;labelClientId.Name" xml:space="preserve">
+    <value>labelClientId</value>
+  </data>
+  <data name="&gt;&gt;labelOauthUrl.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;buttonCreate.Name" xml:space="preserve">
+    <value>buttonCreate</value>
+  </data>
+  <data name="textBoxOAuthUrl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>538, 19</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>704, 401</value>
+  </data>
+  <data name="buttonCreate.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 160</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="labelClientId.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 27</value>
+  </data>
+  <data name="labelClientId.Text" xml:space="preserve">
+    <value>Client ID:</value>
+  </data>
+  <data name="textBoxExportPath.Location" type="System.Drawing.Point, System.Drawing">
+    <value>154, 123</value>
+  </data>
+  <data name="&gt;&gt;textBoxOAuthUrl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBoxRedirectUri.Name" xml:space="preserve">
+    <value>textBoxRedirectUri</value>
+  </data>
+  <data name="labelRedirectUri.Text" xml:space="preserve">
+    <value>Redirect URI:</value>
+  </data>
+  <data name="&gt;&gt;labelRedirectUri.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelOauthUrl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>ja-JP</value>
+  </metadata>
 </root>

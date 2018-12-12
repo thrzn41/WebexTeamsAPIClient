@@ -55,6 +55,7 @@ namespace Thrzn41.WebexTeams
                         AllowAutoRedirect     = false,
                         UseCookies            = false,
                         UseDefaultCredentials = false,
+                        PreAuthenticate       = false,
                     }
                 );
         }

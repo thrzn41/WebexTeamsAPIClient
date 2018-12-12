@@ -34,6 +34,10 @@
             this.labelPath = new System.Windows.Forms.Label();
             this.buttonExportToken = new System.Windows.Forms.Button();
             this.textBoxToken = new System.Windows.Forms.TextBox();
+            this.textBoxGuestIssuerId = new System.Windows.Forms.TextBox();
+            this.labelGuestIssuerId = new System.Windows.Forms.Label();
+            this.textBoxGuestIssuerSecret = new System.Windows.Forms.TextBox();
+            this.labelGuestIssuerSecret = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelToken
@@ -63,11 +67,37 @@
             // 
             resources.ApplyResources(this.textBoxToken, "textBoxToken");
             this.textBoxToken.Name = "textBoxToken";
+            this.textBoxToken.UseSystemPasswordChar = true;
+            // 
+            // textBoxGuestIssuerId
+            // 
+            resources.ApplyResources(this.textBoxGuestIssuerId, "textBoxGuestIssuerId");
+            this.textBoxGuestIssuerId.Name = "textBoxGuestIssuerId";
+            // 
+            // labelGuestIssuerId
+            // 
+            resources.ApplyResources(this.labelGuestIssuerId, "labelGuestIssuerId");
+            this.labelGuestIssuerId.Name = "labelGuestIssuerId";
+            // 
+            // textBoxGuestIssuerSecret
+            // 
+            resources.ApplyResources(this.textBoxGuestIssuerSecret, "textBoxGuestIssuerSecret");
+            this.textBoxGuestIssuerSecret.Name = "textBoxGuestIssuerSecret";
+            this.textBoxGuestIssuerSecret.UseSystemPasswordChar = true;
+            // 
+            // labelGuestIssuerSecret
+            // 
+            resources.ApplyResources(this.labelGuestIssuerSecret, "labelGuestIssuerSecret");
+            this.labelGuestIssuerSecret.Name = "labelGuestIssuerSecret";
             // 
             // MainForm
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.textBoxGuestIssuerSecret);
+            this.Controls.Add(this.labelGuestIssuerSecret);
+            this.Controls.Add(this.textBoxGuestIssuerId);
+            this.Controls.Add(this.labelGuestIssuerId);
             this.Controls.Add(this.textBoxToken);
             this.Controls.Add(this.buttonExportToken);
             this.Controls.Add(this.textBoxPath);
@@ -88,6 +118,10 @@
         private System.Windows.Forms.Label labelPath;
         private System.Windows.Forms.Button buttonExportToken;
         private System.Windows.Forms.TextBox textBoxToken;
+        private System.Windows.Forms.TextBox textBoxGuestIssuerId;
+        private System.Windows.Forms.Label labelGuestIssuerId;
+        private System.Windows.Forms.TextBox textBoxGuestIssuerSecret;
+        private System.Windows.Forms.Label labelGuestIssuerSecret;
     }
 }
 

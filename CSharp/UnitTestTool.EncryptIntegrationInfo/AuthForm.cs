@@ -15,6 +15,8 @@ namespace UnitTestTool.EncryptIntegrationInfo
 
         private readonly Uri authUri;
 
+        public string Code { get; private set; }
+
         public AuthForm()
         {
             InitializeComponent();
@@ -35,10 +37,26 @@ namespace UnitTestTool.EncryptIntegrationInfo
         {
             string bodyText = this.webBrowserAuth.Document?.Body?.OuterText;
 
+            string title = this.webBrowserAuth.DocumentTitle;
+
+            if(!String.IsNullOrEmpty(title))
+            {
+                this.Text = title;
+            }
+
             if(!String.IsNullOrEmpty(bodyText) && bodyText.StartsWith("code="))
             {
+                this.Code = bodyText.Replace("code=", "").Trim();
+
+                this.DialogResult = DialogResult.OK;
+
                 this.Close();
             }
+        }
+
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
