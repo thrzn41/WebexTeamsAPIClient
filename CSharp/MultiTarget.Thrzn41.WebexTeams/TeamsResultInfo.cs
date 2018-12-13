@@ -85,7 +85,7 @@ namespace Thrzn41.WebexTeams
         public RetryConditionHeaderValue RetryAfter { get; internal set; }
 
         /// <summary>
-        /// Indicates the request has Retry-After header value.
+        /// Indicates the result has Retry-After header value.
         /// </summary>
         public bool HasRetryAfter
         {
@@ -95,6 +95,21 @@ namespace Thrzn41.WebexTeams
             }
         }
 
+        /// <summary>
+        /// Time to retry.
+        /// </summary>
+        public TimeSpan? TimeToRetry { get; internal set; }
+
+        /// <summary>
+        /// Indicates the result has time to retry.
+        /// </summary>
+        public bool HasTimeToRetry
+        {
+            get
+            {
+                return this.TimeToRetry.HasValue;
+            }
+        }
 
         /// <summary>
         /// <see cref="TeamsRequestInfo"/> for this request.
@@ -255,6 +270,7 @@ namespace Thrzn41.WebexTeams
             destination.HttpStatusCode  = this.HttpStatusCode;
             destination.RequestInfo     = this.RequestInfo;
             destination.RetryAfter      = this.RetryAfter;
+            destination.TimeToRetry     = this.TimeToRetry;
             destination.TrackingId      = this.TrackingId;
         }
 

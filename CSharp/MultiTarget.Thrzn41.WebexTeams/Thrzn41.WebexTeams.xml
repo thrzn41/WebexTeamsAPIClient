@@ -1566,7 +1566,17 @@
         </member>
         <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.HasRetryAfter">
             <summary>
-            Indicates the request has Retry-After header value.
+            Indicates the result has Retry-After header value.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.TimeToRetry">
+            <summary>
+            Time to retry.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.HasTimeToRetry">
+            <summary>
+            Indicates the result has time to retry.
             </summary>
         </member>
         <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.RequestInfo">
@@ -1641,7 +1651,12 @@
             Weight to adjust retry.
             </summary>
         </member>
-        <member name="M:Thrzn41.WebexTeams.TeamsRetry.#ctor(System.Int32,System.TimeSpan,System.Double)">
+        <member name="F:Thrzn41.WebexTeams.TeamsRetry.timeToRetryOnError">
+            <summary>
+            Time to retry on error.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsRetry.#ctor(System.Int32,System.TimeSpan,System.Double,System.Nullable{System.TimeSpan})">
             <summary>
             Creates instance for retry.
             If Retry-After is requested,
@@ -1650,6 +1665,7 @@
             <param name="retryMax">Max retry count.</param>
             <param name="buffer">Buffer duration for retry.</param>
             <param name="weight">Weight value for retry.</param>
+            <param name="timeToRetryOnError">Time to retry on error.</param>
         </member>
         <member name="M:Thrzn41.WebexTeams.TeamsRetry.#ctor">
             <summary>
@@ -5931,132 +5947,6 @@
             </summary>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.AddNotification(Thrzn41.WebexTeams.Version1.Webhook,System.Action{Thrzn41.WebexTeams.Version1.WebhookEventData})">
-            <summary>
-            Adds notification to the manager.
-            </summary>
-            <param name="webhook">Webhook to be added.</param>
-            <param name="func">Function to be notified on receiving event.</param>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.AddNotification(Thrzn41.WebexTeams.Version1.Webhook,System.Func{Thrzn41.WebexTeams.Version1.WebhookEventData,System.Threading.Tasks.Task})">
-            <summary>
-            Adds notification to the manager.
-            </summary>
-            <param name="webhook">Webhook to be added.</param>
-            <param name="funcAsync">Async function to be notified on receiving event.</param>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.RemoveNotification(Thrzn41.WebexTeams.Version1.Webhook)">
-            <summary>
-            Removes notification info.
-            </summary>
-            <param name="webhook">Webhook to be removed.</param>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.ValidateAndNotify(System.Byte[],System.String,System.Text.Encoding)">
-            <summary>
-            Validates and notifies event.
-            </summary>
-            <param name="data">The data to be validated and notified.</param>
-            <param name="xTeamsSignature">Signature that is notified on event.</param>
-            <param name="encoding">Encoding of data.</param>
-            <returns>true if the data is valid, false if the data is invalid.</returns>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.Dispose(System.Boolean)">
-            <summary>
-            Dispose.
-            </summary>
-            <param name="disposing">disposing.</param>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.Dispose">
-            <summary>
-            Dispose.
-            </summary>
-        </member>
-        <member name="T:Thrzn41.WebexTeams.Version1.WebhookStatus">
-            <summary>
-            Webhook status of Cisco Webex Teams.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookStatus.Active">
-            <summary>
-            Webhook is active.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookStatus.Inactive">
-            <summary>
-            Webhook is inactive.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookStatus.Unknown">
-            <summary>
-            Webhook is unknown status.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookStatus.WEBHOOK_STATUSES">
-            <summary>
-            Dictionary for webhook status.
-            </summary>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.#cctor">
-            <summary>
-            Static constuctor.
-            </summary>
-        </member>
-        <member name="P:Thrzn41.WebexTeams.Version1.WebhookStatus.Name">
-            <summary>
-            Name of the webhook status.
-            </summary>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.#ctor(System.String)">
-            <summary>
-            Constructor.
-            </summary>
-            <param name="name">Name of the webhook status.</param>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.Parse(System.String)">
-            <summary>
-            Parse webhook status.
-            </summary>
-            <param name="name">Name of the webhook status.</param>
-            <returns><see cref="T:Thrzn41.WebexTeams.Version1.WebhookStatus"/> for the name.</returns>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.Equals(Thrzn41.WebexTeams.Version1.WebhookStatus)">
-            <summary>
-            Determines whether this instance and another specified <see cref="T:Thrzn41.WebexTeams.Version1.WebhookStatus"/> object have the same value.
-            </summary>
-            <param name="value">The webhook status to compare to this instance.</param>
-            <returns>true if the value of the parameter is the same as the value of this instance; otherwise, false. If value is null, the method returns false.</returns>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.Equals(System.Object)">
-            <summary>
-            Determines whether this instance and a specified object, which must also be a <see cref="T:Thrzn41.WebexTeams.Version1.WebhookStatus"/> object, have the same value.
-            </summary>
-            <param name="obj">The webhook status to compare to this instance.</param>
-            <returns>true if obj is a <see cref="T:Thrzn41.WebexTeams.Version1.WebhookStatus"/> and its value is the same as this instance; otherwise, false. If obj is null, the method returns false.</returns>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.GetHashCode">
-            <summary>
-            Returns the hash code for this webhook status.
-            </summary>
-            <returns>A 32-bit signed integer hash code.</returns>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.op_Equality(Thrzn41.WebexTeams.Version1.WebhookStatus,Thrzn41.WebexTeams.Version1.WebhookStatus)">
-            <summary>
-            Determines whether two specified webhook status have the same value.
-            </summary>
-            <param name="lhs">Left hand side value.</param>
-            <param name="rhs">Right hand side value.</param>
-            <returns>true if the two values have the same value.</returns>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.op_Inequality(Thrzn41.WebexTeams.Version1.WebhookStatus,Thrzn41.WebexTeams.Version1.WebhookStatus)">
-            <summary>
-            Determines whether two specified webhook status have the different value.
-            </summary>
-            <param name="lhs">Left hand side value.</param>
-            <param name="rhs">Right hand side value.</param>
-            <returns>true if the two values have the different value.</returns>
-        </member>
-    </members>
-</doc>
-r name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.AddNotification(Thrzn41.WebexTeams.Version1.Webhook,System.Action{Thrzn41.WebexTeams.Version1.WebhookEventData})">
             <summary>
             Adds notification to the manager.
             </summary>

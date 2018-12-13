@@ -57,6 +57,11 @@ namespace Thrzn41.WebexTeams
         /// </summary>
         private readonly double weight;
 
+        /// <summary>
+        /// Time to retry on error.
+        /// </summary>
+        private readonly TimeSpan? timeToRetryOnError;
+
 
         /// <summary>
         /// Creates instance for retry.
@@ -66,11 +71,14 @@ namespace Thrzn41.WebexTeams
         /// <param name="retryMax">Max retry count.</param>
         /// <param name="buffer">Buffer duration for retry.</param>
         /// <param name="weight">Weight value for retry.</param>
-        public TeamsRetry(int retryMax, TimeSpan buffer, double weight = 0.0d)
+        /// <param name="timeToRetryOnError">Time to retry on error.</param>
+        public TeamsRetry(int retryMax, TimeSpan buffer, double weight = 0.0d, TimeSpan? timeToRetryOnError = null)
         {
             this.trials = Math.Max( (retryMax + 1), 1);
             this.buffer = buffer.TotalMilliseconds;
             this.weight = weight;
+
+            this.timeToRetryOnError = timeToRetryOnError;
         }
 
         /// <summary>
@@ -79,7 +87,7 @@ namespace Thrzn41.WebexTeams
         /// the retry will be sent after (retry-after + 250ms).
         /// </summary>
         public TeamsRetry()
-            : this(1, DEFAULT_BUFFER, 0.0f)
+            : this(1, DEFAULT_BUFFER, 0.0f, null)
         {
         }
 
@@ -90,10 +98,76 @@ namespace Thrzn41.WebexTeams
         /// </summary>
         /// <param name="retryMax">Max retry count.</param>
         public TeamsRetry(int retryMax)
-            : this(retryMax, DEFAULT_BUFFER, 0.0f)
+            : this(retryMax, DEFAULT_BUFFER, 0.0f, null)
         {
         }
 
+
+        /// <summary>
+        /// Checks if retry is needed or not.
+        /// </summary>
+        /// <param name="result"><see cref="TeamsResultInfo"/> to be checked.</param>
+        /// <returns>true if retry is needed, otherwise false.</returns>
+        private bool checkRetry(TeamsResultInfo result)
+        {
+            int statusCode = (int)result.HttpStatusCode;
+
+            TimeSpan? timeToRetry = null;
+
+            if (result.HasRetryAfter && result.RetryAfter.Delta.HasValue)
+            {
+                var delta = result.RetryAfter.Delta.Value;
+
+                timeToRetry = TimeSpan.FromMilliseconds((delta.TotalMilliseconds + (delta.TotalMilliseconds * this.weight) + this.buffer));
+            }
+
+            if(statusCode == 429 && timeToRetry.HasValue)
+            {
+                result.TimeToRetry = timeToRetry;
+            }
+
+            if( this.timeToRetryOnError != null && !result.HasTimeToRetry && (statusCode == 429 || statusCode == 500 || (statusCode >= 502 && statusCode <= 504)))
+            {
+                if (timeToRetry.HasValue)
+                {
+                    result.TimeToRetry = timeToRetry;
+                }
+                else
+                {
+                    result.TimeToRetry = this.timeToRetryOnError;
+                }
+            }
+
+            return result.HasTimeToRetry;
+        }
+
+        /// <summary>
+        /// Checks if retry is needed or not.
+        /// </summary>
+        /// <param name="result"><see cref="TeamsResultInfo"/> to be checked.</param>
+        /// <param name="notificationFunc">A function to be notified when a retry is trying.</param>
+        /// <param name="count">Trial count.</param>
+        /// <returns>true if retry is needed, otherwise false.</returns>
+        private bool checkRetry(TeamsResultInfo result, Func<TeamsResultInfo, int, bool> notificationFunc, int count)
+        {
+            return (checkRetry(result) && ((notificationFunc == null) || notificationFunc(result, count)));
+        }
+
+        /// <summary>
+        /// Checks if retry is needed or not.
+        /// </summary>
+        /// <typeparam name="TTeamsResult">Type of TeamsResult to be returned.</typeparam>
+        /// <typeparam name="TTeamsObject">Type of TeamsObject to be returned.</typeparam>
+        /// <param name="result">The result to be checked.</param>
+        /// <param name="notificationFunc">A function to be notified when a retry is trying.</param>
+        /// <param name="count">Trial count.</param>
+        /// <returns>true if retry is needed, otherwise false.</returns>
+        private bool checkRetry<TTeamsResult, TTeamsObject>(TTeamsResult result, Func<TTeamsResult, int, bool> notificationFunc, int count)
+            where TTeamsResult : TeamsResult<TTeamsObject>, new()
+            where TTeamsObject : TeamsObject, new()
+        {
+            return (checkRetry(result) && ((notificationFunc == null) || notificationFunc(result, count)));
+        }
 
         /// <summary>
         /// Requests with retry.
@@ -127,10 +201,9 @@ namespace Thrzn41.WebexTeams
                         guid = result.TransactionId;
                     }
 
-                    if ( (result.HasRetryAfter && result.RetryAfter.Delta.HasValue) &&
-                         ((notificationFunc == null) || notificationFunc(result, i)) )
+                    if ( checkRetry(result, notificationFunc, i) )
                     {
-                        await this.DelayAsync(result.RetryAfter.Delta.Value, cancellationToken);
+                        await this.DelayAsync(result.TimeToRetry.Value, cancellationToken);
                     }
                     else
                     {
@@ -176,10 +249,9 @@ namespace Thrzn41.WebexTeams
                         guid = result.TransactionId;
                     }
 
-                    if ( (result.HasRetryAfter && result.RetryAfter.Delta.HasValue) &&
-                         ((notificationFunc == null) || notificationFunc(result, i)) )
+                    if ( checkRetry<TTeamsResult, TTeamsObject>(result, notificationFunc, i) )
                     {
-                        await this.DelayAsync(result.RetryAfter.Delta.Value, cancellationToken);
+                        await this.DelayAsync(result.TimeToRetry.Value, cancellationToken);
                     }
                     else
                     {
@@ -200,20 +272,17 @@ namespace Thrzn41.WebexTeams
         /// <param name="delta">Duration for retry.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
         /// <returns><see cref="Task"/> for result.</returns>
-        /// <exception cref="OverflowException">The (delta + (delta * weight) + buffer) is greater than <see cref="Int32.MaxValue"/> or less than <see cref="Int32.MinValue"/>.</exception>
         public async Task DelayAsync(TimeSpan delta, CancellationToken? cancellationToken = null)
         {
-            int delay = Convert.ToInt32( (delta.TotalMilliseconds + (delta.TotalMilliseconds * this.weight) + this.buffer) );
-
-            if(delay > 0)
+            if(delta.Ticks > 0L)
             {
                 if(cancellationToken.HasValue)
                 {
-                    await Task.Delay(delay, cancellationToken.Value);
+                    await Task.Delay(delta, cancellationToken.Value);
                 }
                 else
                 {
-                    await Task.Delay(delay);
+                    await Task.Delay(delta);
                 }
             }
         }
