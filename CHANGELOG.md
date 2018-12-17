@@ -9,6 +9,20 @@
 > NOTE: Datetime format is `yyyy-MM-dd`.
 
 ---
+### [2018-12-17] Version 1.6.1
+
+#### [NEW FEATURES]
+
+* TeamsRetryHandler/TeamsRetryOnErrorHandler feature to retry on HTTP 429 and optionally 500, 502, 503 and 504.
+* Copy file data to stream feature.
+* TransactionId/ListTransactionId for TeamsResultInfo.
+* TeamsResourceOperation for TeamsResultInfo.
+* RequestLine for TeamsResultInfo.
+
+#### [OBSOLETES]
+* `RetryExecutor` is obsoleted. Please use TeamsRetryHandler or TeamsRetryOnErrorHandler.
+
+---
 ### [2018-10-12] Version 1.5.1
 
 #### [NEW FEATURES]

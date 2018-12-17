@@ -7,7 +7,7 @@
     <Copyright>Copyright (c) 2018 thrzn41</Copyright>
     <Company>thrzn41</Company>
     <Authors>thrzn41</Authors>
-    <Version>1.5.1</Version>
+    <Version>1.6.1</Version>
     <PackageProjectUrl>https://github.com/thrzn41/WebexTeamsAPIClient</PackageProjectUrl>
     <RepositoryUrl>https://github.com/thrzn41/WebexTeamsAPIClient</RepositoryUrl>
     <PackageTags>CiscoWebexTeams WebexTeams Webex Teams CiscoSpark</PackageTags>
@@ -15,8 +15,8 @@
     <Description>Webex Teams API Client is a Library that wraps Cisco Webex Teams REST API.
 Also, some useful features for developers are provided.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.5.1.0</AssemblyVersion>
-    <FileVersion>1.5.1.0</FileVersion>
+    <AssemblyVersion>1.6.1.0</AssemblyVersion>
+    <FileVersion>1.6.1.0</FileVersion>
     <DocumentationFile>Thrzn41.WebexTeams.xml</DocumentationFile>
   </PropertyGroup>
 

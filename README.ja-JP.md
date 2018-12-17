@@ -17,8 +17,8 @@
 // 暗号化されたトークンをストレージから読み込む。
 ProtectedString token = LoadEncryptedBotToken();
 
-// TeamsAPIClientのインスタンスを作成する。
-var teams = TeamsAPI.CreateVersion1Client(token);
+// TeamsAPIClientのインスタンスを作成する(リトライ機能付き)。
+var teams = TeamsAPI.CreateVersion1Client(token, new TeamsRetryHandler(4));
 
 // Markdownを構成します。
 var markdown = new MarkdownBuilder();
@@ -45,8 +45,8 @@ var guestIssuer = TeamsAPI.CreateVersion1GuestIssuerClient(secret, "your_guest_i
 // Guest Userを作成する。
 var guest = (await guestIssuer.CreateGuestUserAsync("my-guest-id", "ゲストユーザ名")).GetData();
 
-// ゲストユーザ用のTeamsAPIClientインスタンスを作成する。
-var teams = TeamsAPI.CreateVersion1Client(guest);
+// ゲストユーザ用のTeamsAPIClientインスタンスを作成する(リトライ機能付き)。
+var teams = TeamsAPI.CreateVersion1Client(guest, new TeamsRetryHandler(4));
 
 // ゲストユーザからメッセージを投稿する。
 var message = (await teams.CreateDirectMessageAsync("your_webex_teams_account@example.com", "こんにちは、私はゲストユーザです！！")).GetData();
@@ -112,7 +112,7 @@ Webex Teams API Clientのサンプルは、 [こちらをクリック](https://g
 * Webex TeamsのAdmin API(List/Get Event, Licenseなど)。
 * ストレージに保存するTokenの暗号化と復号。
 * List API用のPagination機能。Paginationを簡単にするためのEnumerator。
-* Retry-after値の処理とRetry executor。
+* Retry-after値の処理とRetry handler。
 * Markdown builder。
 * エラーコードや詳細の取得。
 * Webhook secretの検証とWebhook notification manager、Webhook event handler。
@@ -159,7 +159,7 @@ Cisco Webex Teams APIのpaginationに関しては、[ここ](https://developer.w
 ### Retry-Afterの取得
 
 `result.HasRetryAfter`と `result.RetryAfter`が、Webex Teams API Clientで利用可能です。  
-また、 `RetryExecutor`が利用可能です。  
+また、 `TeamsRetryHandler`と`TeamsRetryOnErrorHandler`が利用可能です。  
 詳細は後述。
 
 ### HTTP Statusコードの取得
@@ -397,19 +397,18 @@ if(result.IsSuccessStatus)
 }
 ```
 
-ファイルをダウンロードする。
+ファイルをダウンロードする。  
+この例では、ファイルのデータがMemoryStreamにコピーされます。
 ``` csharp
-var result = await teams.GetFileDataAsync(new Uri("https://api.example.com/path/to/file.png"));
-
-if(result.IsSuccessStatus)
+using(var stream = new MemoryStream())
 {
-  var file = result.Data;
+  var result = await teams.CopyFileDataToStreamAsync(new Uri("https://api.example.com/path/to/file.png"), stream);
 
-  Console.WriteLine("File: Name = {0}, Size = {1}, Type = {2}", file.Name, file.Size?.Value, file.MediaType?.Name);
-
-  using(var stream = file.Stream)
+  if(result.IsSuccessStatus)
   {
-    // streamにファイルのデータが含まれる。
+    var file = result.Data;
+
+    Console.WriteLine("File: Name = {0}, Size = {1}, Type = {2}", file.Name, file.Size?.Value, file.MediaType?.Name);
   }
 }
 ```
@@ -489,30 +488,21 @@ else if(result.HasRetryAfter)
 }
 ```
 
-### Retry Executor
+### Retry Handler
 
-`RetryExecutor`を利用してリトライ処理を容易にします。
+`TeamsRetryHandler`と`TeamsRetryOnErrorHandler`を利用してリトライ処理を容易にします。
 
 ``` csharp
-// RetryExecutor.Oneは最大で1回のリトライを試みます。
-var result = RetryExecutor.One.ListAsync(
-  () =>
-  {
-      // このメソッドは必要に応じて、リトライされます。
-      return teams.ListSpacesAsync();
-  },
+// リトライ機能付きでインスタンスを作成(この場合は、最大4回のリトライ)。
+var teams = TeamsAPI.CreateVersion1Client(token, new TeamsRetryHandler(4));
 
-  (r, retryCount) =>
-  {
-      // ここは、リトライが実行される前に呼び出されます。
+// リクエスト時に、HTTP 429のレスポンスがあると、リトライが行われます。
+var result = await teams.GetMeAsync();
 
-      // ここでリトライ時のログの出力等の処理が可能です。
-      Log.Info("Retry is required: delta = {0}, counter = {1}", r.RetryAfter.Delta, retryCount);
 
-      // 'true'を返すとリトライが実行されます。
-      return true;
-  }
-);
+//HTTP 500, 502, 503, 504レスポンス時にもリトライしたい場合は、TeamsRetryOnErrorHandlerを利用します。
+// Retry-Afterヘッダがない場合は、この例の場合は、15秒後にリトライが行われます。
+var teams = TeamsAPI.CreateVersion1Client(token, new TeamsRetryOnErrorHandler(4, TimeSpan.FromSeconds(15.0f)));
 ```
 
 ### TrackingIdを取得する

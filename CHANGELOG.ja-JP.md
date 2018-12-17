@@ -8,6 +8,21 @@
 
 > NOTE: 日付形式は、`yyyy-MM-dd`です。
 
+
+---
+### [2018-12-17] Version 1.6.1
+
+#### [NEW FEATURES]
+
+* HTTP 429や500, 502, 503, 504のときにリトライするためのTeamsRetryHandler/TeamsRetryOnErrorHandler機能
+* ファイルデータをStreamにコピーする機能。
+* TeamsResultInfoのための、TransactionId/ListTransactionId。
+* TeamsResultInfoのための、TeamsResourceOperation。
+* TeamsResultInfoのための、RequestLine。
+
+#### [OBSOLETES]
+* `RetryExecutor`を非推奨クラスにしました。TeamsRetryHandlerかTeamsRetryOnErrorHandlerを利用してください。
+
 ---
 ### [2018-10-12] Version 1.5.1
 
