@@ -348,6 +348,24 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                 Assert.AreEqual(34991, data.Length);
             }
 
+
+            using (var stream = new MemoryStream())
+            {
+                var r3 = await teams.CopyFileDataToStreamAsync(fileUri, stream);
+                Assert.IsTrue(r3.IsSuccessStatus);
+                Assert.IsTrue(r3.Data.HasValues);
+
+                Assert.AreEqual("mypng.png", r3.Data.FileName);
+                Assert.AreEqual(TeamsMediaType.ImagePNG, r3.Data.MediaType);
+                Assert.AreEqual(34991, r3.Data.Size);
+
+                resourceOperation = r3.ParseResourceOperation();
+                Assert.AreEqual(TeamsResource.FileData, resourceOperation.Resource);
+                Assert.AreEqual(TeamsOperation.Get, resourceOperation.Operation);
+                Assert.AreEqual("GetFileData", resourceOperation.ToString());
+
+                Assert.AreEqual(34991, stream.Length);
+            }
         }
 
         [TestMethod]

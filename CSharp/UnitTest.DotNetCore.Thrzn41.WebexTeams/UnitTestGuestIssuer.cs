@@ -63,7 +63,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
                 var info = TeamsObject.FromJsonString<TeamsInfo>(LocalProtectedString.FromEncryptedData(encryptedInfo, entropy).DecryptToString());
 
-                teamsController = TeamsAPI.CreateVersion1Client(info.APIToken, RetryExecutor.One);
+                teamsController = TeamsAPI.CreateVersion1Client(info.APIToken, new TeamsRetryOnErrorHandler(4, TimeSpan.FromSeconds(15.0f)));
 
                 var rMe = await teamsController.GetMeAsync();
 
@@ -105,7 +105,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
                     if (r.IsSuccessStatus)
                     {
-                        teamsGuest = TeamsAPI.CreateVersion1Client(r.Data, RetryExecutor.One);
+                        teamsGuest = TeamsAPI.CreateVersion1Client(r.Data, new TeamsRetryOnErrorHandler(4, TimeSpan.FromSeconds(15.0f)));
 
                         var rGuestMe = await teamsGuest.GetMeAsync();
 
@@ -384,6 +384,26 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             using (var data = r2.Data.Stream)
             {
                 Assert.AreEqual(34991, data.Length);
+            }
+
+
+
+            using (var stream = new MemoryStream())
+            {
+                var r3 = await teamsGuest.CopyFileDataToStreamAsync(fileUri, stream);
+                Assert.IsTrue(r3.IsSuccessStatus);
+                Assert.IsTrue(r3.Data.HasValues);
+
+                Assert.AreEqual("mypng.png", r3.Data.FileName);
+                Assert.AreEqual(TeamsMediaType.ImagePNG, r3.Data.MediaType);
+                Assert.AreEqual(34991, r3.Data.Size);
+
+                resourceOperation = r3.ParseResourceOperation();
+                Assert.AreEqual(TeamsResource.FileData, resourceOperation.Resource);
+                Assert.AreEqual(TeamsOperation.Get, resourceOperation.Operation);
+                Assert.AreEqual("GetFileData", resourceOperation.ToString());
+
+                Assert.AreEqual(34991, stream.Length);
             }
 
         }

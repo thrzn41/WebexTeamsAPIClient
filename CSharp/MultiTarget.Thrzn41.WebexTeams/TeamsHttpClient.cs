@@ -249,6 +249,32 @@ namespace Thrzn41.WebexTeams
             }
         }
 
+
+        /// <summary>
+        /// Reusable copy file data request.
+        /// </summary>
+        private class ReusableCopyFileDataHttpRequest : ReusableStringHttpRequest
+        {
+
+            /// <summary>
+            /// The stream to where the data will be copied.
+            /// </summary>
+            public Stream Stream { get; private set; }
+
+            /// <summary>
+            /// Creates reusable copy file data request.
+            /// </summary>
+            /// <param name="method">Http method.</param>
+            /// <param name="uri">Request uri.</param>
+            /// <param name="stream">The stream to where the data will be copied.</param>
+            public ReusableCopyFileDataHttpRequest(HttpMethod method, Uri uri, Stream stream)
+                : base(method, uri)
+            {
+                this.Stream = stream;
+            }
+
+        }
+
         /// <summary>
         /// Reusable FormData http request.
         /// </summary>
@@ -695,9 +721,9 @@ namespace Thrzn41.WebexTeams
 
 
         /// <summary>
-        /// Executor for retry.
+        /// Handler for retry.
         /// </summary>
-        private readonly TeamsRetry retryExecutor;
+        private readonly TeamsRetry retryHandler;
 
         /// <summary>
         /// Notification func for retry.
@@ -722,7 +748,7 @@ namespace Thrzn41.WebexTeams
 
             this.teamsAPIUriPattern = teamsAPIUriPattern;
 
-            this.retryExecutor         = retryExecutor;
+            this.retryHandler          = retryExecutor;
             this.retryNotificationFunc = retryNotificationFunc;
         }
 
@@ -807,7 +833,7 @@ namespace Thrzn41.WebexTeams
                                     result.Data = TeamsObject.FromJsonString<TTeamsObject>(body);
                                 }
                             }
-                            else
+                            else if(response.StatusCode == System.Net.HttpStatusCode.OK)
                             {
                                 var info = new TTeamsObject() as TeamsFileInfo;
 
@@ -823,20 +849,32 @@ namespace Thrzn41.WebexTeams
                                     info.FileName      = fileName;
                                     info.MediaTypeName = contentHeaders.ContentType?.MediaType;
                                     info.Size          = contentHeaders.ContentLength;
+
+                                    var copyRequest = reusableRequest as ReusableCopyFileDataHttpRequest;
+
+                                    TeamsFileData data = null;
+
+                                    if (copyRequest != null)
+                                    {
+                                        await content.CopyToAsync(copyRequest.Stream);
+                                    }
+                                    else
+                                    {
+                                        data = info as TeamsFileData;
+
+                                        if (data != null)
+                                        {
+                                            data.Stream = new MemoryStream();
+
+                                            await content.CopyToAsync(data.Stream);
+
+                                            data.Stream.Position = 0;
+                                        }
+
+                                    }
+
+                                    result.Data = ((data != null) ? data : info) as TTeamsObject;
                                 }
-
-                                var data = info as TeamsFileData;
-
-                                if (data != null)
-                                {
-                                    data.Stream = new MemoryStream();
-
-                                    await content.CopyToAsync(data.Stream);
-
-                                    data.Stream.Position = 0;
-                                }
-
-                                result.Data = ((data != null) ? data : info) as TTeamsObject;
                             }
                         }
                     }
@@ -923,13 +961,13 @@ namespace Thrzn41.WebexTeams
         {
             Task<TTeamsResult> result;
 
-            if(this.retryExecutor == null)
+            if(this.retryHandler == null)
             {
                 result = requestAsync<TTeamsResult, TTeamsObject>(request, cancellationToken);
             }
             else
             {
-                result = retryExecutor.requestAsync<TTeamsResult, TTeamsObject>(
+                result = retryHandler.requestAsync<TTeamsResult, TTeamsObject>(
                     () =>
                     {
                         return requestAsync<TTeamsResult, TTeamsObject>(request, cancellationToken);
@@ -978,6 +1016,24 @@ namespace Thrzn41.WebexTeams
             return (RequestAsync<TTeamsResult, TTeamsObject>(CreateJsonRequestWithBearerToken(method, uri, queryParameters, objectToBePosted, token), cancellationToken));
         }
 
+
+        /// <summary>
+        /// Requests copy file data to stream to Cisco Webex Teams API.
+        /// </summary>
+        /// <typeparam name="TTeamsResult">Type of TeamsResult to be returned.</typeparam>
+        /// <typeparam name="TTeamsFileInfo">Type of TeamsFileInfo to be returned.</typeparam>
+        /// <param name="method"><see cref="HttpMethod"/> to be used on requesting.</param>
+        /// <param name="uri">Uri to be requested.</param>
+        /// <param name="queryParameters">Query parameter collection.</param>
+        /// <param name="stream"></param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
+        public Task<TTeamsResult> RequestCopyFileDataAsync<TTeamsResult, TTeamsFileInfo>(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, Stream stream = null, CancellationToken? cancellationToken = null)
+            where TTeamsResult   : TeamsResult<TTeamsFileInfo>, new()
+            where TTeamsFileInfo : TeamsFileInfo, new()
+        {
+            return (RequestAsync<TTeamsResult, TTeamsFileInfo>(CreateCopyFileDataRequest(method, uri, queryParameters, stream), cancellationToken));
+        }
 
         /// <summary>
         /// Requests file info/data to Cisco Webex Teams API.
@@ -1092,6 +1148,25 @@ namespace Thrzn41.WebexTeams
         /// <param name="method"><see cref="HttpMethod"/> to be used on requesting.</param>
         /// <param name="uri">Uri to be requested.</param>
         /// <param name="queryParameters">Query parameter collection.</param>
+        /// <param name="stream">The stream to where the file data will be copied.</param>
+        /// <returns><see cref="ReusableHttpRequest"/> that is created.</returns>
+        private ReusableHttpRequest CreateCopyFileDataRequest(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, Stream stream = null)
+        {
+            var request = new ReusableCopyFileDataHttpRequest(method, HttpUtils.BuildUri(uri, queryParameters), stream);
+
+            request.AddAcceptCharset(new StringWithQualityHeaderValue(ENCODING.WebName));
+            request.AddAccept(new MediaTypeWithQualityHeaderValue(MEDIA_TYPE_APPLICATION_JSON));
+            request.AddAccept(new MediaTypeWithQualityHeaderValue(MEDIA_TYPE_ANY));
+
+            return request;
+        }
+
+        /// <summary>
+        /// Creates <see cref="ReusableHttpRequest"/> to use for File info request.
+        /// </summary>
+        /// <param name="method"><see cref="HttpMethod"/> to be used on requesting.</param>
+        /// <param name="uri">Uri to be requested.</param>
+        /// <param name="queryParameters">Query parameter collection.</param>
         /// <returns><see cref="ReusableHttpRequest"/> that is created.</returns>
         private ReusableHttpRequest CreateFileInfoRequest(HttpMethod method, Uri uri, NameValueCollection queryParameters = null)
         {
@@ -1116,7 +1191,7 @@ namespace Thrzn41.WebexTeams
         /// <returns><see cref="ReusableHttpRequest"/> that is created.</returns>
         private ReusableHttpRequest CreateMultipartFormDataRequest(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, NameValueCollection stringData = null, TeamsFileData fileData = null)
         {
-            var request = new ReusableMultipartFormDataHttpRequest(method, HttpUtils.BuildUri(uri, queryParameters), stringData, fileData, (this.retryExecutor != null));
+            var request = new ReusableMultipartFormDataHttpRequest(method, HttpUtils.BuildUri(uri, queryParameters), stringData, fileData, (this.retryHandler != null));
 
             request.AddAcceptCharset(new StringWithQualityHeaderValue(ENCODING.WebName));
             request.AddAccept(new MediaTypeWithQualityHeaderValue(MEDIA_TYPE_APPLICATION_JSON));

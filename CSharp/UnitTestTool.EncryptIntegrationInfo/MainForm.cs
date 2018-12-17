@@ -57,7 +57,7 @@ namespace UnitTestTool.EncryptIntegrationInfo
                     var oauth2 = TeamsAPI.CreateVersion1OAuth2Client(
                         this.textBoxClientSecret.Text,
                         this.textBoxClientId.Text,
-                        RetryExecutor.One);
+                        new TeamsRetryOnErrorHandler(4, TimeSpan.FromSeconds(15.0f)));
 
                     var r = await oauth2.GetTokenInfoAsync(
                         form.Code,

@@ -39,7 +39,7 @@ namespace Thrzn41.WebexTeams
         /// <summary>
         /// Default buffer delay.
         /// </summary>
-        private static readonly TimeSpan DEFAULT_BUFFER = TimeSpan.FromMilliseconds(250.0d);
+        protected static readonly TimeSpan DEFAULT_BUFFER = TimeSpan.FromMilliseconds(250.0d);
 
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace Thrzn41.WebexTeams
 
                     if ( checkRetry(result, notificationFunc, i) )
                     {
-                        await this.DelayAsync(result.TimeToRetry.Value, cancellationToken);
+                        await DelayAsync(result.TimeToRetry.Value, cancellationToken);
                     }
                     else
                     {
@@ -251,7 +251,7 @@ namespace Thrzn41.WebexTeams
 
                     if ( checkRetry<TTeamsResult, TTeamsObject>(result, notificationFunc, i) )
                     {
-                        await this.DelayAsync(result.TimeToRetry.Value, cancellationToken);
+                        await DelayAsync(result.TimeToRetry.Value, cancellationToken);
                     }
                     else
                     {
@@ -269,10 +269,36 @@ namespace Thrzn41.WebexTeams
         /// <summary>
         /// Delay before retry.
         /// </summary>
+        /// <param name="result"><see cref="TeamsRequestInfo"/> to be delayed.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
+        /// <returns><see cref="Task"/> for result.</returns>
+        public static Task DelayAsync(TeamsResultInfo result, CancellationToken? cancellationToken = null)
+        {
+            Task task;
+
+            if(result != null && result.HasTimeToRetry)
+            {
+                task = DelayAsync(result.TimeToRetry.Value, cancellationToken);
+            }
+            else
+            {
+#if (DOTNETFRAMEWORK4_5_2)
+                task = DelayAsync(TimeSpan.FromTicks(0L), cancellationToken);
+#else
+                task = Task.CompletedTask;
+#endif
+            }
+
+            return task;
+        }
+
+        /// <summary>
+        /// Delay before retry.
+        /// </summary>
         /// <param name="delta">Duration for retry.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
         /// <returns><see cref="Task"/> for result.</returns>
-        public async Task DelayAsync(TimeSpan delta, CancellationToken? cancellationToken = null)
+        public static async Task DelayAsync(TimeSpan delta, CancellationToken? cancellationToken = null)
         {
             if(delta.Ticks > 0L)
             {
