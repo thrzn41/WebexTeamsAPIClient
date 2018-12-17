@@ -9,19 +9,26 @@ using Thrzn41.WebexTeams.Version1.OAuth2;
 using Thrzn41.Util;
 using System.Net;
 using System.Threading;
+using Thrzn41.WebexTeams.Version1.GuestIssuer;
 
 namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 {
     [TestClass]
-    public class UnitTestBasic
+    public class UnitTestGuestIssuer
     {
         private const string UNIT_TEST_SPACE_TAG = "#webexteamsapiclientunittestspace";
 
         private const string UNIT_TEST_CREATED_PREFIX = "#createdwebexteamsapiclientunittest";
 
-        private static TeamsAPIClient teams;
+        private static TeamsAPIClient teamsGuest;
+
+        private static TeamsGuestIssuerClient guestIssuer;
+
+        private static TeamsAPIClient teamsController;
 
         private static Space unitTestSpace;
+
+        private static SpaceMembership membershipGuest;
 
         [ClassInitialize]
         public static async Task Init(TestContext testContext)
@@ -34,7 +41,6 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
             try
             {
-
                 string userDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
                 var dirInfo = new DirectoryInfo(String.Format("{0}{1}.thrzn41{1}unittest{1}teams", userDir, Path.DirectorySeparatorChar));
@@ -57,15 +63,15 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
                 var info = TeamsObject.FromJsonString<TeamsInfo>(LocalProtectedString.FromEncryptedData(encryptedInfo, entropy).DecryptToString());
 
-                teams = TeamsAPI.CreateVersion1Client(info.APIToken);
-            
-                var rMe = await teams.GetMeAsync();
+                teamsController = TeamsAPI.CreateVersion1Client(info.APIToken, new TeamsRetryOnErrorHandler(4, TimeSpan.FromSeconds(15.0f)));
+
+                var rMe = await teamsController.GetMeAsync();
 
                 if (rMe.IsSuccessStatus)
                 {
                     me = rMe.Data;
 
-                    var e = (await teams.ListSpacesAsync(type: SpaceType.Group, sortBy: SpaceSortBy.Created, max: 50)).GetListResultEnumerator();
+                    var e = (await teamsController.ListSpacesAsync(type: SpaceType.Group, sortBy: SpaceSortBy.Created, max: 50)).GetListResultEnumerator();
 
                     while (await e.MoveNextAsync())
                     {
@@ -90,6 +96,33 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                     }
                 }
 
+
+                if (unitTestSpace != null)
+                {
+                    guestIssuer = TeamsAPI.CreateVersion1GuestIssuerClient(info.GuestIssuerSecret, info.GuestIssuerId);
+
+                    var r = await guestIssuer.CreateGuestUserAsync("470d916c-74ba-44c6-8e26-6fd57fa7d158", "UnitTestGuest");
+
+                    if (r.IsSuccessStatus)
+                    {
+                        teamsGuest = TeamsAPI.CreateVersion1Client(r.Data, new TeamsRetryOnErrorHandler(4, TimeSpan.FromSeconds(15.0f)));
+
+                        var rGuestMe = await teamsGuest.GetMeAsync();
+
+                        if (rGuestMe.IsSuccessStatus)
+                        {
+                            me = rGuestMe.Data;
+
+                            var rMs = await teamsController.CreateSpaceMembershipAsync(unitTestSpace, me);
+
+                            if(rMs.IsSuccessStatus)
+                            {
+                                membershipGuest = rMs.Data;
+                            }
+                        }
+                    }
+
+                }
             }
             catch (DirectoryNotFoundException) { }
             catch (FileNotFoundException) { }
@@ -103,28 +136,33 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
         [ClassCleanup]
         public static async Task Clean()
         {
-            if(teams == null)
+            if(teamsController == null)
             {
                 return;
             }
 
-            var e = (await teams.ListSpacesAsync(type: SpaceType.Group, sortBy: SpaceSortBy.Created, max: 50)).GetListResultEnumerator();
-
-            while (await e.MoveNextAsync())
+            if(membershipGuest != null)
             {
-                var r = e.CurrentResult;
-
-                if (r.IsSuccessStatus && r.Data.HasItems)
-                {
-                    foreach (var item in r.Data.Items)
-                    {
-                        if (item.Title.Contains(UNIT_TEST_CREATED_PREFIX))
-                        {
-                            await teams.DeleteSpaceAsync(item);
-                        }
-                    }
-                }
+                await teamsController.DeleteSpaceMembershipAsync(membershipGuest);
             }
+
+            //var e = (await teamsController.ListSpaceMembershipsAsync(unitTestSpace, 50)).GetListResultEnumerator();
+
+            //while (await e.MoveNextAsync())
+            //{
+            //    var r = e.CurrentResult;
+
+            //    if (r.IsSuccessStatus && r.Data.HasItems)
+            //    {
+            //        foreach (var item in r.Data.Items)
+            //        {
+            //            if (item.PersonDisplayName == "UnitTestGuest")
+            //            {
+            //                await teamsController.DeleteSpaceMembershipAsync(item);
+            //            }
+            //        }
+            //    }
+            //}
 
         }
 
@@ -147,7 +185,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
         [TestMethod]
         public async Task TestCreateMessage()
         {
-            var r = await teams.CreateMessageAsync(unitTestSpace.Id, "Hello, Cisco Webex Teams!!");
+            var r = await teamsGuest.CreateMessageAsync(unitTestSpace.Id, "Hello, Cisco Webex Teams!!");
 
             Assert.IsTrue(r.IsSuccessStatus);
             Assert.IsTrue(r.Data.HasValues);
@@ -171,7 +209,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
         [TestMethod]
         public async Task TestCreateMessageWithMarkdown()
         {
-            var r = await teams.CreateMessageAsync(unitTestSpace.Id, "Hello, **markdown**!!");
+            var r = await teamsGuest.CreateMessageAsync(unitTestSpace.Id, "Hello, **markdown**!!");
 
             Assert.IsTrue(r.IsSuccessStatus);
             Assert.IsTrue(r.Data.HasValues);
@@ -254,21 +292,21 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
             md.Append("OK!");
 
-            var r = await teams.CreateMessageAsync(unitTestSpace.Id, md.ToString());
+            var r = await teamsGuest.CreateMessageAsync(unitTestSpace.Id, md.ToString());
             Assert.IsTrue(r.IsSuccessStatus);
 
 
             md.Clear();
             md.AppendMentionToGroup(MentionedGroup.All).Append(", Hello All!");
 
-            r = await teams.CreateMessageAsync(unitTestSpace.Id, md.ToString());
+            r = await teamsGuest.CreateMessageAsync(unitTestSpace.Id, md.ToString());
             Assert.IsTrue(r.IsSuccessStatus);
 
 
             md.Clear();
             md.AppendMentionToAll().Append(", Hello All again!!");
 
-            r = await teams.CreateMessageAsync(unitTestSpace.Id, md.ToString());
+            r = await teamsGuest.CreateMessageAsync(unitTestSpace.Id, md.ToString());
             Assert.IsTrue(r.IsSuccessStatus);
 
         }
@@ -276,14 +314,14 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
         [TestMethod]
         public async Task TestCreateAndDeleteMessage()
         {
-            var r = await teams.CreateMessageAsync(unitTestSpace.Id, "This message will be deleted.");
+            var r = await teamsGuest.CreateMessageAsync(unitTestSpace.Id, "This message will be deleted.");
 
             Assert.IsTrue(r.IsSuccessStatus);
             Assert.IsTrue(r.Data.HasValues);
 
             Assert.IsNotNull(r.Data.Id);
 
-            var rdm = await teams.DeleteMessageAsync(r.Data);
+            var rdm = await teamsGuest.DeleteMessageAsync(r.Data);
 
             Assert.IsTrue(rdm.IsSuccessStatus);
             Assert.IsFalse(rdm.Data.HasValues);
@@ -307,7 +345,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var data = new TeamsFileData(fs, "mypng.png", TeamsMediaType.ImagePNG))
             {
-                var r = await teams.CreateMessageAsync(unitTestSpace.Id, "**Post with attachment!!**", data);
+                var r = await teamsGuest.CreateMessageAsync(unitTestSpace.Id, "**Post with attachment!!**", data);
                 Assert.IsTrue(r.IsSuccessStatus);
                 Assert.IsTrue(r.Data.HasValues);
                 Assert.IsTrue(r.Data.HasFiles);
@@ -315,7 +353,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                 fileUri = r.Data.FileUris[0];
             }
 
-            var r1 = await teams.GetFileInfoAsync(fileUri);
+            var r1 = await teamsGuest.GetFileInfoAsync(fileUri);
             Assert.IsTrue(r1.IsSuccessStatus);
             Assert.IsTrue(r1.Data.HasValues);
 
@@ -330,7 +368,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
 
 
-            var r2 = await teams.GetFileDataAsync(fileUri);
+            var r2 = await teamsGuest.GetFileDataAsync(fileUri);
             Assert.IsTrue(r2.IsSuccessStatus);
             Assert.IsTrue(r2.Data.HasValues);
 
@@ -349,9 +387,10 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             }
 
 
+
             using (var stream = new MemoryStream())
             {
-                var r3 = await teams.CopyFileDataToStreamAsync(fileUri, stream);
+                var r3 = await teamsGuest.CopyFileDataToStreamAsync(fileUri, stream);
                 Assert.IsTrue(r3.IsSuccessStatus);
                 Assert.IsTrue(r3.Data.HasValues);
 
@@ -366,144 +405,28 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
                 Assert.AreEqual(34991, stream.Length);
             }
+
         }
 
         [TestMethod]
         public async Task TestGetMe()
         {
-            var r = await teams.GetMeAsync();
+            var r = await teamsGuest.GetMeAsync();
 
             Assert.IsTrue(r.IsSuccessStatus);
 
-            var r2 = await teams.GetMeFromCacheAsync();
+            var r2 = await teamsGuest.GetMeFromCacheAsync();
             Assert.IsTrue(r2.IsSuccessStatus);
 
-            var r3 = await teams.GetMeFromCacheAsync();
+            var r3 = await teamsGuest.GetMeFromCacheAsync();
             Assert.IsTrue(r3.IsSuccessStatus);
             Assert.AreEqual(r2.Data, r3.Data);
 
-            var r4 = await teams.GetMeFromCacheAsync();
+            var r4 = await teamsGuest.GetMeFromCacheAsync();
             Assert.IsTrue(r4.IsSuccessStatus);
             Assert.AreEqual(r2.Data, r4.Data);
             Assert.AreEqual(r3.Data, r4.Data);
         }
-
-
-        [TestMethod]
-        public async Task TestPagination()
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                var r = await teams.CreateSpaceAsync(String.Format("Test Space {0}{1}", UNIT_TEST_CREATED_PREFIX, i));
-
-                Assert.IsTrue(r.IsSuccessStatus);
-            }
-
-            var rls = await teams.ListSpacesAsync(max:2);
-
-            Assert.IsTrue(rls.IsSuccessStatus);
-            Assert.IsTrue(rls.HasNext);
-            Assert.AreEqual(2, rls.Data.ItemCount);
-
-            var resourceOperation = rls.ParseResourceOperation();
-            Assert.AreEqual(TeamsResource.Space, resourceOperation.Resource);
-            Assert.AreEqual(TeamsOperation.List, resourceOperation.Operation);
-            Assert.AreEqual("ListSpace", resourceOperation.ToString());
-
-            var guid = rls.ListTransactionId;
-
-            rls = await rls.ListNextAsync();
-
-            Assert.IsTrue(rls.IsSuccessStatus);
-            Assert.IsTrue(rls.HasNext);
-            Assert.AreEqual(2, rls.Data.ItemCount);
-            Assert.AreEqual(guid, rls.ListTransactionId);
-
-        }
-
-
-        [TestMethod]
-        public async Task TestListResultEnumerator()
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                var r = await teams.CreateSpaceAsync(String.Format("Test Space {0}{1}", UNIT_TEST_CREATED_PREFIX, i));
-
-                Assert.IsTrue(r.IsSuccessStatus);
-            }
-
-
-            var guid = Guid.Empty;
-
-            int counter = 0;
-
-            var rls = await teams.ListSpacesAsync(max: 2);
-
-            var e = rls.GetListResultEnumerator();
-
-            while(await e.MoveNextAsync())
-            {
-                rls = e.CurrentResult;
-
-                Assert.IsTrue(rls.IsSuccessStatus);
-                Assert.IsTrue(rls.HasNext);
-                Assert.AreEqual(2, rls.Data.ItemCount);
-
-                var resourceOperation = rls.ParseResourceOperation();
-                Assert.AreEqual(TeamsResource.Space, resourceOperation.Resource);
-                Assert.AreEqual(TeamsOperation.List, resourceOperation.Operation);
-                Assert.AreEqual("ListSpace", resourceOperation.ToString());
-
-                if (guid != Guid.Empty)
-                {
-                    Assert.AreEqual(guid, rls.ListTransactionId);
-                }
-                else
-                {
-                    guid = rls.ListTransactionId;
-                }
-
-                if( ++counter >= 2 )
-                {
-                    // In this test, break after 2nd loop.
-                    break;
-                }
-            }
-
-        }
-
-
-        [TestMethod]
-        public void TestPartialErrorResponse()
-        {
-            string str = "{\"items\":[{\"id\":\"id01\",\"title\":\"title01\",\"type\":\"group\",\"isLocked\":true,\"teamId\":\"teamid01\",\"lastActivity\":\"2016-04-21T19:12:48.920Z\",\"created\":\"2016-04-21T19:01:55.966Z\"},{\"id\":\"id02\",\"title\":\"xyz...\",\"errors\":{\"title\":{\"code\":\"kms_failure\",\"reason\":\"Key management server failed to respond appropriately. For more information: https://developer.webex.com/errors.html\"}}}]}";
-
-            var spaces = TeamsObject.FromJsonString<SpaceList>(str);
-
-            var space = spaces.Items[1];
-
-            var errors = space.GetPartialErrors();
-
-            Assert.IsTrue(errors.ContainsKey("title"));
-            Assert.AreEqual(PartialErrorCode.KMSFailure, errors["title"].Code);
-            Assert.AreEqual("Key management server failed to respond appropriately. For more information: https://developer.webex.com/errors.html", errors["title"].Reason);
-
-        }
-
-        [TestMethod]
-        public void TestErrorResponse()
-        {
-            string str = "{\"errorCode\":1,\"message\":\"The requested resource could not be found.\",\"errors\":[{\"errorCode\":1,\"description\":\"The requested resource could not be found.\"}],\"trackingId\":\"xyz\"}";
-
-            var spaces = TeamsObject.FromJsonString<SpaceList>(str);
-
-            var errors = spaces.GetErrors();
-
-            Assert.AreEqual(1, errors[0].ErrorCode);
-            Assert.AreEqual("The requested resource could not be found.", errors[0].Description);
-
-        }
-
 
 
         [TestMethod]
@@ -527,7 +450,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
             try
             {
-                var result = await teams.CreateMessageAsync("this space id does not exist", "hello");
+                var result = await teamsGuest.CreateMessageAsync("this space id does not exist", "hello");
 
                 var m = result.GetData();
             }
@@ -552,14 +475,14 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             await Assert.ThrowsExceptionAsync<TaskCanceledException>(
                 async () =>
                 {
-                    var r = await teams.CreateMessageAsync(unitTestSpace.Id, "Hello, Cisco Webex Teams!!", cancellationToken: cancel.Token);
+                    var r = await teamsGuest.CreateMessageAsync(unitTestSpace.Id, "Hello, Cisco Webex Teams!!", cancellationToken: cancel.Token);
                 }
             );
 
             await Assert.ThrowsExceptionAsync<TaskCanceledException>(
                 async () =>
                 {
-                    var r = await teams.ListSpacesAsync(max: 1, cancellationToken: cancel.Token);
+                    var r = await teamsGuest.ListSpacesAsync(max: 1, cancellationToken: cancel.Token);
                 }
             );
 

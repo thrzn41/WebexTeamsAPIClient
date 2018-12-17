@@ -52,30 +52,38 @@ namespace Thrzn41.WebexTeams
             /// <summary>
             /// Http method.
             /// </summary>
-            private HttpMethod method;
+            private readonly HttpMethod method;
 
             /// <summary>
             /// Request uri.
             /// </summary>
-            private Uri uri;
+            public Uri Uri { get; private set; }
 
             /// <summary>
             /// Accept charset list.
             /// </summary>
-            private List<StringWithQualityHeaderValue> acceptCharsets;
+            private readonly List<StringWithQualityHeaderValue> acceptCharsets;
 
             /// <summary>
             /// Accept list.
             /// </summary>
-            private List<MediaTypeWithQualityHeaderValue> accepts;
+            private readonly List<MediaTypeWithQualityHeaderValue> accepts;
 
             /// <summary>
             /// Authentication info.
             /// </summary>
             public AuthenticationHeaderValue Authentication { get; set; }
 
-
-
+            /// <summary>
+            /// true if the request has authentication.
+            /// </summary>
+            public bool HasAuthentication
+            {
+                get
+                {
+                    return (this.Authentication != null);
+                }
+            }
 
             /// <summary>
             /// Is ready to reuse.
@@ -93,7 +101,7 @@ namespace Thrzn41.WebexTeams
             public ReusableHttpRequest(HttpMethod method, Uri uri)
             {
                 this.method  = method;
-                this.uri     = uri;
+                this.Uri     = uri;
 
                 this.acceptCharsets = new List<StringWithQualityHeaderValue>();
                 this.accepts        = new List<MediaTypeWithQualityHeaderValue>();
@@ -129,7 +137,7 @@ namespace Thrzn41.WebexTeams
             /// <returns><see cref="HttpRequestMessage"/>.</returns>
             protected HttpRequestMessage CreateHttpRequestMessage()
             {
-                var request = new HttpRequestMessage(this.method, this.uri);
+                var request = new HttpRequestMessage(this.method, this.Uri);
 
                 var headers = request.Headers;
 
@@ -175,17 +183,17 @@ namespace Thrzn41.WebexTeams
             /// <summary>
             /// Request body text.
             /// </summary>
-            private string text;
+            private readonly string text;
 
             /// <summary>
             /// Encoding of request body.
             /// </summary>
-            private Encoding encoding;
+            private readonly Encoding encoding;
 
             /// <summary>
             /// MediaType of request body.
             /// </summary>
-            private string mediaType;
+            private readonly string mediaType;
 
 
             /// <summary>
@@ -241,6 +249,32 @@ namespace Thrzn41.WebexTeams
             }
         }
 
+
+        /// <summary>
+        /// Reusable copy file data request.
+        /// </summary>
+        private class ReusableCopyFileDataHttpRequest : ReusableStringHttpRequest
+        {
+
+            /// <summary>
+            /// The stream to where the data will be copied.
+            /// </summary>
+            public Stream Stream { get; private set; }
+
+            /// <summary>
+            /// Creates reusable copy file data request.
+            /// </summary>
+            /// <param name="method">Http method.</param>
+            /// <param name="uri">Request uri.</param>
+            /// <param name="stream">The stream to where the data will be copied.</param>
+            public ReusableCopyFileDataHttpRequest(HttpMethod method, Uri uri, Stream stream)
+                : base(method, uri)
+            {
+                this.Stream = stream;
+            }
+
+        }
+
         /// <summary>
         /// Reusable FormData http request.
         /// </summary>
@@ -251,7 +285,7 @@ namespace Thrzn41.WebexTeams
             /// <summary>
             /// String data for FormData.
             /// </summary>
-            private List< KeyValuePair<string, string> > stringData;
+            private readonly List< KeyValuePair<string, string> > stringData;
 
 
             /// <summary>
@@ -301,21 +335,184 @@ namespace Thrzn41.WebexTeams
         private class ReusableMultipartFormDataHttpRequest : ReusableHttpRequest
         {
 
+            /// <summary>
+            /// Reusable stream.
+            /// The internal stream is not disposed even after this stream is disposed.
+            /// </summary>
+            private class ReusableStream : Stream
+            {
+                /// <summary>
+                /// Internal stream.
+                /// </summary>
+                private readonly Stream stream;
+
+                /// <summary>
+                /// Initial position.
+                /// </summary>
+                private readonly long initialPosition;
+
+
+                /// <summary>
+                /// Creates instance.
+                /// </summary>
+                /// <param name="stream">Internal stream.</param>
+                public ReusableStream(Stream stream)
+                {
+                    this.stream = stream;
+
+                    if(this.stream.CanSeek)
+                    {
+                        this.initialPosition = this.stream.Position;
+                    }
+                }
+
+
+                /// <summary>
+                /// true if the stream supports reading; otherwise, false.
+                /// </summary>
+                public override bool CanRead
+                {
+                    get
+                    {
+                        return this.stream.CanRead;
+                    }
+                }
+
+                /// <summary>
+                /// true if the stream supports seeking; otherwise, false.
+                /// </summary>
+                public override bool CanSeek
+                {
+                    get
+                    {
+                        return this.stream.CanSeek;
+                    }
+                }
+
+                /// <summary>
+                /// true if the stream supports writing; otherwise, false.
+                /// </summary>
+                public override bool CanWrite
+                {
+                    get
+                    {
+                        return this.stream.CanWrite;
+                    }
+                }
+
+                /// <summary>
+                /// A long value representing the length of the stream in bytes.
+                /// </summary>
+                public override long Length
+                {
+                    get
+                    {
+                        return this.stream.Length;
+                    }
+                }
+
+                /// <summary>
+                /// The current position within the stream.
+                /// </summary>
+                public override long Position
+                {
+                    get
+                    {
+                        return this.stream.Position;
+                    }
+                    set
+                    {
+                        this.stream.Position = value;
+                    }
+                }
+
+
+                /// <summary>
+                /// Clears all buffers for this stream and causes any buffered data to be written to the underlying device.
+                /// </summary>
+                public override void Flush()
+                {
+                    this.stream.Flush();
+                }
+
+                /// <summary>
+                /// Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
+                /// </summary>
+                /// <param name="buffer">An array of bytes. When this method returns, the buffer contains the specified byte array with the values between offset and (offset + count - 1) replaced by the bytes read from the current source.</param>
+                /// <param name="offset">The zero-based byte offset in buffer at which to begin storing the data read from the current stream.</param>
+                /// <param name="count">The maximum number of bytes to be read from the current stream.</param>
+                /// <returns>The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.</returns>
+                public override int Read(byte[] buffer, int offset, int count)
+                {
+                    return this.stream.Read(buffer, offset, count);
+                }
+
+                /// <summary>
+                /// Sets the position within the current stream.
+                /// </summary>
+                /// <param name="offset">A byte offset relative to the origin parameter.</param>
+                /// <param name="origin">A value of type <see cref="SeekOrigin"/> indicating the reference point used to obtain the new position.</param>
+                /// <returns>The new position within the current stream.</returns>
+                public override long Seek(long offset, SeekOrigin origin)
+                {
+                    return this.stream.Seek(offset, origin);
+                }
+
+                /// <summary>
+                /// Sets the length of the current stream.
+                /// </summary>
+                /// <param name="value">The desired length of the current stream in bytes.</param>
+                public override void SetLength(long value)
+                {
+                    this.stream.SetLength(value);
+                }
+
+                /// <summary>
+                /// Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
+                /// </summary>
+                /// <param name="buffer">An array of bytes. This method copies count bytes from buffer to the current stream.</param>
+                /// <param name="offset">The zero-based byte offset in buffer at which to begin copying bytes to the current stream.</param>
+                /// <param name="count">The number of bytes to be written to the current stream.</param>
+                public override void Write(byte[] buffer, int offset, int count)
+                {
+                    this.stream.Write(buffer, offset, count);
+                }
+
+
+                /// <summary>
+                /// Resets position.
+                /// </summary>
+                public void ResetPosition()
+                {
+                    if(this.stream.CanSeek && this.stream.Position != this.initialPosition)
+                    {
+                        this.stream.Position = this.initialPosition;
+                    }
+                }
+            }
+
+
+
 
             /// <summary>
             /// String data for FormData.
             /// </summary>
-            private NameValueCollection stringData;
+            private readonly NameValueCollection stringData;
 
             /// <summary>
             /// Teams file data.
             /// </summary>
-            private TeamsFileData fileData;
+            private readonly TeamsFileData fileData;
 
             /// <summary>
             /// Indicates reuse is required or not.
             /// </summary>
-            private bool isReuseRequired;
+            private readonly bool isReuseRequired;
+
+            /// <summary>
+            /// Stream of the file.
+            /// </summary>
+            private ReusableStream stream;
 
             /// <summary>
             /// Byte data of file.
@@ -339,7 +536,8 @@ namespace Thrzn41.WebexTeams
 
                 this.isReuseRequired = isReuseRequired;
 
-                this.byteData     = null;
+                this.stream   = null;
+                this.byteData = null;
 
                 this.IsReadyToReuse = false;
             }
@@ -376,20 +574,26 @@ namespace Thrzn41.WebexTeams
 
                 if (this.fileData != null)
                 {
-                    HttpContent fileContent;
+                    HttpContent fileContent = null;
 
-                    if (this.byteData != null)
+                    if(this.stream != null)
+                    {
+                        this.stream.ResetPosition();
+
+                        fileContent = new StreamContent(this.stream);
+                    }
+                    else if (this.byteData != null)
                     {
                         fileContent = new ByteArrayContent(byteData);
                     }
-                    else
+
+                    if (fileContent != null)
                     {
-                        fileContent = new StreamContent(fileData.Stream);
+
+                        fileContent.Headers.ContentType = new MediaTypeHeaderValue(fileData.MediaTypeName);
+
+                        content.Add(fileContent, "files", fileData.FileName);
                     }
-
-                    fileContent.Headers.ContentType = new MediaTypeHeaderValue(fileData.MediaTypeName);
-
-                    content.Add(fileContent, "files", fileData.FileName);
                 }
 
                 request.Content = content;
@@ -403,13 +607,23 @@ namespace Thrzn41.WebexTeams
             /// <returns><see cref="HttpRequestMessage"/> to be used to request.</returns>
             public override HttpRequestMessage CreateRequest()
             {
-                if( !this.IsReadyToReuse && this.isReuseRequired && this.byteData == null )
+                if( !this.IsReadyToReuse )
                 {
-                    using (var memory = new MemoryStream())
+                    if((this.fileData != null) && (this.stream == null) && (this.byteData == null))
                     {
-                        fileData.Stream.CopyTo(memory);
+                        if( this.isReuseRequired && !this.fileData.Stream.CanSeek )
+                        {
+                            using (var memory = new MemoryStream())
+                            {
+                                fileData.Stream.CopyTo(memory);
 
-                        byteData = memory.ToArray();
+                                this.byteData = memory.ToArray();
+                            }
+                        }
+                        else
+                        {
+                            this.stream = new ReusableStream(fileData.Stream);
+                        }
                     }
 
                     this.IsReadyToReuse = true;
@@ -425,30 +639,39 @@ namespace Thrzn41.WebexTeams
             /// <returns><see cref="HttpRequestMessage"/> to be used to request.</returns>
             public override async Task<HttpRequestMessage> CreateRequestAsync(CancellationToken? cancellationToken = null)
             {
-                if ( !this.IsReadyToReuse && this.isReuseRequired && this.byteData == null )
+                if (!this.IsReadyToReuse)
                 {
-                    using (var memory = new MemoryStream())
+                    if ((this.fileData != null) && (this.stream == null) && (this.byteData == null))
                     {
-                        if (cancellationToken.HasValue)
+                        if (this.isReuseRequired && !this.fileData.Stream.CanSeek)
                         {
-                            await fileData.Stream.CopyToAsync(memory, 81920, cancellationToken.Value);
+                            using (var memory = new MemoryStream())
+                            {
+                                if (cancellationToken.HasValue)
+                                {
+                                    await fileData.Stream.CopyToAsync(memory, 81920, cancellationToken.Value);
+                                }
+                                else
+                                {
+                                    await fileData.Stream.CopyToAsync(memory);
+                                }
+
+                                this.byteData = memory.ToArray();
+                            }
                         }
                         else
                         {
-                            await fileData.Stream.CopyToAsync(memory);
+                            this.stream = new ReusableStream(fileData.Stream);
                         }
-
-                        byteData = memory.ToArray();
                     }
 
                     this.IsReadyToReuse = true;
                 }
 
-
                 return createRequest();
             }
-
         }
+
 
 
 
@@ -487,15 +710,9 @@ namespace Thrzn41.WebexTeams
 
 
         /// <summary>
-        /// HttpClient to access Cisco Webex Teams API uris.
+        /// Teams Authentication.
         /// </summary>
-        private readonly HttpClient httpClientForTeamsAPI;
-
-        /// <summary>
-        /// HttpClient to access non-Cisco Webex Teams API uris.
-        /// </summary>
-        private readonly HttpClient httpClientForNonTeamsAPI;
-
+        private readonly AuthenticationHeaderValue teamsAuthentication;
 
         /// <summary>
         /// Regex pattern to check if the Uri is Cisco Webex Teams API uris.
@@ -504,9 +721,9 @@ namespace Thrzn41.WebexTeams
 
 
         /// <summary>
-        /// Executor for retry.
+        /// Handler for retry.
         /// </summary>
-        private readonly TeamsRetry retryExecutor;
+        private readonly TeamsRetry retryHandler;
 
         /// <summary>
         /// Notification func for retry.
@@ -520,60 +737,22 @@ namespace Thrzn41.WebexTeams
         /// </summary>
         /// <param name="teamsToken">Cisco Webex Teams Token.</param>
         /// <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
-        /// <param name="preAuthenticate">true if preAuthenticate is needed.</param>
         /// <param name="retryExecutor">Executor for retry.</param>
         /// <param name="retryNotificationFunc">Notification func for retry.</param>
-        internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern, bool preAuthenticate, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc)
+        internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc)
         {
-            // HttpClient for Cisco Webex Teams API.
-            // Teams Token MUST be sent to only Teams API https URL.
-            // NEVER SEND Token to other URLs or non-secure http URL.
-            this.httpClientForTeamsAPI = new HttpClient(
-                    new HttpClientHandler
-                    {
-                        AllowAutoRedirect = false,
-                        PreAuthenticate   = preAuthenticate,
-                    },
-                    true
-                );
-
-            // HttpClient for non-Cisco Webex Teams API URL.
-            // An avator image path is well-known case.
-            this.httpClientForNonTeamsAPI = new HttpClient(
-                    new HttpClientHandler
-                    {
-                        AllowAutoRedirect = false,
-                        PreAuthenticate   = false,
-                    },
-                    true
-                );
-
-
-            if (teamsToken != null)
+            if(teamsToken != null)
             {
-                // For Cisco Webex Teams API https path, the token is added.
-                this.httpClientForTeamsAPI.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", teamsToken);
+                this.teamsAuthentication = new AuthenticationHeaderValue("Bearer", teamsToken);
             }
 
             this.teamsAPIUriPattern = teamsAPIUriPattern;
 
-            this.retryExecutor         = retryExecutor;
+            this.retryHandler          = retryExecutor;
             this.retryNotificationFunc = retryNotificationFunc;
-
         }
 
 
-
-        /// <summary>
-        /// TeamsHttpClient constructor.
-        /// </summary>
-        /// <param name="teamsToken">Cisco Webex Teams Token.</param>
-        /// <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
-        /// <param name="preAuthenticate">true if preAuthenticate is needed.</param>
-        internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern, bool preAuthenticate)
-            : this(teamsToken, teamsAPIUriPattern, preAuthenticate, null, null)
-        {
-        }
 
         /// <summary>
         /// TeamsHttpClient constructor.
@@ -581,41 +760,12 @@ namespace Thrzn41.WebexTeams
         /// <param name="teamsToken">Cisco Webex Teams Token.</param>
         /// <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
         internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern)
-            : this(teamsToken, teamsAPIUriPattern, (teamsToken != null))
-        {
-        }
-
-        /// <summary>
-        /// TeamsHttpClient constructor.
-        /// </summary>
-        /// <param name="teamsToken">Cisco Webex Teams Token.</param>
-        /// <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
-        /// <param name="retryExecutor">Executor for retry.</param>
-        /// <param name="retryNotificationFunc">Notification func for retry.</param>
-        internal TeamsHttpClient(string teamsToken, Regex teamsAPIUriPattern, TeamsRetry retryExecutor, Func<TeamsResultInfo, int, bool> retryNotificationFunc)
-            : this(teamsToken, teamsAPIUriPattern, (teamsToken != null), retryExecutor, retryNotificationFunc)
+            : this(teamsToken, teamsAPIUriPattern, null, null)
         {
         }
 
 
 
-
-        /// <summary>
-        /// Selects HttpClient for uri.
-        /// </summary>
-        /// <param name="uri">Uri to be requested.</param>
-        /// <returns>HttpClient for uri.</returns>
-        private HttpClient selectHttpClient(Uri uri)
-        {
-            var result = this.httpClientForNonTeamsAPI;
-
-            if(this.teamsAPIUriPattern.IsMatch(uri.AbsoluteUri))
-            {
-                result = this.httpClientForTeamsAPI;
-            }
-
-            return result;
-        }
 
         /// <summary>
         /// Requests to Cisco Webex Teams API.
@@ -633,6 +783,11 @@ namespace Thrzn41.WebexTeams
 
             HttpRequestMessage request;
 
+            if (this.teamsAuthentication != null && !reusableRequest.HasAuthentication && this.teamsAPIUriPattern != null && this.teamsAPIUriPattern.IsMatch(reusableRequest.Uri.AbsoluteUri))
+            {
+                reusableRequest.Authentication = this.teamsAuthentication;
+            }
+
             if(reusableRequest.IsReadyToReuse)
             {
                 request = reusableRequest.CreateRequest();
@@ -646,7 +801,7 @@ namespace Thrzn41.WebexTeams
             using (request.Content)
             {
 
-                var httpClient = selectHttpClient(request.RequestUri);
+                var httpClient = TeamsStaticHttpClients.SelectHttpClient(request.RequestUri, this.teamsAPIUriPattern);
 
                 result.RequestInfo = new TeamsRequestInfo(request);
 
@@ -678,7 +833,7 @@ namespace Thrzn41.WebexTeams
                                     result.Data = TeamsObject.FromJsonString<TTeamsObject>(body);
                                 }
                             }
-                            else
+                            else if(response.StatusCode == System.Net.HttpStatusCode.OK)
                             {
                                 var info = new TTeamsObject() as TeamsFileInfo;
 
@@ -694,20 +849,32 @@ namespace Thrzn41.WebexTeams
                                     info.FileName      = fileName;
                                     info.MediaTypeName = contentHeaders.ContentType?.MediaType;
                                     info.Size          = contentHeaders.ContentLength;
+
+                                    var copyRequest = reusableRequest as ReusableCopyFileDataHttpRequest;
+
+                                    TeamsFileData data = null;
+
+                                    if (copyRequest != null)
+                                    {
+                                        await content.CopyToAsync(copyRequest.Stream);
+                                    }
+                                    else
+                                    {
+                                        data = info as TeamsFileData;
+
+                                        if (data != null)
+                                        {
+                                            data.Stream = new MemoryStream();
+
+                                            await content.CopyToAsync(data.Stream);
+
+                                            data.Stream.Position = 0;
+                                        }
+
+                                    }
+
+                                    result.Data = ((data != null) ? data : info) as TTeamsObject;
                                 }
-
-                                var data = info as TeamsFileData;
-
-                                if (data != null)
-                                {
-                                    data.Stream = new MemoryStream();
-
-                                    await content.CopyToAsync(data.Stream);
-
-                                    data.Stream.Position = 0;
-                                }
-
-                                result.Data = ((data != null) ? data : info) as TTeamsObject;
                             }
                         }
                     }
@@ -794,13 +961,13 @@ namespace Thrzn41.WebexTeams
         {
             Task<TTeamsResult> result;
 
-            if(this.retryExecutor == null)
+            if(this.retryHandler == null)
             {
                 result = requestAsync<TTeamsResult, TTeamsObject>(request, cancellationToken);
             }
             else
             {
-                result = retryExecutor.requestAsync<TTeamsResult, TTeamsObject>(
+                result = retryHandler.requestAsync<TTeamsResult, TTeamsObject>(
                     () =>
                     {
                         return requestAsync<TTeamsResult, TTeamsObject>(request, cancellationToken);
@@ -849,6 +1016,24 @@ namespace Thrzn41.WebexTeams
             return (RequestAsync<TTeamsResult, TTeamsObject>(CreateJsonRequestWithBearerToken(method, uri, queryParameters, objectToBePosted, token), cancellationToken));
         }
 
+
+        /// <summary>
+        /// Requests copy file data to stream to Cisco Webex Teams API.
+        /// </summary>
+        /// <typeparam name="TTeamsResult">Type of TeamsResult to be returned.</typeparam>
+        /// <typeparam name="TTeamsFileInfo">Type of TeamsFileInfo to be returned.</typeparam>
+        /// <param name="method"><see cref="HttpMethod"/> to be used on requesting.</param>
+        /// <param name="uri">Uri to be requested.</param>
+        /// <param name="queryParameters">Query parameter collection.</param>
+        /// <param name="stream"></param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> that represents result of API request.</returns>
+        public Task<TTeamsResult> RequestCopyFileDataAsync<TTeamsResult, TTeamsFileInfo>(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, Stream stream = null, CancellationToken? cancellationToken = null)
+            where TTeamsResult   : TeamsResult<TTeamsFileInfo>, new()
+            where TTeamsFileInfo : TeamsFileInfo, new()
+        {
+            return (RequestAsync<TTeamsResult, TTeamsFileInfo>(CreateCopyFileDataRequest(method, uri, queryParameters, stream), cancellationToken));
+        }
 
         /// <summary>
         /// Requests file info/data to Cisco Webex Teams API.
@@ -963,6 +1148,25 @@ namespace Thrzn41.WebexTeams
         /// <param name="method"><see cref="HttpMethod"/> to be used on requesting.</param>
         /// <param name="uri">Uri to be requested.</param>
         /// <param name="queryParameters">Query parameter collection.</param>
+        /// <param name="stream">The stream to where the file data will be copied.</param>
+        /// <returns><see cref="ReusableHttpRequest"/> that is created.</returns>
+        private ReusableHttpRequest CreateCopyFileDataRequest(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, Stream stream = null)
+        {
+            var request = new ReusableCopyFileDataHttpRequest(method, HttpUtils.BuildUri(uri, queryParameters), stream);
+
+            request.AddAcceptCharset(new StringWithQualityHeaderValue(ENCODING.WebName));
+            request.AddAccept(new MediaTypeWithQualityHeaderValue(MEDIA_TYPE_APPLICATION_JSON));
+            request.AddAccept(new MediaTypeWithQualityHeaderValue(MEDIA_TYPE_ANY));
+
+            return request;
+        }
+
+        /// <summary>
+        /// Creates <see cref="ReusableHttpRequest"/> to use for File info request.
+        /// </summary>
+        /// <param name="method"><see cref="HttpMethod"/> to be used on requesting.</param>
+        /// <param name="uri">Uri to be requested.</param>
+        /// <param name="queryParameters">Query parameter collection.</param>
         /// <returns><see cref="ReusableHttpRequest"/> that is created.</returns>
         private ReusableHttpRequest CreateFileInfoRequest(HttpMethod method, Uri uri, NameValueCollection queryParameters = null)
         {
@@ -987,7 +1191,7 @@ namespace Thrzn41.WebexTeams
         /// <returns><see cref="ReusableHttpRequest"/> that is created.</returns>
         private ReusableHttpRequest CreateMultipartFormDataRequest(HttpMethod method, Uri uri, NameValueCollection queryParameters = null, NameValueCollection stringData = null, TeamsFileData fileData = null)
         {
-            var request = new ReusableMultipartFormDataHttpRequest(method, HttpUtils.BuildUri(uri, queryParameters), stringData, fileData, (this.retryExecutor != null));
+            var request = new ReusableMultipartFormDataHttpRequest(method, HttpUtils.BuildUri(uri, queryParameters), stringData, fileData, (this.retryHandler != null));
 
             request.AddAcceptCharset(new StringWithQualityHeaderValue(ENCODING.WebName));
             request.AddAccept(new MediaTypeWithQualityHeaderValue(MEDIA_TYPE_APPLICATION_JSON));
@@ -1048,11 +1252,7 @@ namespace Thrzn41.WebexTeams
             {
                 if (disposing)
                 {
-                    using (this.httpClientForTeamsAPI)
-                    using (this.httpClientForNonTeamsAPI)
-                    {
-                        // disposed.
-                    }
+                    // disposed.
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

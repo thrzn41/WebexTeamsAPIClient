@@ -95,10 +95,7 @@ namespace Thrzn41.WebexTeams.Version1.OAuth2
         {
             var result = new TeamsResult<TokenInfo>();
 
-            result.IsSuccessStatus = source.IsSuccessStatus;
-            result.HttpStatusCode  = source.HttpStatusCode;
-            result.RetryAfter      = source.RetryAfter;
-            result.TrackingId      = source.TrackingId;
+            source.CopyInfoTo(result);
 
 
             var tokenInfo = new TokenInfo();

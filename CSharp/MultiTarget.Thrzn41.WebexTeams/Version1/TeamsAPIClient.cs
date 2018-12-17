@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -629,7 +630,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="max">Limit the maximum number of items in the response.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public Task< TeamsListResult<SpaceMembershipList> > ListSpaceMembershipsAsync(Space space, Person person = null, int? max = null, CancellationToken? cancellationToken = null)
+        public Task< TeamsListResult<SpaceMembershipList> > ListSpaceMembershipsAsync(Space space, Person person, int? max = null, CancellationToken? cancellationToken = null)
         {
             return (ListSpaceMembershipsAsync(space.Id, person?.Id, max, PersonIdType.Id, cancellationToken));
         }
@@ -1842,7 +1843,31 @@ namespace Thrzn41.WebexTeams.Version1
         }
 
         /// <summary>
+        /// Copies file data to the stream.
+        /// </summary>
+        /// <param name="fileUri">Uri of the file.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <param name="stream">The stream to where the file data will be copied.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task< TeamsResult<TeamsFileInfo> > CopyFileDataToStreamAsync(Uri fileUri, Stream stream, CancellationToken? cancellationToken = null)
+        {
+            var result = await this.teamsHttpClient.RequestCopyFileDataAsync<TeamsResult<TeamsFileInfo>, TeamsFileInfo>(
+                                    HttpMethod.Get,
+                                    fileUri,
+                                    null,
+                                    stream,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
         /// Gets file data.
+        /// The file data is copied to <see cref="MemoryStream"/> internally.
+        /// This will cause a high memory consumption depending on file size.
+        /// If the file size is too large, please consider to use <see cref="CopyFileDataToStreamAsync(Uri, Stream, CancellationToken?)"/>.
         /// </summary>
         /// <param name="fileUri">Uri of the file.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>

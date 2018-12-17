@@ -59,7 +59,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <summary>
         /// <see cref="TimeSpan"/> till the access token will expire.
         /// </summary>
-        [JsonProperty(PropertyName = "accessTokenTimeLeft")]
+        [JsonIgnore]
         public TimeSpan? AccessTokenTimeLeft
         {
             get

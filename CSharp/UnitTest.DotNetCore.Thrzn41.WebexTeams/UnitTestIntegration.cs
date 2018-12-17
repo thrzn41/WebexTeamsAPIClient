@@ -13,7 +13,7 @@ using System.Threading;
 namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 {
     [TestClass]
-    public class UnitTestBasic
+    public class UnitTestIntegration
     {
         private const string UNIT_TEST_SPACE_TAG = "#webexteamsapiclientunittestspace";
 
@@ -39,7 +39,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
                 var dirInfo = new DirectoryInfo(String.Format("{0}{1}.thrzn41{1}unittest{1}teams", userDir, Path.DirectorySeparatorChar));
 
-                using (var stream = new FileStream(String.Format("{0}{1}teamsinfo.dat", dirInfo.FullName, Path.DirectorySeparatorChar), FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (var stream = new FileStream(String.Format("{0}{1}teamsintegration.dat", dirInfo.FullName, Path.DirectorySeparatorChar), FileMode.Open, FileAccess.Read, FileShare.Read))
                 using (var memory = new MemoryStream())
                 {
                     stream.CopyTo(memory);
@@ -47,7 +47,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                     encryptedInfo = memory.ToArray();
                 }
 
-                using (var stream = new FileStream(String.Format("{0}{1}infoentropy.dat", dirInfo.FullName, Path.DirectorySeparatorChar), FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (var stream = new FileStream(String.Format("{0}{1}integrationentropy.dat", dirInfo.FullName, Path.DirectorySeparatorChar), FileMode.Open, FileAccess.Read, FileShare.Read))
                 using (var memory = new MemoryStream())
                 {
                     stream.CopyTo(memory);
@@ -55,10 +55,10 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                     entropy = memory.ToArray();
                 }
 
-                var info = TeamsObject.FromJsonString<TeamsInfo>(LocalProtectedString.FromEncryptedData(encryptedInfo, entropy).DecryptToString());
+                var token = TeamsObject.FromJsonString<TeamsIntegrationInfo>(LocalProtectedString.FromEncryptedData(encryptedInfo, entropy).DecryptToString());
 
-                teams = TeamsAPI.CreateVersion1Client(info.APIToken);
-            
+                teams = TeamsAPI.CreateVersion1Client(token.TokenInfo, new TeamsRetryOnErrorHandler(4, TimeSpan.FromSeconds(15.0f)));
+
                 var rMe = await teams.GetMeAsync();
 
                 if (rMe.IsSuccessStatus)
@@ -93,7 +93,6 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             }
             catch (DirectoryNotFoundException) { }
             catch (FileNotFoundException) { }
-
 
             checkTeamsAPIClient(me);
             checkUnitTestSpace();
@@ -349,6 +348,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             }
 
 
+
             using (var stream = new MemoryStream())
             {
                 var r3 = await teams.CopyFileDataToStreamAsync(fileUri, stream);
@@ -366,6 +366,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
                 Assert.AreEqual(34991, stream.Length);
             }
+
         }
 
         [TestMethod]
@@ -471,39 +472,6 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             }
 
         }
-
-
-        [TestMethod]
-        public void TestPartialErrorResponse()
-        {
-            string str = "{\"items\":[{\"id\":\"id01\",\"title\":\"title01\",\"type\":\"group\",\"isLocked\":true,\"teamId\":\"teamid01\",\"lastActivity\":\"2016-04-21T19:12:48.920Z\",\"created\":\"2016-04-21T19:01:55.966Z\"},{\"id\":\"id02\",\"title\":\"xyz...\",\"errors\":{\"title\":{\"code\":\"kms_failure\",\"reason\":\"Key management server failed to respond appropriately. For more information: https://developer.webex.com/errors.html\"}}}]}";
-
-            var spaces = TeamsObject.FromJsonString<SpaceList>(str);
-
-            var space = spaces.Items[1];
-
-            var errors = space.GetPartialErrors();
-
-            Assert.IsTrue(errors.ContainsKey("title"));
-            Assert.AreEqual(PartialErrorCode.KMSFailure, errors["title"].Code);
-            Assert.AreEqual("Key management server failed to respond appropriately. For more information: https://developer.webex.com/errors.html", errors["title"].Reason);
-
-        }
-
-        [TestMethod]
-        public void TestErrorResponse()
-        {
-            string str = "{\"errorCode\":1,\"message\":\"The requested resource could not be found.\",\"errors\":[{\"errorCode\":1,\"description\":\"The requested resource could not be found.\"}],\"trackingId\":\"xyz\"}";
-
-            var spaces = TeamsObject.FromJsonString<SpaceList>(str);
-
-            var errors = spaces.GetErrors();
-
-            Assert.AreEqual(1, errors[0].ErrorCode);
-            Assert.AreEqual("The requested resource could not be found.", errors[0].Description);
-
-        }
-
 
 
         [TestMethod]

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Thrzn41.Util;
 
-namespace UnitTestTool.EncryptWebexTeamsTokenForm
+namespace UnitTestTool.EncryptTeamsInfo
 {
     public partial class MainForm : Form
     {
@@ -28,21 +28,27 @@ namespace UnitTestTool.EncryptWebexTeamsTokenForm
             this.dirInfo = new DirectoryInfo(userDir);
 
             this.textBoxPath.Text = String.Format("{0}{1}.thrzn41{1}unittest{1}teams", this.dirInfo.FullName, Path.DirectorySeparatorChar);
-
         }
 
         private async Task exportEncryptedToken()
         {
             DirectoryInfo exportDir = this.dirInfo.CreateSubdirectory(".thrzn41").CreateSubdirectory("unittest").CreateSubdirectory("teams");
 
-            LocalProtectedString ps = LocalProtectedString.FromString(this.maskedTextBoxToken.Text);
+            var info = new TeamsInfo
+            {
+                APIToken          = this.textBoxToken.Text,
+                GuestIssuerId     = this.textBoxGuestIssuerId.Text,
+                GuestIssuerSecret = this.textBoxGuestIssuerSecret.Text,
+            };
 
-            using (var fs = new FileStream(String.Format("{0}{1}teamstoken.dat", exportDir.FullName, Path.DirectorySeparatorChar), FileMode.Create, FileAccess.Write, FileShare.Read))
+            LocalProtectedString ps = LocalProtectedString.FromString(info.ToJsonString());
+
+            using (var fs = new FileStream(String.Format("{0}{1}teamsinfo.dat", exportDir.FullName, Path.DirectorySeparatorChar), FileMode.Create, FileAccess.Write, FileShare.Read))
             {
                 await fs.WriteAsync(ps.EncryptedData, 0, ps.EncryptedData.Length);
             }
 
-            using (var fs = new FileStream(String.Format("{0}{1}tokenentropy.dat", exportDir.FullName, Path.DirectorySeparatorChar), FileMode.Create, FileAccess.Write, FileShare.Read))
+            using (var fs = new FileStream(String.Format("{0}{1}infoentropy.dat", exportDir.FullName, Path.DirectorySeparatorChar), FileMode.Create, FileAccess.Write, FileShare.Read))
             {
                 await fs.WriteAsync(ps.Entropy, 0, ps.Entropy.Length);
             }
@@ -58,7 +64,7 @@ namespace UnitTestTool.EncryptWebexTeamsTokenForm
 
                 await exportEncryptedToken();
 
-                MessageBox.Show(ResourceMessage.AppMessages.TeamsTokenExported);
+                MessageBox.Show(ResourceMessage.AppMessages.TeamsInfoExported);
             }
             finally
             {

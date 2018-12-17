@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UnitTestTool.EncryptWebexTeamsTokenForm.Properties {
+namespace UnitTestTool.EncryptTeamsInfo.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace UnitTestTool.EncryptWebexTeamsTokenForm.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("UnitTestTool.EncryptWebexTeamsTokenForm.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("UnitTestTool.EncryptTeamsInfo.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

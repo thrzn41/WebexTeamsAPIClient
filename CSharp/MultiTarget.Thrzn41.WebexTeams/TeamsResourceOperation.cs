@@ -113,6 +113,16 @@ namespace Thrzn41.WebexTeams
         /// Guest user resource.
         /// </summary>
         GuestUser,
+
+        /// <summary>
+        /// File data resource.
+        /// </summary>
+        FileData,
+
+        /// <summary>
+        /// File info resource.
+        /// </summary>
+        FileInfo,
     }
 
 
@@ -151,6 +161,10 @@ namespace Thrzn41.WebexTeams
         /// </summary>
         Delete,
 
+        /// <summary>
+        /// Get header operation.
+        /// </summary>
+        GetHeader,
     }
 
 
@@ -263,6 +277,14 @@ namespace Thrzn41.WebexTeams
                     name = "GuestUser";
                     break;
 
+                case TeamsResource.FileData:
+                    name = "FileData";
+                    break;
+
+                case TeamsResource.FileInfo:
+                    name = "FileInfo";
+                    break;
+
                 default:
                     name = resource.ToString();
                     break;
@@ -307,6 +329,10 @@ namespace Thrzn41.WebexTeams
 
                 case TeamsOperation.Delete:
                     name = "Delete";
+                    break;
+
+                case TeamsOperation.GetHeader:
+                    name = "GetHeader";
                     break;
 
                 default:

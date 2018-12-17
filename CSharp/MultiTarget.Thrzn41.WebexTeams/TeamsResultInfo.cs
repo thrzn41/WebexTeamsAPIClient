@@ -85,7 +85,7 @@ namespace Thrzn41.WebexTeams
         public RetryConditionHeaderValue RetryAfter { get; internal set; }
 
         /// <summary>
-        /// Indicates the request has Retry-After header value.
+        /// Indicates the result has Retry-After header value.
         /// </summary>
         public bool HasRetryAfter
         {
@@ -95,6 +95,21 @@ namespace Thrzn41.WebexTeams
             }
         }
 
+        /// <summary>
+        /// Time to retry.
+        /// </summary>
+        public TimeSpan? TimeToRetry { get; internal set; }
+
+        /// <summary>
+        /// Indicates the result has time to retry.
+        /// </summary>
+        public bool HasTimeToRetry
+        {
+            get
+            {
+                return this.TimeToRetry.HasValue;
+            }
+        }
 
         /// <summary>
         /// <see cref="TeamsRequestInfo"/> for this request.
@@ -166,6 +181,7 @@ namespace Thrzn41.WebexTeams
                 new PathAndResource{ Path = "/v1/resourceGroup/memberships", Resouce = TeamsResource.ResourceGroupMembership },
                 new PathAndResource{ Path = "/v1/access_token",              Resouce = TeamsResource.AccessToken             },
                 new PathAndResource{ Path = "/v1/jwt/login",                 Resouce = TeamsResource.GuestUser               },
+                new PathAndResource{ Path = "/v1/contents",                  Resouce = TeamsResource.FileData                },
             };
 
         }
@@ -202,6 +218,10 @@ namespace Thrzn41.WebexTeams
                     {
                         operation = TeamsOperation.Delete;
                     }
+                    else if (method == HttpMethod.Head)
+                    {
+                        operation = TeamsOperation.GetHeader;
+                    }
                 }
 
                 string path = this.RequestInfo.Uri?.AbsolutePath;
@@ -218,7 +238,7 @@ namespace Thrzn41.WebexTeams
                             {
                                 operation = TeamsOperation.Get;
                             }
-                            else if(operation == TeamsOperation.Get && path.EndsWith(item.Path))
+                            else if (operation == TeamsOperation.Get && path.EndsWith(item.Path))
                             {
                                 operation = TeamsOperation.List;
                             }
@@ -228,9 +248,30 @@ namespace Thrzn41.WebexTeams
                     }
                 }
 
+                if(resource == TeamsResource.FileData && operation == TeamsOperation.GetHeader)
+                {
+                    operation = TeamsOperation.Get;
+                    resource  = TeamsResource.FileInfo;
+                }
             }
 
             return (new TeamsResourceOperation(resource, operation));
+        }
+
+
+        /// <summary>
+        /// Copies Info to ather <see cref="TeamsResultInfo"/>.
+        /// </summary>
+        /// <param name="destination"><see cref="TeamsResultInfo"/> to be copied.</param>
+        internal void CopyInfoTo(TeamsResultInfo destination)
+        {
+            destination.TransactionId   = this.TransactionId;
+            destination.IsSuccessStatus = this.IsSuccessStatus;
+            destination.HttpStatusCode  = this.HttpStatusCode;
+            destination.RequestInfo     = this.RequestInfo;
+            destination.RetryAfter      = this.RetryAfter;
+            destination.TimeToRetry     = this.TimeToRetry;
+            destination.TrackingId      = this.TrackingId;
         }
 
     }

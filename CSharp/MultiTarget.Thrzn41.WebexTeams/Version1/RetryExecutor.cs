@@ -33,6 +33,7 @@ namespace Thrzn41.WebexTeams.Version1
     /// <summary>
     /// Retry executor to retry requests.
     /// </summary>
+    [Obsolete("Please use TeamsRetryHandler or TeamsRetryOnErrorHandler instead. These handlers can be set on creating a TeamsAPIClient instance and handle retry automatically.")]
     public class RetryExecutor : TeamsRetry
     {
 

@@ -21,59 +21,58 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 
-namespace Thrzn41.WebexTeams.Version1.OAuth2
+namespace Thrzn41.WebexTeams
 {
 
+
     /// <summary>
-    /// Cisco Webex Teams token info object.
+    /// Static HttpClients for Teams API Client.
     /// </summary>
-    [JsonObject(MemberSerialization.OptIn)]
-    public class TokenInfo : AccessTokenInfo
+    internal static class TeamsStaticHttpClients
     {
 
+        /// <summary>
+        /// Default <see cref="HttpClient"/>.
+        /// </summary>
+        private readonly static HttpClient DEFAULT_HTTP_CLIENT;
+
 
         /// <summary>
-        /// Refresh token.
+        /// Static constuctor.
         /// </summary>
-        [JsonProperty(PropertyName = "refreshToken")]
-        public string RefreshToken { get; internal set; }
-
-        /// <summary>
-        /// Refresh token will expire in this time from refreshed date time.
-        /// </summary>
-        [JsonProperty(PropertyName = "refreshTokenExpiresIn")]
-        public TimeSpan? RefreshTokenExpiresIn { get; internal set; }
-
-        /// <summary>
-        /// <see cref="DateTime"/> when the refresh token will expire.
-        /// </summary>
-        [JsonProperty(PropertyName = "refreshTokenExpiresAt")]
-        public DateTime? RefreshTokenExpiresAt { get; internal set; }
-
-        /// <summary>
-        /// <see cref="TimeSpan"/> till the refresh token will expire.
-        /// </summary>
-        [JsonIgnore]
-        public TimeSpan? RefreshTokenTimeLeft
+        static TeamsStaticHttpClients()
         {
-            get
-            {
-                if (!this.RefreshTokenExpiresAt.HasValue)
-                {
-                    return null;
-                }
-                else
-                {
-                    return (this.RefreshTokenExpiresAt.Value.ToUniversalTime() - DateTime.UtcNow);
-                }
-            }
+            // The default HttpClient do not allow redirect, cookies and default credentials.
+            DEFAULT_HTTP_CLIENT = new HttpClient(
+                    new HttpClientHandler
+                    {
+                        AllowAutoRedirect     = false,
+                        UseCookies            = false,
+                        UseDefaultCredentials = false,
+                        PreAuthenticate       = false,
+                    }
+                );
         }
 
+
+
+        /// <summary>
+        /// Selects <see cref="HttpClient"/>.
+        /// </summary>
+        /// <param name="uri"><see cref="Uri"/> to be requested.</param>
+        /// <param name="teamsAPIUriPattern">Pattern of Teams API Uri.</param>
+        /// <returns>Selected <see cref="HttpClient"/>.</returns>
+        public static HttpClient SelectHttpClient(Uri uri, Regex teamsAPIUriPattern)
+        {
+            // For now, the default HttpClient is always returned.
+            return DEFAULT_HTTP_CLIENT;
+        }
 
     }
 
