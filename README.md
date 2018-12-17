@@ -17,8 +17,8 @@ By using `Webex Teams API Client`, you can invoke `Cisco Webex Teams REST API` e
 // Load encrypted bot token from storage.
 ProtectedString token = LoadEncryptedBotToken();
 
-// Create a TeamsAPIClient instance.
-var teams = TeamsAPI.CreateVersion1Client(token);
+// Create a TeamsAPIClient instance with retry option.
+var teams = TeamsAPI.CreateVersion1Client(token, new TeamsRetryHandler(4));
 
 // Build markdown.
 var markdown = new MarkdownBuilder();
@@ -45,8 +45,8 @@ var guestIssuer = TeamsAPI.CreateVersion1GuestIssuerClient(secret, "your_guest_i
 // Create a Guest User.
 var guest = (await guestIssuer.CreateGuestUserAsync("my-guest-id", "GuestUserName")).GetData();
 
-// Create a TeamsAPIClient instance for the Guest User.
-var teams = TeamsAPI.CreateVersion1Client(guest);
+// Create a TeamsAPIClient instance for the Guest User with retry option.
+var teams = TeamsAPI.CreateVersion1Client(guest, new TeamsRetryHandler(4));
 
 // Post a message from the Guest User.
 var message = (await teams.CreateDirectMessageAsync("your_webex_teams_account@example.com", "Hello, I am a guest!!")).GetData();
@@ -112,7 +112,7 @@ Samples for Webex Teams API Client is available on [here](https://github.com/thr
 * Webex Teams Admin APIs(List/Get Event, License, etc.).
 * Encrypt/Decrypt Webex Teams token in storage.
 * Pagination for list APIs. Enumerator to facilitate the pagination.
-* Retry-after value, Retry executor.
+* Retry-after value, Retry handler.
 * Markdown builder.
 * Error code, error description.
 * Webhook secret validator, Webhook notification manager, Webhook event handler.
@@ -160,7 +160,7 @@ More details are described later.
 ### Gets retry-after
 
 `result.HasRetryAfter` and `result.RetryAfter` are available in the Webex Teams API Client.  
-Also, `RetryExecutor` is available.  
+Also, `TeamsRetryHandler` and `TeamsRetryOnErrorHandler` are available.  
 More details are described later.
 
 ### Gets HttpStatus code
@@ -404,19 +404,18 @@ if(result.IsSuccessStatus)
 }
 ```
 
-Download the file.
+Download the file.  
+In this example, the file data will be downloaded to memory stream.
 ``` csharp
-var result = await teams.GetFileDataAsync(new Uri("https://api.example.com/path/to/file.png"));
-
-if(result.IsSuccessStatus)
+using(var stream = new MemoryStream())
 {
-  var file = result.Data;
+  var result = await teams.CopyFileDataToStreamAsync(new Uri("https://api.example.com/path/to/file.png"), stream);
 
-  Console.WriteLine("File: Name = {0}, Size = {1}, Type = {2}", file.Name, file.Size?.Value, file.MediaType?.Name);
-
-  using(var stream = file.Stream)
+  if(result.IsSuccessStatus)
   {
-    // File data will be contained in the stream...
+    var file = result.Data;
+
+    Console.WriteLine("File: Name = {0}, Size = {1}, Type = {2}", file.Name, file.Size?.Value, file.MediaType?.Name);
   }
 }
 ```
@@ -496,30 +495,21 @@ else if(result.HasRetryAfter)
 }
 ```
 
-### Retry Executor
+### Retry Handler
 
-`RetryExecutor` facilitates retry.
+`TeamsRetryHandler` and `TeamsRetryOnErrorHandler` facilitate retry.
 
 ``` csharp
-// RetryExecutor.One requests with 1 time retry at most.
-var result = await RetryExecutor.One.ListAsync(
-  () =>
-  {
-      // This function will be executed again if needed.
-      return teams.ListSpacesAsync();
-  },
+// Creates instance with Retry option(Max retry is 4 in this case).
+var teams = TeamsAPI.CreateVersion1Client(token, new TeamsRetryHandler(4));
 
-  (r, retryCount) =>
-  {
-      // This function will be executed before evry retry request.
+// If the request received HTTP 429. the request will be retried.
+var result = await teams.GetMeAsync();
 
-      // You can output logs or other things at this point.
-      Log.Info("Retry is required: delta = {0}, counter = {1}", r.RetryAfter.Delta, retryCount);
 
-      // Return 'true' when you want to proceed retry.
-      return true;
-  }
-);
+// If you want the client retry also on HTTP 500, 502, 503, 504 error response, use TeamsRetryOnErrorHandler.
+// If there is no Retry-After header, the request will be retried after 15 sec delay in this case.
+var teams = TeamsAPI.CreateVersion1Client(token, new TeamsRetryOnErrorHandler(4, TimeSpan.FromSeconds(15.0f)));
 ```
 
 ### Gets TrackingId
