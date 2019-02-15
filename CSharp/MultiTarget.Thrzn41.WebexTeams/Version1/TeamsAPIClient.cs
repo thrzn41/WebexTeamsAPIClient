@@ -194,7 +194,11 @@ namespace Thrzn41.WebexTeams.Version1
 
             if(personIdType == PersonIdType.Detect)
             {
-                if( TEAMS_PERSON_EMAIL_PATTERN.IsMatch(personId) )
+                if( String.IsNullOrEmpty(personId) )
+                {
+                    result = PersonIdType.Id;
+                }
+                else if( TEAMS_PERSON_EMAIL_PATTERN.IsMatch(personId) )
                 {
                     result = PersonIdType.Email;
                 }
