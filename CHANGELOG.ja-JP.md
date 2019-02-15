@@ -10,6 +10,16 @@
 
 
 ---
+### [2019-02-15] Version 1.6.2
+
+#### [FIXED DEFECTS]
+* ファイルサイズが大きい時に、`CopyFileDataToStreamAsync()`が`OutOfMemoryException`を送出する。
+* `personId == null`の時、`DetectPersonIdType()`が例外を送出する。
+
+#### [OBSOLETES]
+* `TeamsListResult.GetListResultEnumerator(TeamsRetry, TeamsListResultFunc)`を非推奨メソッドにしました。TeamsRetryHandlerかTeamsRetryOnErrorHandlerを利用してください。
+
+---
 ### [2018-12-17] Version 1.6.1
 
 #### [NEW FEATURES]
