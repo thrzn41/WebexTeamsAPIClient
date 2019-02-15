@@ -149,6 +149,8 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
         {
             var r = await teams.CreateMessageAsync(unitTestSpace.Id, "Hello, Cisco Webex Teams!!");
 
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+
             Assert.IsTrue(r.IsSuccessStatus);
             Assert.IsTrue(r.Data.HasValues);
 
@@ -172,6 +174,8 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
         public async Task TestCreateMessageWithMarkdown()
         {
             var r = await teams.CreateMessageAsync(unitTestSpace.Id, "Hello, **markdown**!!");
+
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
 
             Assert.IsTrue(r.IsSuccessStatus);
             Assert.IsTrue(r.Data.HasValues);
@@ -255,6 +259,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             md.Append("OK!");
 
             var r = await teams.CreateMessageAsync(unitTestSpace.Id, md.ToString());
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
             Assert.IsTrue(r.IsSuccessStatus);
 
 
@@ -262,6 +267,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             md.AppendMentionToGroup(MentionedGroup.All).Append(", Hello All!");
 
             r = await teams.CreateMessageAsync(unitTestSpace.Id, md.ToString());
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
             Assert.IsTrue(r.IsSuccessStatus);
 
 
@@ -269,6 +275,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             md.AppendMentionToAll().Append(", Hello All again!!");
 
             r = await teams.CreateMessageAsync(unitTestSpace.Id, md.ToString());
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
             Assert.IsTrue(r.IsSuccessStatus);
 
         }
@@ -278,12 +285,16 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
         {
             var r = await teams.CreateMessageAsync(unitTestSpace.Id, "This message will be deleted.");
 
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+
             Assert.IsTrue(r.IsSuccessStatus);
             Assert.IsTrue(r.Data.HasValues);
 
             Assert.IsNotNull(r.Data.Id);
 
             var rdm = await teams.DeleteMessageAsync(r.Data);
+
+            Assert.AreEqual(HttpStatusCode.NoContent, rdm.HttpStatusCode);
 
             Assert.IsTrue(rdm.IsSuccessStatus);
             Assert.IsFalse(rdm.Data.HasValues);
@@ -308,6 +319,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             using (var data = new TeamsFileData(fs, "mypng.png", TeamsMediaType.ImagePNG))
             {
                 var r = await teams.CreateMessageAsync(unitTestSpace.Id, "**Post with attachment!!**", data);
+                Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
                 Assert.IsTrue(r.IsSuccessStatus);
                 Assert.IsTrue(r.Data.HasValues);
                 Assert.IsTrue(r.Data.HasFiles);
@@ -316,6 +328,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             }
 
             var r1 = await teams.GetFileInfoAsync(fileUri);
+            Assert.AreEqual(HttpStatusCode.OK, r1.HttpStatusCode);
             Assert.IsTrue(r1.IsSuccessStatus);
             Assert.IsTrue(r1.Data.HasValues);
 
@@ -331,6 +344,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
 
             var r2 = await teams.GetFileDataAsync(fileUri);
+            Assert.AreEqual(HttpStatusCode.OK, r2.HttpStatusCode);
             Assert.IsTrue(r2.IsSuccessStatus);
             Assert.IsTrue(r2.Data.HasValues);
 
@@ -352,6 +366,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             using (var stream = new MemoryStream())
             {
                 var r3 = await teams.CopyFileDataToStreamAsync(fileUri, stream);
+                Assert.AreEqual(HttpStatusCode.OK, r3.HttpStatusCode);
                 Assert.IsTrue(r3.IsSuccessStatus);
                 Assert.IsTrue(r3.Data.HasValues);
 
@@ -372,17 +387,20 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
         public async Task TestGetMe()
         {
             var r = await teams.GetMeAsync();
-
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
             Assert.IsTrue(r.IsSuccessStatus);
 
             var r2 = await teams.GetMeFromCacheAsync();
+            Assert.AreEqual(HttpStatusCode.OK, r2.HttpStatusCode);
             Assert.IsTrue(r2.IsSuccessStatus);
 
             var r3 = await teams.GetMeFromCacheAsync();
+            Assert.AreEqual(HttpStatusCode.OK, r3.HttpStatusCode);
             Assert.IsTrue(r3.IsSuccessStatus);
             Assert.AreEqual(r2.Data, r3.Data);
 
             var r4 = await teams.GetMeFromCacheAsync();
+            Assert.AreEqual(HttpStatusCode.OK, r4.HttpStatusCode);
             Assert.IsTrue(r4.IsSuccessStatus);
             Assert.AreEqual(r2.Data, r4.Data);
             Assert.AreEqual(r3.Data, r4.Data);
@@ -396,11 +414,13 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             {
                 var r = await teams.CreateSpaceAsync(String.Format("Test Space {0}{1}", UNIT_TEST_CREATED_PREFIX, i));
 
+                Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
                 Assert.IsTrue(r.IsSuccessStatus);
             }
 
             var rls = await teams.ListSpacesAsync(max:2);
 
+            Assert.AreEqual(HttpStatusCode.OK, rls.HttpStatusCode);
             Assert.IsTrue(rls.IsSuccessStatus);
             Assert.IsTrue(rls.HasNext);
             Assert.AreEqual(2, rls.Data.ItemCount);
@@ -414,6 +434,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
             rls = await rls.ListNextAsync();
 
+            Assert.AreEqual(HttpStatusCode.OK, rls.HttpStatusCode);
             Assert.IsTrue(rls.IsSuccessStatus);
             Assert.IsTrue(rls.HasNext);
             Assert.AreEqual(2, rls.Data.ItemCount);
@@ -429,6 +450,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             {
                 var r = await teams.CreateSpaceAsync(String.Format("Test Space {0}{1}", UNIT_TEST_CREATED_PREFIX, i));
 
+                Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
                 Assert.IsTrue(r.IsSuccessStatus);
             }
 
@@ -445,6 +467,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             {
                 rls = e.CurrentResult;
 
+                Assert.AreEqual(HttpStatusCode.OK, rls.HttpStatusCode);
                 Assert.IsTrue(rls.IsSuccessStatus);
                 Assert.IsTrue(rls.HasNext);
                 Assert.AreEqual(2, rls.Data.ItemCount);

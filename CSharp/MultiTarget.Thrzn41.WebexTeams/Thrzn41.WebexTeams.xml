@@ -404,6 +404,11 @@
             HttpClient for Cisco Webex Teams API.
             </summary>
         </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsHttpClient.DEFAULT_STREAM_BUFFER_SIZE">
+            <summary>
+            Default stream buffer size.
+            </summary>
+        </member>
         <member name="T:Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest">
             <summary>
             Reusable Http request.
@@ -786,6 +791,15 @@
             </summary>
             <param name="teamsToken">Cisco Webex Teams Token.</param>
             <param name="teamsAPIUriPattern">Regex pattern to check if the Uri is Cisco Webex Teams API uris.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.copyStreamAsync(System.IO.Stream,System.IO.Stream,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Copy source stream to destination stream.
+            </summary>
+            <param name="source">Source stream.</param>
+            <param name="destination">Destination stream.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used cancellation.</param>
+            <returns><see cref="T:System.Threading.Tasks.Task"/> to wait completion.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.TeamsHttpClient.requestAsync``2(Thrzn41.WebexTeams.TeamsHttpClient.ReusableHttpRequest,System.Nullable{System.Threading.CancellationToken})">
             <summary>

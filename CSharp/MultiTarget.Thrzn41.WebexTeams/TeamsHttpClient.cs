@@ -44,6 +44,14 @@ namespace Thrzn41.WebexTeams
 
 
         /// <summary>
+        /// Default stream buffer size.
+        /// </summary>
+        private const int DEFAULT_STREAM_BUFFER_SIZE = 81920;
+
+
+
+
+        /// <summary>
         /// Reusable Http request.
         /// </summary>
         private abstract class ReusableHttpRequest
@@ -647,14 +655,7 @@ namespace Thrzn41.WebexTeams
                         {
                             using (var memory = new MemoryStream())
                             {
-                                if (cancellationToken.HasValue)
-                                {
-                                    await fileData.Stream.CopyToAsync(memory, 81920, cancellationToken.Value);
-                                }
-                                else
-                                {
-                                    await fileData.Stream.CopyToAsync(memory);
-                                }
+                                await copyStreamAsync(fileData.Stream, memory, cancellationToken);
 
                                 this.byteData = memory.ToArray();
                             }
@@ -766,6 +767,27 @@ namespace Thrzn41.WebexTeams
 
 
 
+        /// <summary>
+        /// Copy source stream to destination stream.
+        /// </summary>
+        /// <param name="source">Source stream.</param>
+        /// <param name="destination">Destination stream.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used cancellation.</param>
+        /// <returns><see cref="Task"/> to wait completion.</returns>
+        private static Task copyStreamAsync(Stream source, Stream destination, CancellationToken? cancellationToken = null)
+        {
+            if(cancellationToken.HasValue)
+            {
+                return source.CopyToAsync(destination, DEFAULT_STREAM_BUFFER_SIZE, cancellationToken.Value);
+            }
+            else
+            {
+                return source.CopyToAsync(destination, DEFAULT_STREAM_BUFFER_SIZE);
+            }
+        }
+
+
+
 
         /// <summary>
         /// Requests to Cisco Webex Teams API.
@@ -809,11 +831,11 @@ namespace Thrzn41.WebexTeams
 
                 if (cancellationToken.HasValue)
                 {
-                    response = await httpClient.SendAsync(request, cancellationToken.Value);
+                    response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken.Value);
                 }
                 else
                 {
-                    response = await httpClient.SendAsync(request);
+                    response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
                 }
 
                 using (response)
@@ -856,7 +878,10 @@ namespace Thrzn41.WebexTeams
 
                                     if (copyRequest != null)
                                     {
-                                        await content.CopyToAsync(copyRequest.Stream);
+                                        using (var stream = await content.ReadAsStreamAsync())
+                                        {
+                                            await copyStreamAsync(stream, copyRequest.Stream, cancellationToken);
+                                        }
                                     }
                                     else
                                     {
@@ -866,7 +891,10 @@ namespace Thrzn41.WebexTeams
                                         {
                                             data.Stream = new MemoryStream();
 
-                                            await content.CopyToAsync(data.Stream);
+                                            using (var stream = await content.ReadAsStreamAsync())
+                                            {
+                                                await copyStreamAsync(stream, data.Stream, cancellationToken);
+                                            }
 
                                             data.Stream.Position = 0;
                                         }

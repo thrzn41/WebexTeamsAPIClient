@@ -126,6 +126,7 @@ namespace Thrzn41.WebexTeams
         /// <param name="retry">Retry will be tried by this instance if needed.</param>
         /// <param name="retryNotificationFunc">Function to be notified on retry.</param>
         /// <returns><see cref="TeamsListResult{TTeamsObject}"/> to iterate <see cref="TeamsListResult{TTeamsObject}"/>.</returns>
+        [Obsolete("Please use TeamsRetryHandler or TeamsRetryOnErrorHandler instead. These handlers can be set on creating a TeamsAPIClient instance and handle retry automatically.")]
         public TeamsListResultEnumerator<TTeamsObject> GetListResultEnumerator(TeamsRetry retry, Func<TeamsListResult<TTeamsObject>, int, bool> retryNotificationFunc = null)
         {
             return new TeamsListResultEnumerator<TTeamsObject>(this, retry, retryNotificationFunc);
