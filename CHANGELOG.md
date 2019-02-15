@@ -9,6 +9,16 @@
 > NOTE: Datetime format is `yyyy-MM-dd`.
 
 ---
+### [2019-02-15] Version 1.6.2
+
+#### [FIXED DEFECTS]
+* `CopyFileDataToStreamAsync()` throws `OutOfMemoryException` when the file is too large.
+* `DetectPersonIdType()` throws Exception in case of `personId == null`.
+
+#### [OBSOLETES]
+* `TeamsListResult.GetListResultEnumerator(TeamsRetry, TeamsListResultFunc)` is obsoleted. Please use TeamsRetryHandler or TeamsRetryOnErrorHandler.
+
+---
 ### [2018-12-17] Version 1.6.1
 
 #### [NEW FEATURES]
