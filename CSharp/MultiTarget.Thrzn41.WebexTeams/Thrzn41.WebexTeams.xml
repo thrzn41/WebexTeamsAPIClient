@@ -4106,6 +4106,16 @@
             Email addresses of the person.
             </summary>
         </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Person.Email">
+            <summary>
+            Default Email address of the person.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Person.PhoneNumbers">
+            <summary>
+            Phone numbers of the person.
+            </summary>
+        </member>
         <member name="P:Thrzn41.WebexTeams.Version1.Person.DisplayName">
             <summary>
             Full name of the person.
@@ -4154,6 +4164,11 @@
         <member name="P:Thrzn41.WebexTeams.Version1.Person.Created">
             <summary>
             <see cref="T:System.DateTime"/> when the person was created.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Person.LastModified">
+            <summary>
+            <see cref="T:System.DateTime"/> when the person was modified last.
             </summary>
         </member>
         <member name="P:Thrzn41.WebexTeams.Version1.Person.TimezoneName">
@@ -4260,27 +4275,47 @@
         </member>
         <member name="F:Thrzn41.WebexTeams.Version1.PersonStatus.Active">
             <summary>
-            Person is active.
+            Person is active within the last 10 minutes.
             </summary>
         </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.PersonStatus.Inactive">
+        <member name="F:Thrzn41.WebexTeams.Version1.PersonStatus.Call">
             <summary>
-            Person is inactive.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.PersonStatus.OutOfOffice">
-            <summary>
-            Person is out of office.
+            Person is in a call.
             </summary>
         </member>
         <member name="F:Thrzn41.WebexTeams.Version1.PersonStatus.DoNotDisturb">
             <summary>
-            Person is DND.
+            Person has manually set their status to "Do Not Disturb".
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.PersonStatus.Inactive">
+            <summary>
+            Person's last activity occurred more than 10 minutes ago.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.PersonStatus.Meeting">
+            <summary>
+            Person is in a meeting.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.PersonStatus.OutOfOffice">
+            <summary>
+            Person or a Hybrid Calendar service has indicated that they are "Out of Office".
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.PersonStatus.Pending">
+            <summary>
+            Person has never logged in; a status cannot be determined.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.PersonStatus.Presenting">
+            <summary>
+            Person is sharing content.
             </summary>
         </member>
         <member name="F:Thrzn41.WebexTeams.Version1.PersonStatus.Unknown">
             <summary>
-            Person is unknown status.
+            Person's status could not be determined.
             </summary>
         </member>
         <member name="F:Thrzn41.WebexTeams.Version1.PersonStatus.PERSON_STATUSES">
@@ -4426,6 +4461,100 @@
         <member name="M:Thrzn41.WebexTeams.Version1.PersonType.op_Inequality(Thrzn41.WebexTeams.Version1.PersonType,Thrzn41.WebexTeams.Version1.PersonType)">
             <summary>
             Determines whether two specified person types have the different value.
+            </summary>
+            <param name="lhs">Left hand side value.</param>
+            <param name="rhs">Right hand side value.</param>
+            <returns>true if the two values have the different value.</returns>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.PhoneNumber">
+            <summary>
+            Cisco Webex Teams PhoneNumber object.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.PhoneNumber.TypeName">
+            <summary>
+            PhoneNumber type name.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.PhoneNumber.Type">
+            <summary>
+            PhoneNumber type.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.PhoneNumber.Value">
+            <summary>
+            PhoneNumber value.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.PhoneNumberType">
+            <summary>
+            PhoneNumber type of Cisco Webex Teams.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.PhoneNumberType.Work">
+            <summary>
+            Phone number is for work.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.PhoneNumberType.PHONE_NUMBER_TYPES">
+            <summary>
+            Dictionary for phone number type.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.PhoneNumberType.#cctor">
+            <summary>
+            Static constuctor.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.PhoneNumberType.Name">
+            <summary>
+            Name of the phone number type.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.PhoneNumberType.#ctor(System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="name">Name of the phone number type.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.PhoneNumberType.Parse(System.String)">
+            <summary>
+            Parse phone number type.
+            </summary>
+            <param name="name">Name of the phone number type.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.Version1.PhoneNumberType"/> for the name.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.PhoneNumberType.Equals(Thrzn41.WebexTeams.Version1.PhoneNumberType)">
+            <summary>
+            Determines whether this instance and another specified <see cref="T:Thrzn41.WebexTeams.Version1.PhoneNumberType"/> object have the same value.
+            </summary>
+            <param name="value">The phone number type to compare to this instance.</param>
+            <returns>true if the value of the parameter is the same as the value of this instance; otherwise, false. If value is null, the method returns false.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.PhoneNumberType.Equals(System.Object)">
+            <summary>
+            Determines whether this instance and a specified object, which must also be a <see cref="T:Thrzn41.WebexTeams.Version1.PhoneNumberType"/> object, have the same value.
+            </summary>
+            <param name="obj">The phone number type to compare to this instance.</param>
+            <returns>true if obj is a <see cref="T:Thrzn41.WebexTeams.Version1.PhoneNumberType"/> and its value is the same as this instance; otherwise, false. If obj is null, the method returns false.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.PhoneNumberType.GetHashCode">
+            <summary>
+            Returns the hash code for this phone number type.
+            </summary>
+            <returns>A 32-bit signed integer hash code.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.PhoneNumberType.op_Equality(Thrzn41.WebexTeams.Version1.PhoneNumberType,Thrzn41.WebexTeams.Version1.PhoneNumberType)">
+            <summary>
+            Determines whether two specified phone number types have the same value.
+            </summary>
+            <param name="lhs">Left hand side value.</param>
+            <param name="rhs">Right hand side value.</param>
+            <returns>true if the two values have the same value.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.PhoneNumberType.op_Inequality(Thrzn41.WebexTeams.Version1.PhoneNumberType,Thrzn41.WebexTeams.Version1.PhoneNumberType)">
+            <summary>
+            Determines whether two specified phone number types have the different value.
             </summary>
             <param name="lhs">Left hand side value.</param>
             <param name="rhs">Right hand side value.</param>
