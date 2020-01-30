@@ -49,6 +49,23 @@ namespace Thrzn41.WebexTeams.Version1
         public string[] Emails { get; internal set; }
 
         /// <summary>
+        /// Default Email address of the person.
+        /// </summary>
+        [JsonIgnore]
+        public string Email {
+            get
+            {
+                return ((this.Emails != null && this.Emails.Length > 0) ? (this.Emails[0]) : null);
+            }
+        }
+
+        /// <summary>
+        /// Phone numbers of the person.
+        /// </summary>
+        [JsonProperty(PropertyName = "phoneNumbers")]
+        public PhoneNumber[] PhoneNumbers { get; internal set; }
+
+        /// <summary>
         /// Full name of the person.
         /// </summary>
         [JsonProperty(PropertyName = "displayName")]
@@ -117,6 +134,12 @@ namespace Thrzn41.WebexTeams.Version1
         /// </summary>
         [JsonProperty(PropertyName = "created")]
         public DateTime? Created { get; internal set; }
+
+        /// <summary>
+        /// <see cref="DateTime"/> when the person was modified last.
+        /// </summary>
+        [JsonProperty(PropertyName = "lastModified")]
+        public DateTime? LastModified { get; internal set; }
 
         /// <summary>
         /// Timezone info for the person.

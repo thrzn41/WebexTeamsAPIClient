@@ -35,27 +35,47 @@ namespace Thrzn41.WebexTeams.Version1
     {
 
         /// <summary>
-        /// Person is active.
+        /// Person is active within the last 10 minutes.
         /// </summary>
         public static readonly PersonStatus Active = new PersonStatus("active");
 
         /// <summary>
-        /// Person is inactive.
+        /// Person is in a call.
         /// </summary>
-        public static readonly PersonStatus Inactive = new PersonStatus("inactive");
+        public static readonly PersonStatus Call = new PersonStatus("call");
 
         /// <summary>
-        /// Person is out of office.
-        /// </summary>
-        public static readonly PersonStatus OutOfOffice = new PersonStatus("OutOfOffice");
-
-        /// <summary>
-        /// Person is DND.
+        /// Person has manually set their status to "Do Not Disturb".
         /// </summary>
         public static readonly PersonStatus DoNotDisturb = new PersonStatus("DoNotDisturb");
 
         /// <summary>
-        /// Person is unknown status.
+        /// Person's last activity occurred more than 10 minutes ago.
+        /// </summary>
+        public static readonly PersonStatus Inactive = new PersonStatus("inactive");
+
+        /// <summary>
+        /// Person is in a meeting.
+        /// </summary>
+        public static readonly PersonStatus Meeting = new PersonStatus("meeting");
+
+        /// <summary>
+        /// Person or a Hybrid Calendar service has indicated that they are "Out of Office".
+        /// </summary>
+        public static readonly PersonStatus OutOfOffice = new PersonStatus("OutOfOffice");
+
+        /// <summary>
+        /// Person has never logged in; a status cannot be determined.
+        /// </summary>
+        public static readonly PersonStatus Pending = new PersonStatus("pending");
+
+        /// <summary>
+        /// Person is sharing content.
+        /// </summary>
+        public static readonly PersonStatus Presenting = new PersonStatus("presenting");
+
+        /// <summary>
+        /// Person's status could not be determined.
         /// </summary>
         public static readonly PersonStatus Unknown = new PersonStatus("unknown");
 
@@ -75,9 +95,13 @@ namespace Thrzn41.WebexTeams.Version1
             PERSON_STATUSES = new Dictionary<string, PersonStatus>();
 
             PERSON_STATUSES.Add(Active.Name,       Active);
-            PERSON_STATUSES.Add(Inactive.Name,     Inactive);
-            PERSON_STATUSES.Add(OutOfOffice.Name,  OutOfOffice);
+            PERSON_STATUSES.Add(Call.Name,         Call);
             PERSON_STATUSES.Add(DoNotDisturb.Name, DoNotDisturb);
+            PERSON_STATUSES.Add(Inactive.Name,     Inactive);
+            PERSON_STATUSES.Add(Meeting.Name,      Meeting);
+            PERSON_STATUSES.Add(OutOfOffice.Name,  OutOfOffice);
+            PERSON_STATUSES.Add(Pending.Name,      Pending);
+            PERSON_STATUSES.Add(Presenting.Name,   Presenting);
         }
 
 
