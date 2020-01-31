@@ -49,10 +49,23 @@ namespace Thrzn41.WebexTeams.Version1
         public string[] Emails { get; internal set; }
 
         /// <summary>
+        /// Checks if Person has email info.
+        /// </summary>
+        [JsonIgnore]
+        public bool HasEmails
+        {
+            get
+            {
+                return (this.Emails != null && this.Emails.Length > 0);
+            }
+        }
+
+        /// <summary>
         /// Default Email address of the person.
         /// </summary>
         [JsonIgnore]
-        public string Email {
+        public string Email
+        {
             get
             {
                 return ((this.Emails != null && this.Emails.Length > 0) ? (this.Emails[0]) : null);
@@ -64,6 +77,18 @@ namespace Thrzn41.WebexTeams.Version1
         /// </summary>
         [JsonProperty(PropertyName = "phoneNumbers")]
         public PhoneNumber[] PhoneNumbers { get; internal set; }
+
+        /// <summary>
+        /// Checks if Person has Phone number info.
+        /// </summary>
+        [JsonIgnore]
+        public bool HasPhoneNumbers
+        {
+            get
+            {
+                return (this.PhoneNumbers != null && this.PhoneNumbers.Length > 0);
+            }
+        }
 
         /// <summary>
         /// Full name of the person.
@@ -124,10 +149,34 @@ namespace Thrzn41.WebexTeams.Version1
         public string[] Roles { get; internal set; }
 
         /// <summary>
+        /// Checks if Person has role info.
+        /// </summary>
+        [JsonIgnore]
+        public bool HasRoles
+        {
+            get
+            {
+                return (this.Roles != null && this.Roles.Length > 0);
+            }
+        }
+
+        /// <summary>
         /// Licenses allocated to the person.
         /// </summary>
         [JsonProperty(PropertyName = "licenses")]
         public string[] Licenses { get; internal set; }
+
+        /// <summary>
+        /// Checks if Person has license info.
+        /// </summary>
+        [JsonIgnore]
+        public bool HasLicenses
+        {
+            get
+            {
+                return (this.Licenses != null && this.Licenses.Length > 0);
+            }
+        }
 
         /// <summary>
         /// <see cref="DateTime"/> when the person was created.

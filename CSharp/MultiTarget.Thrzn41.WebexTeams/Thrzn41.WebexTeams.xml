@@ -20,6 +20,16 @@
               resource lookups using this strongly typed resource class.
             </summary>
         </member>
+        <member name="P:Thrzn41.WebexTeams.ResourceMessage.ErrorMessages.TeamsJsonDeserializationError">
+            <summary>
+              Looks up a localized string similar to Error occured on deserializing from Json string: [Line = {0}, Position = {1}, Path = {2}].
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.ResourceMessage.ErrorMessages.TeamsJsonSerializationError">
+            <summary>
+              Looks up a localized string similar to Error occured on serializing to Json string: [Line = {0}, Position = {1}, Path = {2}].
+            </summary>
+        </member>
         <member name="P:Thrzn41.WebexTeams.ResourceMessage.ErrorMessages.TeamsResultError">
             <summary>
               Looks up a localized string similar to Cisco Webex Teams API Service returned an error..
@@ -972,6 +982,179 @@
             Dispose.
             </summary>
         </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsJsonConverter">
+            <summary>
+            Json converter to serialize or deserialize to/from Json.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsJsonConverter.SerializeObject(System.Object)">
+            <summary>
+            Serialize the object to Json string.
+            </summary>
+            <param name="obj">The object to be serialized.</param>
+            <returns>The serialized Json string.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsJsonConverter.DeserializeObject``1(System.String)">
+            <summary>
+            Deserialize the Json string to the object.
+            </summary>
+            <typeparam name="T">Type of the object.</typeparam>
+            <param name="jsonString">The Json string to be deserialized.</param>
+            <returns>The deserialized object.</returns>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsJsonDeserializationException">
+            <summary>
+            Exception occurs on deserializing to Json.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsJsonDeserializationException.LineNumber">
+            <summary>
+            Line Number.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsJsonDeserializationException.LinePosition">
+            <summary>
+            Line Position.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsJsonDeserializationException.Path">
+            <summary>
+            Path.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsJsonDeserializationException.#ctor(System.Int32,System.Int32,System.String)">
+            <summary>
+            Create <see cref="T:Thrzn41.WebexTeams.TeamsJsonDeserializationException"/>.
+            </summary>
+            <param name="lineNumber">Line number the error occured.</param>
+            <param name="linePosition">Position in the Line the error occured.</param>
+            <param name="path">Path to the Json the error occured.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsJsonDeserializationException.#ctor(System.String)">
+            <summary>
+            Create <see cref="T:Thrzn41.WebexTeams.TeamsJsonDeserializationException"/>.
+            </summary>
+            <param name="path">Path to the Json the error occured.</param>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsJsonObject">
+            <summary>
+            Json object to use in Webex Teams API.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsJsonObject.deserializationErrors">
+            <summary>
+            Errors on deserializing.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsJsonObject.HasDeserializationErrors">
+            <summary>
+            Check if there are errors on deserializing.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsJsonObject.DeserializationErrors">
+            <summary>
+            Get errors on deserializing.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsJsonObject.OnJsonConvertError(System.Runtime.Serialization.StreamingContext,Newtonsoft.Json.Serialization.ErrorContext)">
+            <summary>
+            Error handler on deserializing.
+            </summary>
+            <param name="context">Streaming context.</param>
+            <param name="errorContext">Error context.</param>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsJsonObjectConverter">
+            <summary>
+            Converter to serialize or deserialize to/from Json.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsJsonObjectConverter.SERIALIZER_SETTINGS">
+            <summary>
+            Default Settings for Json serializer.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsJsonObjectConverter.DESERIALIZER_SETTINGS">
+            <summary>
+            Default Settings for Json deserializer.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsJsonObjectConverter.serializerSettings">
+            <summary>
+            Settings for Json serializer.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsJsonObjectConverter.deserializerSettings">
+            <summary>
+            Settings for Json deserializer.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsJsonObjectConverter.#ctor(System.String,System.String)">
+            <summary>
+            Creates <see cref="T:Thrzn41.WebexTeams.TeamsJsonObjectConverter"/>.
+            </summary>
+            <param name="dateFormatStringForSerializer">Date format to serialize to Json.</param>
+            <param name="dateFormatStringForDeserializer">Date format to deserialize from Json.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsJsonObjectConverter.#ctor(System.String)">
+            <summary>
+            Creates <see cref="T:Thrzn41.WebexTeams.TeamsJsonObjectConverter"/>.
+            </summary>
+            <param name="dateFormatStringForSerializer">Date format to serialize to Json.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsJsonObjectConverter.#ctor">
+            <summary>
+            Creates <see cref="T:Thrzn41.WebexTeams.TeamsJsonObjectConverter"/>.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsJsonObjectConverter.SerializeObject(System.Object)">
+            <summary>
+            Serialize the object to Json string.
+            </summary>
+            <param name="obj">The object to be serialized.</param>
+            <returns>The serialized Json string.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsJsonObjectConverter.DeserializeObject``1(System.String)">
+            <summary>
+            Deserialize the Json string to the object.
+            </summary>
+            <typeparam name="T">Type of the object.</typeparam>
+            <param name="jsonString">The Json string to be deserialized.</param>
+            <returns>The deserialized object.</returns>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsJsonSerializationException">
+            <summary>
+            Exception occurs on serializing to Json.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsJsonSerializationException.LineNumber">
+            <summary>
+            Line Number.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsJsonSerializationException.LinePosition">
+            <summary>
+            Line Position.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsJsonSerializationException.Path">
+            <summary>
+            Path.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsJsonSerializationException.#ctor(System.Int32,System.Int32,System.String)">
+            <summary>
+            Create <see cref="T:Thrzn41.WebexTeams.TeamsJsonSerializationException"/>.
+            </summary>
+            <param name="lineNumber">Line number the error occured.</param>
+            <param name="linePosition">Position in the Line the error occured.</param>
+            <param name="path">Path to the Json the error occured.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsJsonSerializationException.#ctor(System.String)">
+            <summary>
+            Create <see cref="T:Thrzn41.WebexTeams.TeamsJsonSerializationException"/>.
+            </summary>
+            <param name="path">Path to the Json the error occured.</param>
+        </member>
         <member name="T:Thrzn41.WebexTeams.TeamsListResult`1">
             <summary>
             The result of Cisco API list request.
@@ -1192,14 +1375,19 @@
             This class provides feature to convert object to/from Json.
             </summary>
         </member>
-        <member name="F:Thrzn41.WebexTeams.TeamsObject.SERIALIZER_SETTINGS">
+        <member name="F:Thrzn41.WebexTeams.TeamsObject.DEFAULT_JSON_CONVERTER">
             <summary>
-            Settings for Json serializer.
+            Default Json converter.
             </summary>
         </member>
-        <member name="F:Thrzn41.WebexTeams.TeamsObject.DESERIALIZER_SETTINGS">
+        <member name="F:Thrzn41.WebexTeams.TeamsObject.jsonConverter">
             <summary>
-            Settings for Json deserializer.
+            Json converter to serialize or deserialize to/from Json.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsObject.JsonConverter">
+            <summary>
+            Json converter to serialize or deserialize to/from Json.
             </summary>
         </member>
         <member name="P:Thrzn41.WebexTeams.TeamsObject.HasValues">
@@ -1222,6 +1410,24 @@
             Indicates this Teams Object has errors.
             </summary>
         </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsObject.#ctor(System.String,System.String)">
+            <summary>
+            Creates <see cref="T:Thrzn41.WebexTeams.TeamsObject"/>.
+            </summary>
+            <param name="dateFormatStringForSerializer">Date format to serialize to Json.</param>
+            <param name="dateFormatStringForDeserializer">Date format to deserialize from Json.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsObject.#ctor(System.String)">
+            <summary>
+            Creates <see cref="T:Thrzn41.WebexTeams.TeamsObject"/>.
+            </summary>
+            <param name="dateFormatStringForSerializer">Date format to serialize to Json.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsObject.#ctor">
+            <summary>
+            Creates <see cref="T:Thrzn41.WebexTeams.TeamsObject"/>.
+            </summary>
+        </member>
         <member name="M:Thrzn41.WebexTeams.TeamsObject.GetErrorMessage">
             <summary>
             Gets error message.
@@ -1240,6 +1446,15 @@
             <see cref="T:Thrzn41.WebexTeams.TeamsExtensionObject"/> will be used to get data that is not available in API Client currently.
             </summary>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsExtensionObject"/>.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsObject.FromJsonString``1(System.String,Thrzn41.WebexTeams.TeamsJsonConverter)">
+            <summary>
+            Converts Json string to a Cisco Webex Teams object.
+            </summary>
+            <typeparam name="TTeamsObject">A subclass type of TeamsObject.</typeparam>
+            <param name="jsonString">Json style string to be converted.</param>
+            <param name="jsonConverter">Json converter to deserialize the object.</param>
+            <returns>Cisco Webex Teams object converted from Json string.</returns>
         </member>
         <member name="M:Thrzn41.WebexTeams.TeamsObject.FromJsonString``1(System.String)">
             <summary>
@@ -4106,6 +4321,11 @@
             Email addresses of the person.
             </summary>
         </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Person.HasEmails">
+            <summary>
+            Checks if Person has email info.
+            </summary>
+        </member>
         <member name="P:Thrzn41.WebexTeams.Version1.Person.Email">
             <summary>
             Default Email address of the person.
@@ -4114,6 +4334,11 @@
         <member name="P:Thrzn41.WebexTeams.Version1.Person.PhoneNumbers">
             <summary>
             Phone numbers of the person.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Person.HasPhoneNumbers">
+            <summary>
+            Checks if Person has Phone number info.
             </summary>
         </member>
         <member name="P:Thrzn41.WebexTeams.Version1.Person.DisplayName">
@@ -4156,9 +4381,19 @@
             Roles of the person.
             </summary>
         </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Person.HasRoles">
+            <summary>
+            Checks if Person has role info.
+            </summary>
+        </member>
         <member name="P:Thrzn41.WebexTeams.Version1.Person.Licenses">
             <summary>
             Licenses allocated to the person.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Person.HasLicenses">
+            <summary>
+            Checks if Person has license info.
             </summary>
         </member>
         <member name="P:Thrzn41.WebexTeams.Version1.Person.Created">
@@ -6150,154 +6385,6 @@
             <see cref="T:Thrzn41.WebexTeams.Version1.Webhook"/> list.
             </summary>
         </member>
-        <member name="T:Thrzn41.WebexTeams.Version1.WebhookListener">
-            <summary>
-            Provides simple webhook listener.
-            This listener is NOT INTENDED TO BE USED IN PRODUCTION ENVIRONMENT.
-            Mainly focus on use in quick testing or trying webhook.
-            This listner consumes user thread pool.
-            </summary>
-            <remarks>
-            This listener is NOT INTENDED TO BE USED IN PRODUCTION ENVIRONMENT.
-            Mainly focus on use in quick testing or trying webhook.
-            This listner consumes user thread pool.
-            </remarks>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.DEFAULT_DATA_BUFFER_SIZE">
-            <summary>
-            Default data buffue bytes size for event data.
-            The 2048 bytes will be reasonable size for most event data.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.DEFAULT_NUMBER_OF_THREADS">
-            <summary>
-            Default number of listener threads.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.PATH_PREFIX_PATTERN">
-            <summary>
-            Path prefix pattern of path in uri.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.PATH_PATTERN">
-            <summary>
-            Pattern of path in uri.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.DEFAULT_ENCODING">
-            <summary>
-            Default encoding.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.slimLock">
-            <summary>
-            Slim lock.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.notificationManager">
-            <summary>
-            Notification manager.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.httpListener">
-            <summary>
-            Http listner.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.numberOfThreads">
-            <summary>
-            Number of listner threads.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.pathPrefix">
-            <summary>
-            Path prefix that is listened.
-            </summary>
-        </member>
-        <member name="F:Thrzn41.WebexTeams.Version1.WebhookListener.activeThreadCount">
-            <summary>
-            Thread count that is now active.
-            </summary>
-        </member>
-        <member name="P:Thrzn41.WebexTeams.Version1.WebhookListener.ActiveThreadCount">
-            <summary>
-            Thread count that is now active.
-            </summary>
-        </member>
-        <member name="P:Thrzn41.WebexTeams.Version1.WebhookListener.Path">
-            <summary>
-            Path that is listened.
-            </summary>
-        </member>
-        <member name="P:Thrzn41.WebexTeams.Version1.WebhookListener.IsListening">
-            <summary>
-            true if the WebhookListener was started; otherwise, false.
-            </summary>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.#ctor(System.Int32)">
-            <summary>
-            Creates webhook listner.
-            </summary>
-            <param name="numberOfThreads">Number of listener threads.</param>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.AddListenerEndpoint(System.String,System.UInt16,System.Boolean)">
-            <summary>
-            Adds listening host and port.
-            If you expose the server for public, you should use https.
-            You need to bind the host and port with TLS certificates in your environment.
-            </summary>
-            <param name="hostnameOrIPAddress">Hostname or IP address of local machine.</param>
-            <param name="port">Port number of the listening port.</param>
-            <param name="useHttps">true if the listening uri uses https.</param>
-            <returns><see cref="T:System.Uri"/> that is added.</returns>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.AddNotification(Thrzn41.WebexTeams.Version1.Webhook,System.Action{Thrzn41.WebexTeams.Version1.WebhookEventData})">
-            <summary>
-            Adds event notification to the listner.
-            </summary>
-            <param name="webhook">Webhook to be added.</param>
-            <param name="func">Function to be notified on receiving event.</param>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.AddNotification(Thrzn41.WebexTeams.Version1.Webhook,System.Func{Thrzn41.WebexTeams.Version1.WebhookEventData,System.Threading.Tasks.Task})">
-            <summary>
-            Adds event notification to the listner.
-            </summary>
-            <param name="webhook">Webhook to be added.</param>
-            <param name="funcAsync">Async function to be notified on receiving event.</param>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.RemoveNotification(Thrzn41.WebexTeams.Version1.Webhook)">
-            <summary>
-            Removes notification info.
-            </summary>
-            <param name="webhook">Webhook to be removed.</param>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.startListening">
-            <summary>
-            Starts listening.
-            </summary>
-            <returns><see cref="T:System.Threading.Tasks.Task"/>.</returns>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.Start">
-            <summary>
-            Starts listening.
-            </summary>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.Stop">
-            <summary>
-            Stop listening.
-            </summary>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.Dispose(System.Boolean)">
-            <summary>
-            Dispose.
-            </summary>
-            <param name="disposing">disposing.</param>
-        </member>
-        <member name="M:Thrzn41.WebexTeams.Version1.WebhookListener.Dispose">
-            <summary>
-            Dispose.
-            </summary>
-        </member>
         <member name="T:Thrzn41.WebexTeams.Version1.WebhookNotificationManager">
             <summary>
             Webhook notification manager.
@@ -6353,6 +6440,132 @@
             </summary>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.AddNotification(Thrzn41.WebexTeams.Version1.Webhook,System.Action{Thrzn41.WebexTeams.Version1.WebhookEventData})">
+            <summary>
+            Adds notification to the manager.
+            </summary>
+            <param name="webhook">Webhook to be added.</param>
+            <param name="func">Function to be notified on receiving event.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.AddNotification(Thrzn41.WebexTeams.Version1.Webhook,System.Func{Thrzn41.WebexTeams.Version1.WebhookEventData,System.Threading.Tasks.Task})">
+            <summary>
+            Adds notification to the manager.
+            </summary>
+            <param name="webhook">Webhook to be added.</param>
+            <param name="funcAsync">Async function to be notified on receiving event.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.RemoveNotification(Thrzn41.WebexTeams.Version1.Webhook)">
+            <summary>
+            Removes notification info.
+            </summary>
+            <param name="webhook">Webhook to be removed.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.ValidateAndNotify(System.Byte[],System.String,System.Text.Encoding)">
+            <summary>
+            Validates and notifies event.
+            </summary>
+            <param name="data">The data to be validated and notified.</param>
+            <param name="xTeamsSignature">Signature that is notified on event.</param>
+            <param name="encoding">Encoding of data.</param>
+            <returns>true if the data is valid, false if the data is invalid.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">disposing.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.WebhookStatus">
+            <summary>
+            Webhook status of Cisco Webex Teams.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookStatus.Active">
+            <summary>
+            Webhook is active.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookStatus.Inactive">
+            <summary>
+            Webhook is inactive.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookStatus.Unknown">
+            <summary>
+            Webhook is unknown status.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.WebhookStatus.WEBHOOK_STATUSES">
+            <summary>
+            Dictionary for webhook status.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.#cctor">
+            <summary>
+            Static constuctor.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.WebhookStatus.Name">
+            <summary>
+            Name of the webhook status.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.#ctor(System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="name">Name of the webhook status.</param>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.Parse(System.String)">
+            <summary>
+            Parse webhook status.
+            </summary>
+            <param name="name">Name of the webhook status.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.Version1.WebhookStatus"/> for the name.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.Equals(Thrzn41.WebexTeams.Version1.WebhookStatus)">
+            <summary>
+            Determines whether this instance and another specified <see cref="T:Thrzn41.WebexTeams.Version1.WebhookStatus"/> object have the same value.
+            </summary>
+            <param name="value">The webhook status to compare to this instance.</param>
+            <returns>true if the value of the parameter is the same as the value of this instance; otherwise, false. If value is null, the method returns false.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.Equals(System.Object)">
+            <summary>
+            Determines whether this instance and a specified object, which must also be a <see cref="T:Thrzn41.WebexTeams.Version1.WebhookStatus"/> object, have the same value.
+            </summary>
+            <param name="obj">The webhook status to compare to this instance.</param>
+            <returns>true if obj is a <see cref="T:Thrzn41.WebexTeams.Version1.WebhookStatus"/> and its value is the same as this instance; otherwise, false. If obj is null, the method returns false.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.GetHashCode">
+            <summary>
+            Returns the hash code for this webhook status.
+            </summary>
+            <returns>A 32-bit signed integer hash code.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.op_Equality(Thrzn41.WebexTeams.Version1.WebhookStatus,Thrzn41.WebexTeams.Version1.WebhookStatus)">
+            <summary>
+            Determines whether two specified webhook status have the same value.
+            </summary>
+            <param name="lhs">Left hand side value.</param>
+            <param name="rhs">Right hand side value.</param>
+            <returns>true if the two values have the same value.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.WebhookStatus.op_Inequality(Thrzn41.WebexTeams.Version1.WebhookStatus,Thrzn41.WebexTeams.Version1.WebhookStatus)">
+            <summary>
+            Determines whether two specified webhook status have the different value.
+            </summary>
+            <param name="lhs">Left hand side value.</param>
+            <param name="rhs">Right hand side value.</param>
+            <returns>true if the two values have the different value.</returns>
+        </member>
+    </members>
+</doc>
+r name="M:Thrzn41.WebexTeams.Version1.WebhookNotificationManager.AddNotification(Thrzn41.WebexTeams.Version1.Webhook,System.Action{Thrzn41.WebexTeams.Version1.WebhookEventData})">
             <summary>
             Adds notification to the manager.
             </summary>
