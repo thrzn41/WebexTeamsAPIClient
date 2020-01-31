@@ -856,7 +856,7 @@ namespace Thrzn41.WebexTeams.Version1
             queryParameters.Add("roomId",          spaceId);
             queryParameters.Add("max",             max?.ToString());
             queryParameters.Add("mentionedPeople", mentionedPeople);
-            queryParameters.Add("before",          before?.ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss.fffzzz"));
+            queryParameters.Add("before",          before?.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffK"));
             queryParameters.Add("beforeMessage",   beforeMessage);
 
             var result = await this.teamsHttpClient.RequestJsonAsync<TeamsListResult<MessageList>, MessageList>(

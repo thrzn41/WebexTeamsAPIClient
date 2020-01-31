@@ -488,8 +488,8 @@ namespace Thrzn41.WebexTeams.Version1.Admin
             queryParameters.Add("resource", resource?.Name);
             queryParameters.Add("type",     type?.Name);
             queryParameters.Add("actorId",  actorId);
-            queryParameters.Add("from",     from?.ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss.fffzzz"));
-            queryParameters.Add("to",       to?.ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss.fffzzz"));
+            queryParameters.Add("from",     from?.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffK"));
+            queryParameters.Add("to",       to?.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffK"));
             queryParameters.Add("max",      max?.ToString());
 
             var result = await this.teamsHttpClient.RequestJsonAsync<TeamsListResult<EventDataList>, EventDataList>(

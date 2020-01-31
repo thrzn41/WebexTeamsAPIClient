@@ -514,6 +514,27 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
         }
 
         [TestMethod]
+        public void TestDeserializationError()
+        {
+            string str = "{ abc";
+            Assert.ThrowsException<TeamsJsonDeserializationException>(() => { TeamsObject.FromJsonString<Message>(str); });
+           
+            str = "{ \"id\": 1 \"aaa\": 1 }";
+            Assert.ThrowsException<TeamsJsonDeserializationException>(() => { TeamsObject.FromJsonString<Message>(str); });
+
+            str = "{ \"id\": 12345, \"created\": 1, \"text\": \"Hello!!!\" }";
+            var message = TeamsObject.FromJsonString<Message>(str);
+
+            Assert.IsTrue(message.HasDeserializationErrors);
+            Assert.AreEqual(1, message.DeserializationErrors.Length);
+            Assert.AreEqual(1, message.DeserializationErrors[0].LineNumber);
+            Assert.AreEqual(27, message.DeserializationErrors[0].LinePosition);
+            Assert.AreEqual("created", message.DeserializationErrors[0].Path);
+            Assert.AreEqual("12345", message.Id);
+            Assert.AreEqual("Hello!!!", message.Text);
+        }
+
+        [TestMethod]
         public void TestErrorResponse()
         {
             string str = "{\"errorCode\":1,\"message\":\"The requested resource could not be found.\",\"errors\":[{\"errorCode\":1,\"description\":\"The requested resource could not be found.\"}],\"trackingId\":\"xyz\"}";

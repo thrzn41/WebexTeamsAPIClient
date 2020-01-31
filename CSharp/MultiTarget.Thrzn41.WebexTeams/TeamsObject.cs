@@ -23,8 +23,10 @@
  */
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Thrzn41.WebexTeams
@@ -35,26 +37,33 @@ namespace Thrzn41.WebexTeams
     /// This class provides feature to convert object to/from Json.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public class TeamsObject
+    public class TeamsObject : TeamsJsonObject
     {
 
         /// <summary>
-        /// Settings for Json serializer.
+        /// Default Json converter.
         /// </summary>
         [JsonIgnore]
-        private static readonly JsonSerializerSettings SERIALIZER_SETTINGS = new JsonSerializerSettings
-        {
-            NullValueHandling = NullValueHandling.Ignore,
-            Formatting        = Formatting.None,
-        };
+        private static readonly TeamsJsonConverter DEFAULT_JSON_CONVERTER = new TeamsJsonObjectConverter();
+
 
         /// <summary>
-        /// Settings for Json deserializer.
+        /// Json converter to serialize or deserialize to/from Json.
         /// </summary>
         [JsonIgnore]
-        private static readonly JsonSerializerSettings DESERIALIZER_SETTINGS = new JsonSerializerSettings
+        private TeamsJsonConverter jsonConverter = null;
+
+        /// <summary>
+        /// Json converter to serialize or deserialize to/from Json.
+        /// </summary>
+        [JsonIgnore]
+        private TeamsJsonConverter JsonConverter
         {
-        };
+            get
+            {
+                return (this.jsonConverter ?? DEFAULT_JSON_CONVERTER);
+            }
+        }
 
 
         /// <summary>
@@ -91,6 +100,32 @@ namespace Thrzn41.WebexTeams
 
 
         /// <summary>
+        /// Creates <see cref="TeamsObject"/>.
+        /// </summary>
+        /// <param name="dateFormatStringForSerializer">Date format to serialize to Json.</param>
+        /// <param name="dateFormatStringForDeserializer">Date format to deserialize from Json.</param>
+        public TeamsObject(string dateFormatStringForSerializer, string dateFormatStringForDeserializer)
+        {
+            this.jsonConverter = new TeamsJsonObjectConverter(dateFormatStringForSerializer, dateFormatStringForDeserializer);
+        }
+
+        /// <summary>
+        /// Creates <see cref="TeamsObject"/>.
+        /// </summary>
+        /// <param name="dateFormatStringForSerializer">Date format to serialize to Json.</param>
+        public TeamsObject(string dateFormatStringForSerializer)
+        {
+            this.jsonConverter = new TeamsJsonObjectConverter(dateFormatStringForSerializer);
+        }
+
+        /// <summary>
+        /// Creates <see cref="TeamsObject"/>.
+        /// </summary>
+        public TeamsObject()
+        {
+        }
+
+        /// <summary>
         /// Gets error message.
         /// </summary>
         /// <returns>Error message.</returns>
@@ -105,7 +140,7 @@ namespace Thrzn41.WebexTeams
         /// <returns>Json style string that represents this object.</returns>
         public virtual string ToJsonString()
         {
-            return JsonConvert.SerializeObject(this, SERIALIZER_SETTINGS);
+            return this.JsonConverter.SerializeObject(this);
         }
 
 
@@ -116,9 +151,28 @@ namespace Thrzn41.WebexTeams
         /// <returns><see cref="TeamsExtensionObject"/>.</returns>
         public virtual TeamsExtensionObject ToExtensionObject()
         {
-            return FromJsonString<TeamsExtensionObject>(this.ToJsonString());
+            return FromJsonString<TeamsExtensionObject>(this.ToJsonString(), this.JsonConverter);
         }
 
+        /// <summary>
+        /// Converts Json string to a Cisco Webex Teams object.
+        /// </summary>
+        /// <typeparam name="TTeamsObject">A subclass type of TeamsObject.</typeparam>
+        /// <param name="jsonString">Json style string to be converted.</param>
+        /// <param name="jsonConverter">Json converter to deserialize the object.</param>
+        /// <returns>Cisco Webex Teams object converted from Json string.</returns>
+        public static TTeamsObject FromJsonString<TTeamsObject>(string jsonString, TeamsJsonConverter jsonConverter)
+            where TTeamsObject : TeamsObject, new()
+        {
+            if (jsonConverter != null)
+            {
+                return jsonConverter.DeserializeObject<TTeamsObject>(jsonString);
+            }
+            else
+            {
+                return DEFAULT_JSON_CONVERTER.DeserializeObject<TTeamsObject>(jsonString);
+            }
+        }
 
         /// <summary>
         /// Converts Json string to a Cisco Webex Teams object.
@@ -129,8 +183,9 @@ namespace Thrzn41.WebexTeams
         public static TTeamsObject FromJsonString<TTeamsObject>(string jsonString)
             where TTeamsObject : TeamsObject, new()
         {
-            return JsonConvert.DeserializeObject<TTeamsObject>(jsonString, DESERIALIZER_SETTINGS);
+            return DEFAULT_JSON_CONVERTER.DeserializeObject<TTeamsObject>(jsonString);
         }
+
 
     }
 
