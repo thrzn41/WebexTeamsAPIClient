@@ -24,6 +24,8 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Text;
 
 namespace Thrzn41.WebexTeams
@@ -36,9 +38,14 @@ namespace Thrzn41.WebexTeams
     {
 
         /// <summary>
+        /// Default capacity for <see cref="StringBuilder"/>.
+        /// </summary>
+        private const int STRING_BUILDER_INITIAL_CAPACITY = 256;
+
+        /// <summary>
         /// Default Settings for Json serializer.
         /// </summary>
-        private static readonly JsonSerializerSettings SERIALIZER_SETTINGS = new JsonSerializerSettings
+        private static readonly JsonSerializerSettings DEFAULT_SERIALIZER_SETTINGS = new JsonSerializerSettings
         {
             DateFormatString  = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffK",
             Formatting        = Formatting.None,
@@ -48,21 +55,62 @@ namespace Thrzn41.WebexTeams
         /// <summary>
         /// Default Settings for Json deserializer.
         /// </summary>
-        private static readonly JsonSerializerSettings DESERIALIZER_SETTINGS = new JsonSerializerSettings
+        private static readonly JsonSerializerSettings DEFAULT_DESERIALIZER_SETTINGS = new JsonSerializerSettings
         {
             DateFormatString = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",
         };
 
+        /// <summary>
+        /// Default serializer.
+        /// </summary>
+        internal static readonly JsonSerializer DEFAULT_SERIALIZER;
 
         /// <summary>
-        /// Settings for Json serializer.
+        /// Default deserializer.
         /// </summary>
-        private JsonSerializerSettings serializerSettings   = null;
+        internal static readonly JsonSerializer DEFAULT_DESERIALIZER;
+
 
         /// <summary>
-        /// Settings for Json deserializer.
+        /// Static constructor.
         /// </summary>
-        private JsonSerializerSettings deserializerSettings = null;
+        static TeamsJsonObjectConverter()
+        {
+            DEFAULT_SERIALIZER   = JsonSerializer.CreateDefault(DEFAULT_SERIALIZER_SETTINGS);
+            DEFAULT_DESERIALIZER = JsonSerializer.CreateDefault(DEFAULT_DESERIALIZER_SETTINGS);
+        }
+
+        /// <summary>
+        /// Json serializer.
+        /// </summary>
+        private JsonSerializer serializer = null;
+
+        /// <summary>
+        /// Json deserializer.
+        /// </summary>
+        private JsonSerializer deserializer = null;
+
+        /// <summary>
+        /// Json serializer.
+        /// </summary>
+        internal JsonSerializer Serializer
+        {
+            get
+            {
+                return (this.serializer ?? DEFAULT_SERIALIZER);
+            }
+        }
+
+        /// <summary>
+        /// Json deserializer.
+        /// </summary>
+        internal JsonSerializer Deserializer
+        {
+            get
+            {
+                return (this.deserializer ?? DEFAULT_DESERIALIZER);
+            }
+        }
 
 
         /// <summary>
@@ -74,20 +122,20 @@ namespace Thrzn41.WebexTeams
         {
             if( !String.IsNullOrEmpty(dateFormatStringForSerializer) )
             {
-                this.serializerSettings = new JsonSerializerSettings
-                {
-                    DateFormatString  = dateFormatStringForSerializer,
-                    Formatting        = Formatting.None,
-                    NullValueHandling = NullValueHandling.Ignore,
-                };
+                this.serializer = JsonSerializer.CreateDefault(new JsonSerializerSettings
+                    {
+                        DateFormatString  = dateFormatStringForSerializer,
+                        Formatting        = Formatting.None,
+                        NullValueHandling = NullValueHandling.Ignore,
+                    });
             }
 
             if ( !String.IsNullOrEmpty(dateFormatStringForDeserializer) )
             {
-                this.deserializerSettings = new JsonSerializerSettings
-                {
-                    DateFormatString = dateFormatStringForDeserializer,
-                };
+                this.deserializer = JsonSerializer.CreateDefault(new JsonSerializerSettings
+                    {
+                        DateFormatString = dateFormatStringForDeserializer,
+                    });
             }
         }
 
@@ -118,7 +166,22 @@ namespace Thrzn41.WebexTeams
         {
             try
             {
-                return JsonConvert.SerializeObject(obj, (serializerSettings ?? SERIALIZER_SETTINGS));
+                var sb = new StringBuilder(STRING_BUILDER_INITIAL_CAPACITY);
+
+                using (var writer = new StringWriter(sb, CultureInfo.InvariantCulture))
+                {
+                    using(var jsonWriter = new JsonTextWriter(writer))
+                    {
+                        var serializer = this.Serializer;
+
+                        jsonWriter.Formatting       = serializer.Formatting;
+                        jsonWriter.DateFormatString = serializer.DateFormatString;
+
+                        serializer.Serialize(jsonWriter, obj);
+                    }
+
+                    return writer.ToString();
+                }
             }
             catch (JsonWriterException jwe)
             {
@@ -142,7 +205,15 @@ namespace Thrzn41.WebexTeams
         {
             try
             {
-                return JsonConvert.DeserializeObject<T>(jsonString, (deserializerSettings ?? DESERIALIZER_SETTINGS));
+                using (var reader     = new StringReader(jsonString))
+                using (var jsonReader = new JsonTextReader(reader))
+                {
+                    var deserializer = this.Deserializer;
+
+                    jsonReader.DateFormatString = deserializer.DateFormatString;
+
+                    return deserializer.Deserialize<T>(jsonReader);
+                }
             }
             catch (JsonReaderException jre)
             {
