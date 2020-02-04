@@ -21,38 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Thrzn41.WebexTeams
+namespace Thrzn41.WebexTeams.Version1.AttachmentData
 {
 
     /// <summary>
-    /// Json converter to serialize or deserialize to/from Json.
+    /// <see cref="AdaptiveCardAttachment"/> to be created by object.
     /// </summary>
-    public abstract class TeamsJsonConverter
+    [JsonObject(MemberSerialization.OptIn)]
+    public class AdaptiveCardAttachmentFromObject : AdaptiveCardAttachment
     {
-
+        /// <summary>
+        /// internal constructor.
+        /// </summary>
+        /// <param name="content">Adaptive card data.</param>
+        internal AdaptiveCardAttachmentFromObject(object content)
+        {
+            this.Content = content;
+        }
 
         /// <summary>
-        /// Serialize the object to Json string.
+        /// Adaptive Card.
         /// </summary>
-        /// <param name="obj">The object to be serialized.</param>
-        /// <returns>The serialized Json string.</returns>
-        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
-        public abstract string SerializeObject(object obj);
-
-
-        /// <summary>
-        /// Deserialize the Json string to the object.
-        /// </summary>
-        /// <typeparam name="T">Type of the object.</typeparam>
-        /// <param name="jsonString">The Json string to be deserialized.</param>
-        /// <returns>The deserialized object.</returns>
-        /// <exception cref="TeamsJsonSerializationException">Throws on deserialization error.</exception>
-        public abstract T DeserializeObject<T>(string jsonString);
-
+        [JsonProperty(PropertyName = "content")]
+        public object Content { get; private set; }
     }
-
 }

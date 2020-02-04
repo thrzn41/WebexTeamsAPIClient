@@ -185,11 +185,11 @@ namespace Thrzn41.WebexTeams
             }
             catch (JsonWriterException jwe)
             {
-                throw new TeamsJsonSerializationException(jwe.Path);
+                throw new TeamsJsonSerializationException(TeamsSerializationOperation.Serialize, jwe.Path);
             }
             catch (JsonSerializationException jse)
             {
-                throw new TeamsJsonSerializationException(jse.LineNumber, jse.LinePosition, jse.Path);
+                throw new TeamsJsonSerializationException(TeamsSerializationOperation.Serialize, jse.LineNumber, jse.LinePosition, jse.Path);
             }
         }
 
@@ -200,7 +200,7 @@ namespace Thrzn41.WebexTeams
         /// <typeparam name="T">Type of the object.</typeparam>
         /// <param name="jsonString">The Json string to be deserialized.</param>
         /// <returns>The deserialized object.</returns>
-        /// <exception cref="TeamsJsonDeserializationException">Throws on deserialization error.</exception>
+        /// <exception cref="TeamsJsonSerializationException">Throws on deserialization error.</exception>
         public override T DeserializeObject<T>(string jsonString)
         {
             try
@@ -217,11 +217,11 @@ namespace Thrzn41.WebexTeams
             }
             catch (JsonReaderException jre)
             {
-                throw new TeamsJsonDeserializationException(jre.LineNumber, jre.LinePosition, jre.Path);
+                throw new TeamsJsonSerializationException(TeamsSerializationOperation.Deserialize, jre.LineNumber, jre.LinePosition, jre.Path);
             }
             catch (JsonSerializationException jse)
             {
-                throw new TeamsJsonDeserializationException(jse.LineNumber, jse.LinePosition, jse.Path);
+                throw new TeamsJsonSerializationException(TeamsSerializationOperation.Deserialize, jse.LineNumber, jse.LinePosition, jse.Path);
             }
         }
 

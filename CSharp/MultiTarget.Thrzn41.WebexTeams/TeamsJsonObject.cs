@@ -43,35 +43,35 @@ namespace Thrzn41.WebexTeams
         /// Errors on deserializing.
         /// </summary>
         [JsonIgnore]
-        private List<TeamsJsonDeserializationException> deserializationErrors = null;
+        private List<TeamsJsonSerializationException> serializationErrors = null;
 
         /// <summary>
         /// Check if there are errors on deserializing.
         /// </summary>
         [JsonIgnore]
-        public bool HasDeserializationErrors
+        public bool HasSerializationErrors
         {
             get
             {
-                return (this.deserializationErrors != null && this.deserializationErrors.Count > 0);
+                return (this.serializationErrors != null && this.serializationErrors.Count > 0);
             }
         }
 
         /// <summary>
-        /// Get errors on deserializing.
+        /// Get errors on serializing or deserializing.
         /// </summary>
         [JsonIgnore]
-        public TeamsJsonDeserializationException[] DeserializationErrors
+        public TeamsJsonSerializationException[] SerializationErrors
         {
             get
             {
-                return (this.deserializationErrors?.ToArray());
+                return (this.serializationErrors?.ToArray());
             }
         }
 
 
         /// <summary>
-        /// Error handler on deserializing.
+        /// Error handler on serailizing or deserializing.
         /// </summary>
         /// <param name="context">Streaming context.</param>
         /// <param name="errorContext">Error context.</param>
@@ -82,17 +82,16 @@ namespace Thrzn41.WebexTeams
 
             if(e != null)
             {
-                if(this.deserializationErrors == null)
+                if(this.serializationErrors == null)
                 {
-                    this.deserializationErrors = new List<TeamsJsonDeserializationException>();
+                    this.serializationErrors = new List<TeamsJsonSerializationException>();
                 }
 
-                this.deserializationErrors.Add(new TeamsJsonDeserializationException(e.LineNumber, e.LinePosition, e.Path));
+                this.serializationErrors.Add(new TeamsJsonSerializationException(TeamsSerializationOperation.Deserialize, e.LineNumber, e.LinePosition, e.Path));
 
                 errorContext.Handled = true;
             }
         }
-
 
     }
 }

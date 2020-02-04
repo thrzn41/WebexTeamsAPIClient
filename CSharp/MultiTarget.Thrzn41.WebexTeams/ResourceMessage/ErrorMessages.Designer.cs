@@ -62,16 +62,7 @@ namespace Thrzn41.WebexTeams.ResourceMessage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error occured on deserializing from Json string: [Line = {0}, Position = {1}, Path = {2}].
-        /// </summary>
-        internal static string TeamsJsonDeserializationError {
-            get {
-                return ResourceManager.GetString("TeamsJsonDeserializationError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error occured on serializing to Json string: [Line = {0}, Position = {1}, Path = {2}].
+        ///   Looks up a localized string similar to Error occured on json serialization: [Operation = {0}, Line = {1}, Position = {2}, Path = {3}].
         /// </summary>
         internal static string TeamsJsonSerializationError {
             get {

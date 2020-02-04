@@ -49,27 +49,35 @@ namespace Thrzn41.WebexTeams
         /// </summary>
         public string Path { get; private set; }
 
+        /// <summary>
+        /// Operation type to serialize.
+        /// </summary>
+        public TeamsSerializationOperation Operation { get; set; }
+
 
         /// <summary>
         /// Create <see cref="TeamsJsonSerializationException"/>.
         /// </summary>
+        /// <param name="operation">Operation type to serialize.</param>
         /// <param name="lineNumber">Line number the error occured.</param>
         /// <param name="linePosition">Position in the Line the error occured.</param>
         /// <param name="path">Path to the Json the error occured.</param>
-        public TeamsJsonSerializationException(int lineNumber, int linePosition, string path)
-            : base(String.Format(ResourceMessage.ErrorMessages.TeamsJsonSerializationError, lineNumber, linePosition, path))
+        public TeamsJsonSerializationException(TeamsSerializationOperation operation, int lineNumber, int linePosition, string path)
+            : base(String.Format(ResourceMessage.ErrorMessages.TeamsJsonSerializationError, operation, lineNumber, linePosition, path))
         {
             this.LineNumber   = lineNumber;
             this.LinePosition = linePosition;
             this.Path         = path;
+            this.Operation    = operation;
         }
 
         /// <summary>
         /// Create <see cref="TeamsJsonSerializationException"/>.
         /// </summary>
+        /// <param name="operation">Operation type to serialize.</param>
         /// <param name="path">Path to the Json the error occured.</param>
-        public TeamsJsonSerializationException(string path)
-            : this(0, 0, path)
+        public TeamsJsonSerializationException(TeamsSerializationOperation operation, string path)
+            : this(operation, 0, 0, path)
         {
         }
 

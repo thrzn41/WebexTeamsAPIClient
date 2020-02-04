@@ -963,6 +963,75 @@ namespace Thrzn41.WebexTeams.Version1
             return (CreateMessageAsync(space.Id, markdownOrText, files, MessageTarget.SpaceId, textType, cancellationToken));
         }
 
+        /// <summary>
+        /// Creates a message with an attachment.
+        /// </summary>
+        /// <param name="targetId">Id that the message is posted.</param>
+        /// <param name="markdownOrText">markdown or text to be posted.</param>
+        /// <param name="attachment">Message attachment to be attached with the message.</param>
+        /// <param name="target"><see cref="MessageTarget"/> that the targetId parameter represents.</param>
+        /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task<TeamsResult<Message>> CreateMessageAsync(string targetId, string markdownOrText, Attachment attachment, MessageTarget target = MessageTarget.SpaceId, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        {
+            var message = new Message();
+
+            switch (target)
+            {
+                case MessageTarget.PersonId:
+                    message.ToPersonId = targetId;
+                    break;
+                case MessageTarget.PersonEmail:
+                    message.ToPersonEmail = targetId;
+                    break;
+                default:
+                    message.SpaceId = targetId;
+                    break;
+            }
+
+            switch (textType)
+            {
+                case MessageTextType.Text:
+                    message.Text = markdownOrText;
+                    break;
+                default:
+                    message.Markdown = markdownOrText;
+                    break;
+            }
+
+            if (attachment != null)
+            {
+                message.Attachments = new Attachment[] { attachment };
+            }
+
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsResult<Message>, Message>(
+                                    HttpMethod.Post,
+                                    TEAMS_MESSAGES_API_URI,
+                                    null,
+                                    message,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Creates a message with an attachment.
+        /// </summary>
+        /// <param name="space"><see cref="Space"/> that the message is posted.</param>
+        /// <param name="markdownOrText">markdown or text to be posted.</param>
+        /// <param name="attachment">Message attachment to be attached with the message.</param>
+        /// <param name="target"><see cref="MessageTarget"/> that the targetId parameter represents.</param>
+        /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task<TeamsResult<Message>> CreateMessageAsync(Space space, string markdownOrText, Attachment attachment, MessageTarget target = MessageTarget.SpaceId, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        {
+            return (CreateMessageAsync(space.Id, markdownOrText, attachment, MessageTarget.SpaceId, textType, cancellationToken));
+        }
+
 
         /// <summary>
         /// Creates a message.
@@ -1120,6 +1189,51 @@ namespace Thrzn41.WebexTeams.Version1
         public Task< TeamsResult<Message> > CreateDirectMessageAsync(Person person, string markdownOrText, TeamsFileData fileData, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
         {
             return (CreateDirectMessageAsync(person.Id, markdownOrText, fileData, PersonIdType.Id, textType, cancellationToken));
+        }
+
+
+        /// <summary>
+        /// Create a message to direct space with an attachment.
+        /// </summary>
+        /// <param name="personIdOrEmail">Person id or email that the message is posted.</param>
+        /// <param name="markdownOrText">markdown or text to be posted.</param>
+        /// <param name="attachment">Message attachment to be attached with the message.</param>
+        /// <param name="personIdType"><see cref="PersonIdType"/> of personIdOrEmail parameter.</param>
+        /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task<TeamsResult<Message>> CreateDirectMessageAsync(string personIdOrEmail, string markdownOrText, Attachment attachment, PersonIdType personIdType = PersonIdType.Detect, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        {
+            personIdType = DetectPersonIdType(personIdOrEmail, personIdType);
+
+            MessageTarget targetType;
+
+            switch (personIdType)
+            {
+                case PersonIdType.Email:
+                    targetType = MessageTarget.PersonEmail;
+                    break;
+                default:
+                    targetType = MessageTarget.PersonId;
+                    break;
+            }
+
+            return (CreateMessageAsync(personIdOrEmail, markdownOrText, attachment, targetType, textType, cancellationToken));
+        }
+
+        /// <summary>
+        /// Create a message to direct space with an attachment.
+        /// </summary>
+        /// <param name="person"><see cref="Person"/> that the message is posted.</param>
+        /// <param name="markdownOrText">markdown or text to be posted.</param>
+        /// <param name="attachment">Message attachment to be attached with the message.</param>
+        /// <param name="personIdType"><see cref="PersonIdType"/> of personIdOrEmail parameter.</param>
+        /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task<TeamsResult<Message>> CreateDirectMessageAsync(Person person, string markdownOrText, Attachment attachment, PersonIdType personIdType = PersonIdType.Detect, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        {
+            return (CreateDirectMessageAsync(person.Id, markdownOrText, attachment, PersonIdType.Id, textType, cancellationToken));
         }
 
 
