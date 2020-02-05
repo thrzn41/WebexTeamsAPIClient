@@ -60,7 +60,7 @@ namespace Thrzn41.WebexTeams
 
             if (this.HasExtensionData && this.JsonExtensionData.ContainsKey(key))
             {
-                result = this.JsonExtensionData[key].ToObject<T>();
+                result = this.JsonExtensionData[key].ToObject<T>(this.JsonConverter.Deserializer);
             }
 
             return result;

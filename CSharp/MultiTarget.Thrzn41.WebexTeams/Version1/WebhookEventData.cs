@@ -188,8 +188,17 @@ namespace Thrzn41.WebexTeams.Version1
             }
         }
 
-
-
+        /// <summary>
+        /// AttachmentAction resource data.
+        /// </summary>
+        [JsonIgnore]
+        public AttachmentAction AttachmentActionData
+        {
+            get
+            {
+                return this.checkAndGetResourceData<AttachmentAction>(EventResource.AttachmentActions);
+            }
+        }
 
         /// <summary>
         /// Checks and gets resource data.
@@ -231,7 +240,7 @@ namespace Thrzn41.WebexTeams.Version1
 
                 if(this.JsonExtensionData.TryGetValue("data", out jtoken))
                 {
-                    result = jtoken.ToObject<TTeamsData>();
+                    result = jtoken.ToObject<TTeamsData>(this.JsonConverter.Deserializer);
                 }
             }
 

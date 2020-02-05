@@ -173,8 +173,27 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
         [TestMethod]
         public async Task TestCreateMessageWithAdaptiveCardFromString()
         {
-
-            var card = AdaptiveCardAttachment.FromJsonString("{\"type\":\"AdaptiveCard\",\"version\":\"1.0\",\"body\":[{\"type\":\"TextBlock\",\"text\":\"Adaptive Cards\",\"size\":\"large\"}],\"actions\":[{\"type\":\"Action.OpenUrl\",\"url\":\"http://adaptivecards.io\",\"title\":\"Learn More\"}]}");
+            var card = AdaptiveCardAttachment.FromJsonString(
+                @"
+                    {
+                        ""type"": ""AdaptiveCard"",
+                        ""version"": ""1.0"",
+                        ""body"": [
+                        {
+                            ""type"": ""TextBlock"",
+                            ""text"": ""Adaptive Cards"",
+                            ""size"": ""large""
+                        }
+                        ],
+                        ""actions"": [
+                        {
+                            ""type"": ""Action.OpenUrl"",
+                            ""url"": ""http://adaptivecards.io"",
+                            ""title"": ""Learn More""
+                        }
+                        ]
+                    }
+                ");
 
             var res = await teams.CreateMessageAsync(
                 unitTestSpace.Id,
@@ -248,8 +267,32 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
         [TestMethod]
         public async Task TestCreateMessageWithAdaptiveCardFromObject()
         {
+            var card = new
+            {
+                type    = "AdaptiveCard",
+                version = "1.0",
+                body    = new []
+                {
+                    new
+                    {
+                        type = "TextBlock",
+                        text = "Adaptive Cards",
+                        size = "large",
+                    }
+                },
+                actions = new []
+                {
+                    new
+                    {
+                        type  = "Action.OpenUrl",
+                        url   = "http://adaptivecards.io",
+                        title = "Learn More"
+                    }
+                },
+            };
+
             var r = await teams.CreateMessageAsync(unitTestSpace.Id, "Adaptive Card is not supported in you client.",
-                        AdaptiveCardAttachment.FromObject(new SampleAdaptiveCard01()));
+            AdaptiveCardAttachment.FromObject(card));
 
             Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
 
@@ -266,6 +309,29 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             Assert.AreEqual("Adaptive Card is not supported in you client.", r.Data.Text);
 
             var resourceOperation = r.ParseResourceOperation();
+            Assert.AreEqual(TeamsResource.Message, resourceOperation.Resource);
+            Assert.AreEqual(TeamsOperation.Create, resourceOperation.Operation);
+            Assert.AreEqual("CreateMessage", resourceOperation.ToString());
+
+
+            r = await teams.CreateMessageAsync(unitTestSpace.Id, "Adaptive Card is not supported in you client.",
+                        AdaptiveCardAttachment.FromObject(new SampleAdaptiveCard01()));
+
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+
+            Assert.IsTrue(r.IsSuccessStatus);
+            Assert.IsTrue(r.Data.HasValues);
+
+            Assert.IsNotNull(r.Data.Id);
+            Assert.IsNotNull(r.TrackingId);
+
+            Assert.AreNotEqual(Guid.Empty, r.TransactionId);
+
+            Assert.AreEqual("POST /v1/messages HTTP/1.1", r.RequestLine);
+
+            Assert.AreEqual("Adaptive Card is not supported in you client.", r.Data.Text);
+
+            resourceOperation = r.ParseResourceOperation();
             Assert.AreEqual(TeamsResource.Message, resourceOperation.Resource);
             Assert.AreEqual(TeamsOperation.Create, resourceOperation.Operation);
             Assert.AreEqual("CreateMessage", resourceOperation.ToString());
