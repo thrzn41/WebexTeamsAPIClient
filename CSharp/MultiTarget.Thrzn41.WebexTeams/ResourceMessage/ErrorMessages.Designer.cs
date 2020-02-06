@@ -71,6 +71,15 @@ namespace Thrzn41.WebexTeams.ResourceMessage {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The key name &apos;{0}&apos; does not exist in the Json..
+        /// </summary>
+        internal static string TeamsKeyNotFoundError {
+            get {
+                return ResourceManager.GetString("TeamsKeyNotFoundError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cisco Webex Teams API Service returned an error..
         /// </summary>
         internal static string TeamsResultError {

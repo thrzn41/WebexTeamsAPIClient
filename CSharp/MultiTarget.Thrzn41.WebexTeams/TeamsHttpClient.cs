@@ -868,7 +868,7 @@ namespace Thrzn41.WebexTeams
                                         fileName = fileName.Substring(1, (fileName.Length - 2));
                                     }
 
-                                    info.FileName      = fileName;
+                                    info.FileName      = Uri.UnescapeDataString(fileName);
                                     info.MediaTypeName = contentHeaders.ContentType?.MediaType;
                                     info.Size          = contentHeaders.ContentLength;
 

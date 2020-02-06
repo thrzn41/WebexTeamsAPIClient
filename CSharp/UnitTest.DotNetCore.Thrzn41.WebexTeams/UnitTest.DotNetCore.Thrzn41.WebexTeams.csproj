@@ -81,6 +81,12 @@
     <None Update="TestData\AdaptiveCards\SampleWeatherLarge.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="TestData\TeamsObjects\AttachmentAction.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\TeamsObjects\Message.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestData\thrzn41.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

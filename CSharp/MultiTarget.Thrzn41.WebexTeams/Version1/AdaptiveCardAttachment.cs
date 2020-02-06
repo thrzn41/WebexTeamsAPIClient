@@ -40,7 +40,8 @@ namespace Thrzn41.WebexTeams.Version1
         /// <summary>
         /// Default Json Converter.
         /// </summary>
-        private static TeamsJsonConverter JSON_CONVERTER = TeamsObject.DEFAULT_JSON_CONVERTER;
+        [JsonIgnore]
+        private static readonly TeamsJsonConverter JSON_CONVERTER = TeamsObject.DEFAULT_JSON_CONVERTER;
 
         /// <summary>
         /// Creates <see cref="AdaptiveCardAttachment"/>.
@@ -67,6 +68,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <summary>
         /// Creates <see cref="AdaptiveCardAttachment"/> from object.
         /// </summary>
+        /// <param name="obj">The object which represents Adaptive Card.</param>
         /// <returns><see cref="AdaptiveCardAttachment"/> created from Json string.</returns>
         /// <exception cref="TeamsJsonSerializationException">Throws on deserialization error.</exception>
         public static AdaptiveCardAttachment FromObject(object obj)

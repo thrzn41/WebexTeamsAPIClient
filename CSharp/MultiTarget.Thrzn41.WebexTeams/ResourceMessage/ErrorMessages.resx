@@ -120,6 +120,9 @@
   <data name="TeamsJsonSerializationError" xml:space="preserve">
     <value>Error occured on json serialization: [Operation = {0}, Line = {1}, Position = {2}, Path = {3}]</value>
   </data>
+  <data name="TeamsKeyNotFoundError" xml:space="preserve">
+    <value>The key name '{0}' does not exist in the Json.</value>
+  </data>
   <data name="TeamsResultError" xml:space="preserve">
     <value>Cisco Webex Teams API Service returned an error.</value>
   </data>
