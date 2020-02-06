@@ -68,6 +68,11 @@ namespace Thrzn41.WebexTeams.Version1
         protected static readonly string TEAMS_MESSAGES_API_PATH = GetAPIPath("messages");
 
         /// <summary>
+        /// Teams direct messages API Path.
+        /// </summary>
+        protected static readonly string TEAMS_DIRECT_MESSAGES_API_PATH = GetAPIPath("messages/direct");
+
+        /// <summary>
         /// Teams attachment actions API Path.
         /// </summary>
         protected static readonly string TEAMS_ATTACHMENT_ACTIONS_API_PATH = GetAPIPath("attachment/actions");
@@ -107,6 +112,11 @@ namespace Thrzn41.WebexTeams.Version1
         /// Teams messages API Uri.
         /// </summary>
         protected static readonly Uri TEAMS_MESSAGES_API_URI = new Uri(TEAMS_MESSAGES_API_PATH);
+
+        /// <summary>
+        /// Teams direct messages API Uri.
+        /// </summary>
+        protected static readonly Uri TEAMS_DIRECT_MESSAGES_API_URI = new Uri(TEAMS_DIRECT_MESSAGES_API_PATH);
 
         /// <summary>
         /// Teams attachment actions API Uri.
@@ -518,6 +528,37 @@ namespace Thrzn41.WebexTeams.Version1
             return (GetSpaceAsync(space.Id, cancellationToken));
         }
 
+        /// <summary>
+        /// Gets space meeting info detail.
+        /// </summary>
+        /// <param name="spaceId">Space id that the meeting info is gotten.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task< TeamsResult<SpaceMeetingInfo> > GetSpaceMeetingInfoAsync(string spaceId, CancellationToken? cancellationToken = null)
+        {
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsResult<SpaceMeetingInfo>, SpaceMeetingInfo>(
+                                    HttpMethod.Get,
+                                    new Uri(String.Format("{0}/{1}/meetingInfo", TEAMS_SPACES_API_PATH, Uri.EscapeDataString(spaceId))),
+                                    null,
+                                    null,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets space meeting info detail.
+        /// </summary>
+        /// <param name="space"><see cref="Space"/> that the meeting info is gotten.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsResult<SpaceMeetingInfo> > GetSpaceMeetingInfoAsync(Space space, CancellationToken? cancellationToken = null)
+        {
+            return GetSpaceMeetingInfoAsync(space.Id, cancellationToken);
+        }
+
 
         /// <summary>
         /// Updates space.
@@ -896,6 +937,53 @@ namespace Thrzn41.WebexTeams.Version1
             return (ListMessagesAsync(space.Id, mentionedPeople, before, beforeMessage, max, cancellationToken));
         }
 
+        /// <summary>
+        /// Lists direct messages.
+        /// </summary>
+        /// <param name="personIdOrEmail">Person id or email that the message is posted.</param>
+        /// <param name="personIdType"><see cref="PersonIdType"/> of personIdOrEmail parameter.</param>
+        /// <param name="max">Limit the maximum number of messages in the response.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task< TeamsListResult<MessageList> > ListDirectMessagesAsync(string personIdOrEmail, PersonIdType personIdType = PersonIdType.Detect, int? max = null, CancellationToken? cancellationToken = null)
+        {
+            personIdType = DetectPersonIdType(personIdOrEmail, personIdType);
+
+            string parameterName = "personId";
+
+            if(personIdType == PersonIdType.Email)
+            {
+                parameterName = "personEmail";
+            }
+
+            var queryParameters = new NameValueCollection();
+
+            queryParameters.Add(parameterName, personIdOrEmail);
+            queryParameters.Add("max", max?.ToString());
+
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsListResult<MessageList>, MessageList>(
+                                    HttpMethod.Get,
+                                    TEAMS_DIRECT_MESSAGES_API_URI,
+                                    queryParameters,
+                                    null,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Lists direct messages.
+        /// </summary>
+        /// <param name="person"><see cref="Person"/> that the message is posted.</param>
+        /// <param name="max">Limit the maximum number of messages in the response.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsListResult<MessageList> > ListDirectMessagesAsync(Person person, int? max = null, CancellationToken? cancellationToken = null)
+        {
+            return ListDirectMessagesAsync(person.Id, PersonIdType.Id, max, cancellationToken);
+        }
 
         /// <summary>
         /// Creates a message.
@@ -983,7 +1071,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public async Task<TeamsResult<Message>> CreateMessageAsync(string targetId, string markdownOrText, Attachment attachment, MessageTarget target = MessageTarget.SpaceId, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        public async Task< TeamsResult<Message> > CreateMessageAsync(string targetId, string markdownOrText, Attachment attachment, MessageTarget target = MessageTarget.SpaceId, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
         {
             var message = new Message();
 
@@ -1037,7 +1125,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
         /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
         /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
-        public Task<TeamsResult<Message>> CreateMessageAsync(Space space, string markdownOrText, Attachment attachment, MessageTarget target = MessageTarget.SpaceId, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        public Task< TeamsResult<Message> > CreateMessageAsync(Space space, string markdownOrText, Attachment attachment, MessageTarget target = MessageTarget.SpaceId, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
         {
             return (CreateMessageAsync(space.Id, markdownOrText, attachment, MessageTarget.SpaceId, textType, cancellationToken));
         }

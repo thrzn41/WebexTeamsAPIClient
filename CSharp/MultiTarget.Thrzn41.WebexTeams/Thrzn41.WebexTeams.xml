@@ -1624,6 +1624,16 @@
             File info resource.
             </summary>
         </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.SpaceMeetingInfo">
+            <summary>
+            Space meeting info resource.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.TeamsResource.AttachmentAction">
+            <summary>
+            Attachment action resource.
+            </summary>
+        </member>
         <member name="T:Thrzn41.WebexTeams.TeamsOperation">
             <summary>
             Operations of Webex Teams.
@@ -5405,6 +5415,46 @@
             <see cref="T:Thrzn41.WebexTeams.Version1.Space"/> list.
             </summary>
         </member>
+        <member name="T:Thrzn41.WebexTeams.Version1.SpaceMeetingInfo">
+            <summary>
+            Cisco Webex Teams Space meeting info object.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.SpaceMeetingInfo.SpaceId">
+            <summary>
+            The unique identifier for the Space.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.SpaceMeetingInfo.MeetingLink">
+            <summary>
+            The Webex meeting URL string for the Space.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.SpaceMeetingInfo.MeetingLinkUri">
+            <summary>
+            The Webex meeting Uri string for the Space.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.SpaceMeetingInfo.SipAddress">
+            <summary>
+            The SIP address for the Space.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.SpaceMeetingInfo.MeetingNumber">
+            <summary>
+            The Webex meeting number for the Space.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.SpaceMeetingInfo.CallInTollFreeNumber">
+            <summary>
+            The toll-free PSTN number for the Space.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.SpaceMeetingInfo.CallInTollNumber">
+            <summary>
+            The toll (local) PSTN number for the Space.
+            </summary>
+        </member>
         <member name="T:Thrzn41.WebexTeams.Version1.SpaceMembership">
             <summary>
             Cisco Webex Teams SpaceMembership object.
@@ -5959,6 +6009,22 @@
             Gets space detail.
             </summary>
             <param name="space"><see cref="T:Thrzn41.WebexTeams.Version1.Space"/> that the detail info is gotten.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.GetSpaceMeetingInfoAsync(System.String,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Gets space meeting info detail.
+            </summary>
+            <param name="spaceId">Space id that the meeting info is gotten.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.GetSpaceMeetingInfoAsync(Thrzn41.WebexTeams.Version1.Space,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Gets space meeting info detail.
+            </summary>
+            <param name="space"><see cref="T:Thrzn41.WebexTeams.Version1.Space"/> that the meeting info is gotten.</param>
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
         </member>
@@ -6678,18 +6744,21 @@
             Get error message.
             </summary>
             <returns>Error message.</returns>
+            <exception cref="T:Thrzn41.WebexTeams.TeamsJsonSerializationException">Throws on serialization error.</exception>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.TeamsData.GetPartialErrors">
             <summary>
             Gets Partial Errors.
             </summary>
             <returns>Partial Errors.</returns>
+            <exception cref="T:Thrzn41.WebexTeams.TeamsJsonSerializationException">Throws on serialization error.</exception>
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.TeamsData.GetErrors">
             <summary>
             Gets Errors.
             </summary>
             <returns>Errors or null.</returns>
+            <exception cref="T:Thrzn41.WebexTeams.TeamsJsonSerializationException">Throws on serialization error.</exception>
         </member>
         <member name="T:Thrzn41.WebexTeams.Version1.TeamsListData`1">
             <summary>

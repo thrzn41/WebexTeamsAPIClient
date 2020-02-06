@@ -182,6 +182,7 @@ namespace Thrzn41.WebexTeams
                 new PathAndResource{ Path = "/v1/access_token",              Resouce = TeamsResource.AccessToken             },
                 new PathAndResource{ Path = "/v1/jwt/login",                 Resouce = TeamsResource.GuestUser               },
                 new PathAndResource{ Path = "/v1/contents",                  Resouce = TeamsResource.FileData                },
+                new PathAndResource{ Path = "/v1/attachment/actions",        Resouce = TeamsResource.AttachmentAction        },
             };
 
         }
@@ -246,6 +247,11 @@ namespace Thrzn41.WebexTeams
                             break;
                         }
                     }
+                }
+
+                if(resource == TeamsResource.Space && path.EndsWith("/meetingInfo"))
+                {
+                    resource = TeamsResource.SpaceMeetingInfo;
                 }
 
                 if(resource == TeamsResource.FileData && operation == TeamsOperation.GetHeader)

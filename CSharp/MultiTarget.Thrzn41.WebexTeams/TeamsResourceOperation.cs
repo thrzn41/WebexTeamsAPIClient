@@ -123,6 +123,16 @@ namespace Thrzn41.WebexTeams
         /// File info resource.
         /// </summary>
         FileInfo,
+
+        /// <summary>
+        /// Space meeting info resource.
+        /// </summary>
+        SpaceMeetingInfo,
+
+        /// <summary>
+        /// Attachment action resource.
+        /// </summary>
+        AttachmentAction,
     }
 
 

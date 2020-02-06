@@ -652,6 +652,31 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
             Assert.AreEqual(r3.Data, r4.Data);
         }
 
+        [TestMethod]
+        public async Task TestGetSpaceMeetingInfo()
+        {
+            var r = await teams.GetSpaceMeetingInfoAsync(unitTestSpace);
+
+            Assert.IsTrue(r.IsSuccessStatus);
+
+            var info = r.Data;
+
+            Assert.IsNotNull(info.SpaceId);
+            Assert.IsNotNull(info.MeetingLink);
+            Assert.IsNotNull(info.MeetingLinkUri);
+            Assert.IsNotNull(info.SipAddress);
+            Assert.IsNotNull(info.MeetingNumber);
+            Assert.IsNotNull(info.CallInTollFreeNumber);
+            Assert.IsNotNull(info.CallInTollNumber);
+
+            var resourceOperation = r.ParseResourceOperation();
+            Assert.AreEqual(TeamsResource.SpaceMeetingInfo, resourceOperation.Resource);
+            Assert.AreEqual(TeamsOperation.Get, resourceOperation.Operation);
+            Assert.AreEqual("GetSpaceMeetingInfo", resourceOperation.ToString());
+
+        }
+
+
 
         [TestMethod]
         public async Task TestPagination()

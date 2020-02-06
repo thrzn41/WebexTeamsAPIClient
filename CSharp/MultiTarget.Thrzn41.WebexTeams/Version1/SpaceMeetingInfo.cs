@@ -28,66 +28,66 @@ using System.Text;
 
 namespace Thrzn41.WebexTeams.Version1
 {
+
     /// <summary>
-    /// Cisco Webex Teams Attachment Action object.
+    /// Cisco Webex Teams Space meeting info object.
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public class AttachmentAction : TeamsData
+    public class SpaceMeetingInfo : TeamsData
     {
 
         /// <summary>
-        /// A unique identifier for the action.
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; internal set; }
-
-        /// <summary>
-        /// The Id of the person who performed the action.
-        /// </summary>
-        [JsonProperty(PropertyName = "personId")]
-        public string PersonId { get; internal set; }
-
-        /// <summary>
-        /// The Id of the space the action was performed within.
+        /// The unique identifier for the Space.
         /// </summary>
         [JsonProperty(PropertyName = "roomId")]
         public string SpaceId { get; internal set; }
 
         /// <summary>
-        /// The type name of action performed.
+        /// The Webex meeting URL string for the Space.
         /// </summary>
-        [JsonProperty(PropertyName = "type")]
-        public string TypeName { get; internal set; }
+        [JsonProperty(PropertyName = "meetingLink")]
+        public string MeetingLink { get; internal set; }
 
         /// <summary>
-        /// The type of action performed.
+        /// The Webex meeting Uri string for the Space.
         /// </summary>
         [JsonIgnore]
-        public AttachmentActionType Type
+        public Uri MeetingLinkUri
         {
             get
             {
-                return AttachmentActionType.Parse(this.TypeName);
+                if(String.IsNullOrEmpty(this.MeetingLink))
+                {
+                    return null;
+                }
+
+                return (new Uri(this.MeetingLink));
             }
         }
 
         /// <summary>
-        /// The parent message the attachment action was performed on.
+        /// The SIP address for the Space.
         /// </summary>
-        [JsonProperty(PropertyName = "messageId")]
-        public string MessageId { get; internal set; }
+        [JsonProperty(PropertyName = "sipAddress")]
+        public string SipAddress { get; internal set; }
 
         /// <summary>
-        /// The attachment action's inputs.
+        /// The Webex meeting number for the Space.
         /// </summary>
-        [JsonProperty(PropertyName = "inputs")]
-        public AttachmentActionInputs Inputs { get; internal set; }
+        [JsonProperty(PropertyName = "meetingNumber")]
+        public string MeetingNumber { get; internal set; }
 
         /// <summary>
-        /// The date and time the action was created.
+        /// The toll-free PSTN number for the Space.
         /// </summary>
-        [JsonProperty(PropertyName = "created")]
-        public DateTime? Created { get; internal set; }
+        [JsonProperty(PropertyName = "callInTollFreeNumber")]
+        public string CallInTollFreeNumber { get; internal set; }
+
+        /// <summary>
+        /// The toll (local) PSTN number for the Space.
+        /// </summary>
+        [JsonProperty(PropertyName = "callInTollNumber")]
+        public string CallInTollNumber { get; internal set; }
 
     }
 }
