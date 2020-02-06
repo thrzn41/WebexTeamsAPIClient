@@ -1,0 +1,18 @@
+{
+  "type": "AdaptiveCard",
+  "version": "1.0",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Adaptive Cards",
+      "size": "large"
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.OpenUrl",
+      "url": "http://adaptivecards.io",
+      "title": "Learn More"
+    }
+  ]
+}

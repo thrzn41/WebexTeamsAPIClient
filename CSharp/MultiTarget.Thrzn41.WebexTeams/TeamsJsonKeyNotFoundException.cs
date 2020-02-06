@@ -29,50 +29,25 @@ namespace Thrzn41.WebexTeams
 {
 
     /// <summary>
-    /// Exception occurs on deserializing to Json.
+    /// Exception occurs when a key is not found.
     /// </summary>
-    public class TeamsJsonDeserializationException : TeamsException
+    public class TeamsKeyNotFoundException : TeamsException
     {
 
         /// <summary>
-        /// Line Number.
+        /// The Key name which is not found.
         /// </summary>
-        public int LineNumber { get; private set; }
-
-        /// <summary>
-        /// Line Position.
-        /// </summary>
-        public int LinePosition { get; private set; }
-
-        /// <summary>
-        /// Path.
-        /// </summary>
-        public string Path { get; private set; }
+        public string KeyName { get; private set; }
 
 
         /// <summary>
-        /// Create <see cref="TeamsJsonDeserializationException"/>.
+        /// Constructor.
         /// </summary>
-        /// <param name="lineNumber">Line number the error occured.</param>
-        /// <param name="linePosition">Position in the Line the error occured.</param>
-        /// <param name="path">Path to the Json the error occured.</param>
-        public TeamsJsonDeserializationException(int lineNumber, int linePosition, string path)
-            : base(String.Format(ResourceMessage.ErrorMessages.TeamsJsonDeserializationError, lineNumber, linePosition, path))
+        /// <param name="keyName">The Key name which is not found.</param>
+        public TeamsKeyNotFoundException(string keyName)
+            : base(String.Format(ResourceMessage.ErrorMessages.TeamsKeyNotFoundError, keyName))
         {
-            this.LineNumber = lineNumber;
-            this.LinePosition = linePosition;
-            this.Path = path;
+            this.KeyName = KeyName;
         }
-
-        /// <summary>
-        /// Create <see cref="TeamsJsonDeserializationException"/>.
-        /// </summary>
-        /// <param name="path">Path to the Json the error occured.</param>
-        public TeamsJsonDeserializationException(string path)
-            : this(0, 0, path)
-        {
-        }
-
     }
-
 }

@@ -27,32 +27,19 @@ using System.Text;
 
 namespace Thrzn41.WebexTeams
 {
-
     /// <summary>
-    /// Json converter to serialize or deserialize to/from Json.
+    /// Operation type for serialization.
     /// </summary>
-    public abstract class TeamsJsonConverter
+    public enum TeamsSerializationOperation
     {
-
+        /// <summary>
+        /// The operation is to serialize.
+        /// </summary>
+        Serialize,
 
         /// <summary>
-        /// Serialize the object to Json string.
+        /// The operation is to deserialize.
         /// </summary>
-        /// <param name="obj">The object to be serialized.</param>
-        /// <returns>The serialized Json string.</returns>
-        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
-        public abstract string SerializeObject(object obj);
-
-
-        /// <summary>
-        /// Deserialize the Json string to the object.
-        /// </summary>
-        /// <typeparam name="T">Type of the object.</typeparam>
-        /// <param name="jsonString">The Json string to be deserialized.</param>
-        /// <returns>The deserialized object.</returns>
-        /// <exception cref="TeamsJsonSerializationException">Throws on deserialization error.</exception>
-        public abstract T DeserializeObject<T>(string jsonString);
-
+        Deserialize,
     }
-
 }

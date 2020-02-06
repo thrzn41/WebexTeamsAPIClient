@@ -155,6 +155,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <summary>
         /// Space membership resource data.
         /// </summary>
+        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
         [JsonIgnore]
         public SpaceMembership SpaceMembershipData
         {
@@ -167,6 +168,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <summary>
         /// Message resource data.
         /// </summary>
+        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
         [JsonIgnore]
         public Message MessageData
         {
@@ -179,6 +181,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <summary>
         /// Space resource data.
         /// </summary>
+        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
         [JsonIgnore]
         public Space SpaceData
         {
@@ -188,8 +191,18 @@ namespace Thrzn41.WebexTeams.Version1
             }
         }
 
-
-
+        /// <summary>
+        /// AttachmentAction resource data.
+        /// </summary>
+        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
+        [JsonIgnore]
+        public AttachmentAction AttachmentActionData
+        {
+            get
+            {
+                return this.checkAndGetResourceData<AttachmentAction>(EventResource.AttachmentActions);
+            }
+        }
 
         /// <summary>
         /// Checks and gets resource data.
@@ -197,6 +210,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <typeparam name="TTeamsData">Type of resource data.</typeparam>
         /// <param name="eventResource"><see cref="EventResource"/> to be checked.</param>
         /// <returns>Resource data.</returns>
+        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
         private TTeamsData checkAndGetResourceData<TTeamsData>(EventResource eventResource)
             where TTeamsData : TeamsData, new()
         {
@@ -220,6 +234,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// </summary>
         /// <typeparam name="TTeamsData">Type of resource data.</typeparam>
         /// <returns>Resource data.</returns>
+        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
         public TTeamsData GetResourceData<TTeamsData>()
             where TTeamsData : TeamsData, new()
         {
@@ -231,15 +246,19 @@ namespace Thrzn41.WebexTeams.Version1
 
                 if(this.JsonExtensionData.TryGetValue("data", out jtoken))
                 {
-                    result = jtoken.ToObject<TTeamsData>();
+                    try
+                    {
+                        result = jtoken.ToObject<TTeamsData>(this.JsonConverter.Deserializer);
+                    }
+                    catch (JsonReaderException jre)
+                    {
+                        throw new TeamsJsonSerializationException(TeamsSerializationOperation.Deserialize, jre.LineNumber, jre.LinePosition, jre.Path);
+                    }
+                    catch (JsonSerializationException jse)
+                    {
+                        throw new TeamsJsonSerializationException(TeamsSerializationOperation.Deserialize, jse.LineNumber, jse.LinePosition, jse.Path);
+                    }
                 }
-            }
-
-            if(result == null)
-            {
-                result = new TTeamsData();
-
-                result.HasValues = false;
             }
 
             return result;

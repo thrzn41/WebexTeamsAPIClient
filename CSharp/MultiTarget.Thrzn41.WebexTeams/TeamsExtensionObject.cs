@@ -13,6 +13,11 @@ namespace Thrzn41.WebexTeams
     [JsonObject(MemberSerialization.OptIn)]
     public sealed class TeamsExtensionObject : TeamsObject
     {
+        /// <summary>
+        /// Empty keys.
+        /// </summary>
+        [JsonIgnore]
+        private static readonly string[] EMPTY_KEYS = new string[0];
 
         /// <summary>
         /// Extension data key list.
@@ -24,7 +29,7 @@ namespace Thrzn41.WebexTeams
             {
                 if( !this.HasExtensionData )
                 {
-                    return null;
+                    return EMPTY_KEYS;
                 }
 
                 return this.JsonExtensionData.Keys;
@@ -47,20 +52,34 @@ namespace Thrzn41.WebexTeams
             return this.JsonExtensionData.ContainsKey(key);
         }
 
-
         /// <summary>
         /// Gets Json extension data.
         /// </summary>
         /// <typeparam name="T">Type of result.</typeparam>
         /// <param name="key">The key of Json object.</param>
         /// <returns>Json extension data.</returns>
+        /// <exception cref="TeamsKeyNotFoundException">Throws when the key is not found.</exception>
+        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
         public T GetExtensionData<T>(string key)
         {
-            T result = default(T);
-
-            if (this.HasExtensionData && this.JsonExtensionData.ContainsKey(key))
+            if(key == null || !this.HasExtensionData || !this.JsonExtensionData.ContainsKey(key))
             {
-                result = this.JsonExtensionData[key].ToObject<T>();
+                throw new TeamsKeyNotFoundException(key);
+            }
+
+            T result;
+
+            try
+            {
+                result = this.JsonExtensionData[key].ToObject<T>(this.JsonConverter.Deserializer);
+            }
+            catch(JsonReaderException jre)
+            {
+                throw new TeamsJsonSerializationException(TeamsSerializationOperation.Deserialize, jre.LineNumber, jre.LinePosition, jre.Path);
+            }
+            catch (JsonSerializationException jse)
+            {
+                throw new TeamsJsonSerializationException(TeamsSerializationOperation.Deserialize, jse.LineNumber, jse.LinePosition, jse.Path);
             }
 
             return result;
@@ -71,13 +90,28 @@ namespace Thrzn41.WebexTeams
         /// </summary>
         /// <param name="key">The key of Json object.</param>
         /// <returns>Json extension data.</returns>
+        /// <exception cref="TeamsKeyNotFoundException">Throws when the key is not found.</exception>
+        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
         public string GetExtensionJsonString(string key)
         {
+            if (key == null || !this.HasExtensionData || !this.JsonExtensionData.ContainsKey(key))
+            {
+                throw new TeamsKeyNotFoundException(key);
+            }
+
             string result = null;
 
-            if (this.HasExtensionData && this.JsonExtensionData.ContainsKey(key))
+            try
             {
                 result = this.JsonExtensionData[key].ToString(Formatting.None);
+            }
+            catch (JsonWriterException jwe)
+            {
+                throw new TeamsJsonSerializationException(TeamsSerializationOperation.Serialize, jwe.Path);
+            }
+            catch (JsonSerializationException jse)
+            {
+                throw new TeamsJsonSerializationException(TeamsSerializationOperation.Serialize, jse.LineNumber, jse.LinePosition, jse.Path);
             }
 
             return result;
@@ -87,15 +121,27 @@ namespace Thrzn41.WebexTeams
         /// Gets Json extension data dictionary.
         /// </summary>
         /// <returns>Json extension data dictionary.</returns>
+        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
         public Dictionary<string, string> GetExtensionJsonStrings()
         {
             var result = new Dictionary<string, string>();
 
             if (this.HasExtensionData)
             {
-                foreach (var item in this.JsonExtensionData.Keys)
+                try
                 {
-                    result.Add(item, this.JsonExtensionData[item].ToString(Formatting.None));
+                    foreach (var item in this.JsonExtensionData.Keys)
+                    {
+                        result.Add(item, this.JsonExtensionData[item].ToString(Formatting.None));
+                    }
+                }
+                catch (JsonWriterException jwe)
+                {
+                    throw new TeamsJsonSerializationException(TeamsSerializationOperation.Serialize, jwe.Path);
+                }
+                catch (JsonSerializationException jse)
+                {
+                    throw new TeamsJsonSerializationException(TeamsSerializationOperation.Serialize, jse.LineNumber, jse.LinePosition, jse.Path);
                 }
             }
 

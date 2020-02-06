@@ -171,6 +171,175 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
         }
 
         [TestMethod]
+        public async Task TestCreateMessageWithAdaptiveCardFromString()
+        {
+            var card = AdaptiveCardAttachment.FromJsonString(
+                @"
+                    {
+                        ""type"": ""AdaptiveCard"",
+                        ""version"": ""1.0"",
+                        ""body"": [
+                        {
+                            ""type"": ""TextBlock"",
+                            ""text"": ""Adaptive Cards"",
+                            ""size"": ""large""
+                        }
+                        ],
+                        ""actions"": [
+                        {
+                            ""type"": ""Action.OpenUrl"",
+                            ""url"": ""http://adaptivecards.io"",
+                            ""title"": ""Learn More""
+                        }
+                        ]
+                    }
+                ");
+
+            var res = await teams.CreateMessageAsync(
+                unitTestSpace.Id,
+                "[Learn More](http://adaptivecards.io) about Adaptive Card.",
+                card);
+
+            Assert.AreEqual(HttpStatusCode.OK, res.HttpStatusCode);
+
+
+            var exePath = new FileInfo(Assembly.GetExecutingAssembly().Location);
+
+            string path = String.Format("{0}{1}TestData{1}AdaptiveCards", exePath.DirectoryName, Path.DirectorySeparatorChar);
+
+            foreach (var item in Directory.EnumerateFiles(path, "*.json", SearchOption.TopDirectoryOnly))
+            {
+                using (var fs     = new FileStream(item, FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (var reader = new StreamReader(fs, UTF8Utils.UTF8_WITHOUT_BOM, true))
+                {
+                    var r = await teams.CreateMessageAsync(unitTestSpace.Id, "Adaptive Card is not supported in you client.",
+                        AdaptiveCardAttachment.FromJsonString(reader.ReadToEnd()));
+
+                    Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+
+                    Assert.IsTrue(r.IsSuccessStatus);
+                    Assert.IsTrue(r.Data.HasValues);
+
+                    Assert.IsNotNull(r.Data.Id);
+                    Assert.IsNotNull(r.TrackingId);
+
+                    Assert.AreNotEqual(Guid.Empty, r.TransactionId);
+
+                    Assert.AreEqual("POST /v1/messages HTTP/1.1", r.RequestLine);
+
+                    Assert.AreEqual("Adaptive Card is not supported in you client.", r.Data.Text);
+
+                    var resourceOperation = r.ParseResourceOperation();
+                    Assert.AreEqual(TeamsResource.Message, resourceOperation.Resource);
+                    Assert.AreEqual(TeamsOperation.Create, resourceOperation.Operation);
+                    Assert.AreEqual("CreateMessage", resourceOperation.ToString());
+                }
+            }
+
+        }
+
+
+        private class SampleAdaptiveCard01
+        {
+            public string type = "AdaptiveCard";
+            public string version = "1.0";
+
+            public class SampleBody01
+            {
+                public string type = "TextBlock";
+                public string text = "Adaptive Cards";
+                public string size = "large";
+            }
+
+            public SampleBody01[] body = new SampleBody01[]{ new SampleBody01() };
+
+            public class SampleAction01
+            {
+                public string type = "Action.OpenUrl";
+                public string url = "http://adaptivecards.io";
+                public string title = "Learn More";
+            }
+
+            public SampleAction01[] actions = new SampleAction01[] { new SampleAction01() };
+        }
+
+
+        [TestMethod]
+        public async Task TestCreateMessageWithAdaptiveCardFromObject()
+        {
+            var card = new
+            {
+                type    = "AdaptiveCard",
+                version = "1.0",
+                body    = new []
+                {
+                    new
+                    {
+                        type = "TextBlock",
+                        text = "Adaptive Cards",
+                        size = "large",
+                    }
+                },
+                actions = new []
+                {
+                    new
+                    {
+                        type  = "Action.OpenUrl",
+                        url   = "http://adaptivecards.io",
+                        title = "Learn More"
+                    }
+                },
+            };
+
+            var r = await teams.CreateMessageAsync(unitTestSpace.Id, "Adaptive Card is not supported in you client.",
+            AdaptiveCardAttachment.FromObject(card));
+
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+
+            Assert.IsTrue(r.IsSuccessStatus);
+            Assert.IsTrue(r.Data.HasValues);
+
+            Assert.IsNotNull(r.Data.Id);
+            Assert.IsNotNull(r.TrackingId);
+
+            Assert.AreNotEqual(Guid.Empty, r.TransactionId);
+
+            Assert.AreEqual("POST /v1/messages HTTP/1.1", r.RequestLine);
+
+            Assert.AreEqual("Adaptive Card is not supported in you client.", r.Data.Text);
+
+            var resourceOperation = r.ParseResourceOperation();
+            Assert.AreEqual(TeamsResource.Message, resourceOperation.Resource);
+            Assert.AreEqual(TeamsOperation.Create, resourceOperation.Operation);
+            Assert.AreEqual("CreateMessage", resourceOperation.ToString());
+
+
+            r = await teams.CreateMessageAsync(unitTestSpace.Id, "Adaptive Card is not supported in you client.",
+                        AdaptiveCardAttachment.FromObject(new SampleAdaptiveCard01()));
+
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+
+            Assert.IsTrue(r.IsSuccessStatus);
+            Assert.IsTrue(r.Data.HasValues);
+
+            Assert.IsNotNull(r.Data.Id);
+            Assert.IsNotNull(r.TrackingId);
+
+            Assert.AreNotEqual(Guid.Empty, r.TransactionId);
+
+            Assert.AreEqual("POST /v1/messages HTTP/1.1", r.RequestLine);
+
+            Assert.AreEqual("Adaptive Card is not supported in you client.", r.Data.Text);
+
+            resourceOperation = r.ParseResourceOperation();
+            Assert.AreEqual(TeamsResource.Message, resourceOperation.Resource);
+            Assert.AreEqual(TeamsOperation.Create, resourceOperation.Operation);
+            Assert.AreEqual("CreateMessage", resourceOperation.ToString());
+
+        }
+
+
+        [TestMethod]
         public async Task TestCreateMessageWithMarkdown()
         {
             var r = await teams.CreateMessageAsync(unitTestSpace.Id, "Hello, **markdown**!!");
@@ -384,6 +553,83 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
         }
 
         [TestMethod]
+        public async Task TestCreateMessageWithAttachmentMultiByteFileName()
+        {
+
+            var exePath = new FileInfo(Assembly.GetExecutingAssembly().Location);
+
+            string path = String.Format("{0}{1}TestData{1}thrzn41.png", exePath.DirectoryName, Path.DirectorySeparatorChar);
+
+            Uri fileUri = null;
+            using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var data = new TeamsFileData(fs, "マルチバイトなファイル名.png", TeamsMediaType.ImagePNG))
+            {
+                var r = await teams.CreateMessageAsync(unitTestSpace.Id, "**Post with attachment!!**", data);
+                Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+                Assert.IsTrue(r.IsSuccessStatus);
+                Assert.IsTrue(r.Data.HasValues);
+                Assert.IsTrue(r.Data.HasFiles);
+
+                fileUri = r.Data.FileUris[0];
+            }
+
+            var r1 = await teams.GetFileInfoAsync(fileUri);
+            Assert.AreEqual(HttpStatusCode.OK, r1.HttpStatusCode);
+            Assert.IsTrue(r1.IsSuccessStatus);
+            Assert.IsTrue(r1.Data.HasValues);
+
+            Assert.AreEqual("マルチバイトなファイル名.png", r1.Data.FileName);
+            Assert.AreEqual(TeamsMediaType.ImagePNG, r1.Data.MediaType);
+            Assert.AreEqual(34991, r1.Data.Size);
+
+            var resourceOperation = r1.ParseResourceOperation();
+            Assert.AreEqual(TeamsResource.FileInfo, resourceOperation.Resource);
+            Assert.AreEqual(TeamsOperation.Get, resourceOperation.Operation);
+            Assert.AreEqual("GetFileInfo", resourceOperation.ToString());
+
+
+
+            var r2 = await teams.GetFileDataAsync(fileUri);
+            Assert.AreEqual(HttpStatusCode.OK, r2.HttpStatusCode);
+            Assert.IsTrue(r2.IsSuccessStatus);
+            Assert.IsTrue(r2.Data.HasValues);
+
+            Assert.AreEqual("マルチバイトなファイル名.png", r2.Data.FileName);
+            Assert.AreEqual(TeamsMediaType.ImagePNG, r2.Data.MediaType);
+            Assert.AreEqual(34991, r2.Data.Size);
+
+            resourceOperation = r2.ParseResourceOperation();
+            Assert.AreEqual(TeamsResource.FileData, resourceOperation.Resource);
+            Assert.AreEqual(TeamsOperation.Get, resourceOperation.Operation);
+            Assert.AreEqual("GetFileData", resourceOperation.ToString());
+
+            using (var data = r2.Data.Stream)
+            {
+                Assert.AreEqual(34991, data.Length);
+            }
+
+
+            using (var stream = new MemoryStream())
+            {
+                var r3 = await teams.CopyFileDataToStreamAsync(fileUri, stream);
+                Assert.AreEqual(HttpStatusCode.OK, r3.HttpStatusCode);
+                Assert.IsTrue(r3.IsSuccessStatus);
+                Assert.IsTrue(r3.Data.HasValues);
+
+                Assert.AreEqual("マルチバイトなファイル名.png", r3.Data.FileName);
+                Assert.AreEqual(TeamsMediaType.ImagePNG, r3.Data.MediaType);
+                Assert.AreEqual(34991, r3.Data.Size);
+
+                resourceOperation = r3.ParseResourceOperation();
+                Assert.AreEqual(TeamsResource.FileData, resourceOperation.Resource);
+                Assert.AreEqual(TeamsOperation.Get, resourceOperation.Operation);
+                Assert.AreEqual("GetFileData", resourceOperation.ToString());
+
+                Assert.AreEqual(34991, stream.Length);
+            }
+        }
+
+        [TestMethod]
         public async Task TestGetMe()
         {
             var r = await teams.GetMeAsync();
@@ -517,19 +763,20 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
         public void TestDeserializationError()
         {
             string str = "{ abc";
-            Assert.ThrowsException<TeamsJsonDeserializationException>(() => { TeamsObject.FromJsonString<Message>(str); });
+            Assert.ThrowsException<TeamsJsonSerializationException>(() => { TeamsObject.FromJsonString<Message>(str); });
            
             str = "{ \"id\": 1 \"aaa\": 1 }";
-            Assert.ThrowsException<TeamsJsonDeserializationException>(() => { TeamsObject.FromJsonString<Message>(str); });
+            Assert.ThrowsException<TeamsJsonSerializationException>(() => { TeamsObject.FromJsonString<Message>(str); });
 
             str = "{ \"id\": 12345, \"created\": 1, \"text\": \"Hello!!!\" }";
             var message = TeamsObject.FromJsonString<Message>(str);
 
-            Assert.IsTrue(message.HasDeserializationErrors);
-            Assert.AreEqual(1, message.DeserializationErrors.Length);
-            Assert.AreEqual(1, message.DeserializationErrors[0].LineNumber);
-            Assert.AreEqual(27, message.DeserializationErrors[0].LinePosition);
-            Assert.AreEqual("created", message.DeserializationErrors[0].Path);
+            Assert.IsTrue(message.HasSerializationErrors);
+            Assert.AreEqual(1, message.SerializationErrors.Length);
+            Assert.AreEqual(TeamsSerializationOperation.Deserialize, message.SerializationErrors[0].Operation);
+            Assert.AreEqual(1, message.SerializationErrors[0].LineNumber);
+            Assert.AreEqual(27, message.SerializationErrors[0].LinePosition);
+            Assert.AreEqual("created", message.SerializationErrors[0].Path);
             Assert.AreEqual("12345", message.Id);
             Assert.AreEqual("Hello!!!", message.Text);
         }

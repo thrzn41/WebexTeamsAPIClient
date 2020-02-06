@@ -117,11 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="TeamsJsonDeserializationError" xml:space="preserve">
-    <value>Error occured on deserializing from Json string: [Line = {0}, Position = {1}, Path = {2}]</value>
-  </data>
   <data name="TeamsJsonSerializationError" xml:space="preserve">
-    <value>Error occured on serializing to Json string: [Line = {0}, Position = {1}, Path = {2}]</value>
+    <value>Error occured on json serialization: [Operation = {0}, Line = {1}, Position = {2}, Path = {3}]</value>
+  </data>
+  <data name="TeamsKeyNotFoundError" xml:space="preserve">
+    <value>The key name '{0}' does not exist in the Json.</value>
   </data>
   <data name="TeamsResultError" xml:space="preserve">
     <value>Cisco Webex Teams API Service returned an error.</value>

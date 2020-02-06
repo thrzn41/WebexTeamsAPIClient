@@ -54,6 +54,10 @@ namespace Thrzn41.WebexTeams.Version1
         /// </summary>
         public static readonly EventResource Space = new EventResource("rooms");
 
+        /// <summary>
+        /// Attachment Actions resource.
+        /// </summary>
+        public static readonly EventResource AttachmentActions = new EventResource("attachmentActions");
 
 
 
@@ -69,10 +73,11 @@ namespace Thrzn41.WebexTeams.Version1
         {
             EVENT_RESOURCES = new Dictionary<string, EventResource>();
 
-            EVENT_RESOURCES.Add(All.Name,             All);
-            EVENT_RESOURCES.Add(SpaceMembership.Name, SpaceMembership);
-            EVENT_RESOURCES.Add(Message.Name,         Message);
-            EVENT_RESOURCES.Add(Space.Name,           Space);
+            EVENT_RESOURCES.Add(All.Name,               All);
+            EVENT_RESOURCES.Add(SpaceMembership.Name,   SpaceMembership);
+            EVENT_RESOURCES.Add(Message.Name,           Message);
+            EVENT_RESOURCES.Add(Space.Name,             Space);
+            EVENT_RESOURCES.Add(AttachmentActions.Name, AttachmentActions);
         }
 
 

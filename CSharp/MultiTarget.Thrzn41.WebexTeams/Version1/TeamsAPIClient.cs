@@ -68,6 +68,11 @@ namespace Thrzn41.WebexTeams.Version1
         protected static readonly string TEAMS_MESSAGES_API_PATH = GetAPIPath("messages");
 
         /// <summary>
+        /// Teams attachment actions API Path.
+        /// </summary>
+        protected static readonly string TEAMS_ATTACHMENT_ACTIONS_API_PATH = GetAPIPath("attachment/actions");
+
+        /// <summary>
         /// Teams teams API Path.
         /// </summary>
         protected static readonly string TEAMS_TEAMS_API_PATH = GetAPIPath("teams");
@@ -102,6 +107,11 @@ namespace Thrzn41.WebexTeams.Version1
         /// Teams messages API Uri.
         /// </summary>
         protected static readonly Uri TEAMS_MESSAGES_API_URI = new Uri(TEAMS_MESSAGES_API_PATH);
+
+        /// <summary>
+        /// Teams attachment actions API Uri.
+        /// </summary>
+        protected static readonly Uri TEAMS_ATTACHMENT_ACTIONS_API_URI = new Uri(TEAMS_ATTACHMENT_ACTIONS_API_PATH);
 
         /// <summary>
         /// Teams teams API Uri.
@@ -963,6 +973,75 @@ namespace Thrzn41.WebexTeams.Version1
             return (CreateMessageAsync(space.Id, markdownOrText, files, MessageTarget.SpaceId, textType, cancellationToken));
         }
 
+        /// <summary>
+        /// Creates a message with an attachment.
+        /// </summary>
+        /// <param name="targetId">Id that the message is posted.</param>
+        /// <param name="markdownOrText">markdown or text to be posted.</param>
+        /// <param name="attachment">Message attachment to be attached with the message.</param>
+        /// <param name="target"><see cref="MessageTarget"/> that the targetId parameter represents.</param>
+        /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task<TeamsResult<Message>> CreateMessageAsync(string targetId, string markdownOrText, Attachment attachment, MessageTarget target = MessageTarget.SpaceId, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        {
+            var message = new Message();
+
+            switch (target)
+            {
+                case MessageTarget.PersonId:
+                    message.ToPersonId = targetId;
+                    break;
+                case MessageTarget.PersonEmail:
+                    message.ToPersonEmail = targetId;
+                    break;
+                default:
+                    message.SpaceId = targetId;
+                    break;
+            }
+
+            switch (textType)
+            {
+                case MessageTextType.Text:
+                    message.Text = markdownOrText;
+                    break;
+                default:
+                    message.Markdown = markdownOrText;
+                    break;
+            }
+
+            if (attachment != null)
+            {
+                message.Attachments = new Attachment[] { attachment };
+            }
+
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsResult<Message>, Message>(
+                                    HttpMethod.Post,
+                                    TEAMS_MESSAGES_API_URI,
+                                    null,
+                                    message,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Creates a message with an attachment.
+        /// </summary>
+        /// <param name="space"><see cref="Space"/> that the message is posted.</param>
+        /// <param name="markdownOrText">markdown or text to be posted.</param>
+        /// <param name="attachment">Message attachment to be attached with the message.</param>
+        /// <param name="target"><see cref="MessageTarget"/> that the targetId parameter represents.</param>
+        /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task<TeamsResult<Message>> CreateMessageAsync(Space space, string markdownOrText, Attachment attachment, MessageTarget target = MessageTarget.SpaceId, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        {
+            return (CreateMessageAsync(space.Id, markdownOrText, attachment, MessageTarget.SpaceId, textType, cancellationToken));
+        }
+
 
         /// <summary>
         /// Creates a message.
@@ -1124,6 +1203,51 @@ namespace Thrzn41.WebexTeams.Version1
 
 
         /// <summary>
+        /// Create a message to direct space with an attachment.
+        /// </summary>
+        /// <param name="personIdOrEmail">Person id or email that the message is posted.</param>
+        /// <param name="markdownOrText">markdown or text to be posted.</param>
+        /// <param name="attachment">Message attachment to be attached with the message.</param>
+        /// <param name="personIdType"><see cref="PersonIdType"/> of personIdOrEmail parameter.</param>
+        /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task<TeamsResult<Message>> CreateDirectMessageAsync(string personIdOrEmail, string markdownOrText, Attachment attachment, PersonIdType personIdType = PersonIdType.Detect, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        {
+            personIdType = DetectPersonIdType(personIdOrEmail, personIdType);
+
+            MessageTarget targetType;
+
+            switch (personIdType)
+            {
+                case PersonIdType.Email:
+                    targetType = MessageTarget.PersonEmail;
+                    break;
+                default:
+                    targetType = MessageTarget.PersonId;
+                    break;
+            }
+
+            return (CreateMessageAsync(personIdOrEmail, markdownOrText, attachment, targetType, textType, cancellationToken));
+        }
+
+        /// <summary>
+        /// Create a message to direct space with an attachment.
+        /// </summary>
+        /// <param name="person"><see cref="Person"/> that the message is posted.</param>
+        /// <param name="markdownOrText">markdown or text to be posted.</param>
+        /// <param name="attachment">Message attachment to be attached with the message.</param>
+        /// <param name="personIdType"><see cref="PersonIdType"/> of personIdOrEmail parameter.</param>
+        /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task<TeamsResult<Message>> CreateDirectMessageAsync(Person person, string markdownOrText, Attachment attachment, PersonIdType personIdType = PersonIdType.Detect, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        {
+            return (CreateDirectMessageAsync(person.Id, markdownOrText, attachment, PersonIdType.Id, textType, cancellationToken));
+        }
+
+
+        /// <summary>
         /// Gets message detail.
         /// </summary>
         /// <param name="messageId">Message id that the detail info is gotten.</param>
@@ -1188,6 +1312,82 @@ namespace Thrzn41.WebexTeams.Version1
 
         #endregion
 
+        #region AttachmentActions APIs
+
+        /// <summary>
+        /// Creates an attachment action.
+        /// </summary>
+        /// <param name="messageId">The Id of the message which contains the attachment.</param>
+        /// <param name="inputs">The attachment action's inputs.</param>
+        /// <param name="type">The type of action to perform.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task< TeamsResult<AttachmentAction> > CreateAttachmentActionAsync(string messageId, AttachmentActionInputs inputs, AttachmentActionType type, CancellationToken? cancellationToken = null)
+        {
+            var attachmentAction = new AttachmentAction();
+
+            attachmentAction.MessageId = messageId;
+            attachmentAction.Inputs    = inputs;
+            attachmentAction.TypeName  = type.Name;
+
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsResult<AttachmentAction>, AttachmentAction>(
+                                    HttpMethod.Post,
+                                    TEAMS_ATTACHMENT_ACTIONS_API_URI,
+                                    null,
+                                    attachmentAction,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Creates an attachment action.
+        /// </summary>
+        /// <param name="message"><see cref="Message"/> which contains the attachment.</param>
+        /// <param name="inputs">The attachment action's inputs.</param>
+        /// <param name="type">The type of action to perform.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsResult<AttachmentAction> > CreateAttachmentActionAsync(Message message, AttachmentActionInputs inputs, AttachmentActionType type, CancellationToken? cancellationToken = null)
+        {
+            return CreateAttachmentActionAsync(message.Id, inputs, type, cancellationToken);
+        }
+
+        /// <summary>
+        /// Gets Attachment action detail.
+        /// </summary>
+        /// <param name="attachmentActionId">A unique identifier for the attachment action.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task<TeamsResult<AttachmentAction>> GetAttachmentActionAsync(string attachmentActionId, CancellationToken? cancellationToken = null)
+        {
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsResult<AttachmentAction>, AttachmentAction>(
+                                    HttpMethod.Get,
+                                    new Uri(String.Format("{0}/{1}", TEAMS_ATTACHMENT_ACTIONS_API_PATH, Uri.EscapeDataString(attachmentActionId))),
+                                    null,
+                                    null,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets Attachment action detail.
+        /// </summary>
+        /// <param name="attachmentAction"><see cref="AttachmentAction"/> that the detail info is gotten.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task< TeamsResult<AttachmentAction> > GetAttachmentActionAsync(AttachmentAction attachmentAction, CancellationToken? cancellationToken = null)
+        {
+            return GetAttachmentActionAsync(attachmentAction.Id, cancellationToken);
+        }
+
+
+        #endregion
 
         #region Teams APIs
 

@@ -329,6 +329,22 @@ namespace Thrzn41.WebexTeams.Version1
             }
         }
 
+        /// <summary>
+        /// Content attachments to attach to the message.
+        /// </summary>
+        [JsonProperty(PropertyName = "attachments")]
+        public Attachment[] Attachments { get; internal set; }
+
+        /// <summary>
+        /// Indicates this message has attachments or not.
+        /// </summary>
+        [JsonIgnore]
+        public bool HasAttachments {
+            get
+            {
+                return (this.Attachments != null && this.Attachments.Length > 0);
+            }
+         }
 
         /// <summary>
         /// Checks if the message is posted by other person or not.

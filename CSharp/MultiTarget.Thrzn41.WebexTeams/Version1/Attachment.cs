@@ -21,38 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Thrzn41.WebexTeams
+namespace Thrzn41.WebexTeams.Version1
 {
 
     /// <summary>
-    /// Json converter to serialize or deserialize to/from Json.
+    /// Cisco Webex Teams Message attachment object.
     /// </summary>
-    public abstract class TeamsJsonConverter
+    [JsonObject(MemberSerialization.OptIn)]
+    public class Attachment
     {
 
+        /// <summary>
+        /// The content type name of the attachment.
+        /// </summary>
+        [JsonProperty(PropertyName = "contentType")]
+        public string TypeName { get; internal set; }
 
         /// <summary>
-        /// Serialize the object to Json string.
+        /// The content type of the attachment.
         /// </summary>
-        /// <param name="obj">The object to be serialized.</param>
-        /// <returns>The serialized Json string.</returns>
-        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
-        public abstract string SerializeObject(object obj);
+        [JsonIgnore]
+        public AttachmentType Type
+        {
+            get
+            {
+                return AttachmentType.Parse(this.TypeName);
+            }
 
+            protected set
+            {
+                this.TypeName = value.Name;
+            }
+        }
 
-        /// <summary>
-        /// Deserialize the Json string to the object.
-        /// </summary>
-        /// <typeparam name="T">Type of the object.</typeparam>
-        /// <param name="jsonString">The Json string to be deserialized.</param>
-        /// <returns>The deserialized object.</returns>
-        /// <exception cref="TeamsJsonSerializationException">Throws on deserialization error.</exception>
-        public abstract T DeserializeObject<T>(string jsonString);
 
     }
-
 }

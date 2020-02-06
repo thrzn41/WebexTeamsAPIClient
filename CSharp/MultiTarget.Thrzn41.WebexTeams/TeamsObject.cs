@@ -44,20 +44,20 @@ namespace Thrzn41.WebexTeams
         /// Default Json converter.
         /// </summary>
         [JsonIgnore]
-        private static readonly TeamsJsonConverter DEFAULT_JSON_CONVERTER = new TeamsJsonObjectConverter();
+        internal static readonly TeamsJsonObjectConverter DEFAULT_JSON_CONVERTER = new TeamsJsonObjectConverter();
 
 
         /// <summary>
         /// Json converter to serialize or deserialize to/from Json.
         /// </summary>
         [JsonIgnore]
-        private TeamsJsonConverter jsonConverter = null;
+        private TeamsJsonObjectConverter jsonConverter = null;
 
         /// <summary>
         /// Json converter to serialize or deserialize to/from Json.
         /// </summary>
         [JsonIgnore]
-        private TeamsJsonConverter JsonConverter
+        protected TeamsJsonObjectConverter JsonConverter
         {
             get
             {
@@ -164,14 +164,7 @@ namespace Thrzn41.WebexTeams
         public static TTeamsObject FromJsonString<TTeamsObject>(string jsonString, TeamsJsonConverter jsonConverter)
             where TTeamsObject : TeamsObject, new()
         {
-            if (jsonConverter != null)
-            {
-                return jsonConverter.DeserializeObject<TTeamsObject>(jsonString);
-            }
-            else
-            {
-                return DEFAULT_JSON_CONVERTER.DeserializeObject<TTeamsObject>(jsonString);
-            }
+            return (jsonConverter ?? DEFAULT_JSON_CONVERTER).DeserializeObject<TTeamsObject>(jsonString);
         }
 
         /// <summary>

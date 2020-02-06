@@ -21,38 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Thrzn41.WebexTeams
+namespace Thrzn41.WebexTeams.Version1.AttachmentData
 {
 
+
     /// <summary>
-    /// Json converter to serialize or deserialize to/from Json.
+    /// Adaptive Card data from json string.
     /// </summary>
-    public abstract class TeamsJsonConverter
+    [JsonObject(MemberSerialization.OptIn)]
+    public class AdaptiveCardExtensionData
     {
 
-
         /// <summary>
-        /// Serialize the object to Json string.
+        /// Json extension data.
         /// </summary>
-        /// <param name="obj">The object to be serialized.</param>
-        /// <returns>The serialized Json string.</returns>
-        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
-        public abstract string SerializeObject(object obj);
-
-
-        /// <summary>
-        /// Deserialize the Json string to the object.
-        /// </summary>
-        /// <typeparam name="T">Type of the object.</typeparam>
-        /// <param name="jsonString">The Json string to be deserialized.</param>
-        /// <returns>The deserialized object.</returns>
-        /// <exception cref="TeamsJsonSerializationException">Throws on deserialization error.</exception>
-        public abstract T DeserializeObject<T>(string jsonString);
-
+        [JsonExtensionData]
+        internal Dictionary<string, JToken> ExtensionData{ get; set; }
     }
 
 }

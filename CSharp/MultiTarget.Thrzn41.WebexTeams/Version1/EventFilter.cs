@@ -88,6 +88,32 @@ namespace Thrzn41.WebexTeams.Version1
         }
 
         /// <summary>
+        /// Event filter for message.
+        /// </summary>
+        public class MessageFilter : EventFilter
+        {
+
+            /// <summary>
+            /// Create an event filter for message.
+            /// </summary>
+            /// <param name="messageId">Message id to be filtered.</param>
+            public MessageFilter(string messageId)
+                : base("messageId", messageId)
+            {
+            }
+
+            /// <summary>
+            /// Create an event filter for space.
+            /// </summary>
+            /// <param name="message"><see cref="Message"/> to be filtered.</param>
+            public MessageFilter(Message message)
+                : base("messageId", message.Id)
+            {
+            }
+
+        }
+
+        /// <summary>
         /// Event filter for space type.
         /// </summary>
         public class SpaceTypeFilter : EventFilter
