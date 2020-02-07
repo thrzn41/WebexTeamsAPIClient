@@ -30,6 +30,79 @@ var message = (await teams.CreateDirectMessageAsync("your_webex_teams_account@ex
 Console.WriteLine("メッセージが投稿されました: ID = {0}", message.Id);
 ```
 
+* AdaptiveCardをJson文字列やobjectから生成して投稿する簡単な例
+
+``` csharp
+// Json文字列から生成。
+var card = AdaptiveCardAttachment.FromJsonString(
+@"
+    {
+        ""type"": ""AdaptiveCard"",
+        ""version"": ""1.0"",
+        ""body"": [
+        {
+            ""type"": ""TextBlock"",
+            ""text"": ""Adaptive Cards"",
+            ""size"": ""large""
+        }
+        ],
+        ""actions"": [
+        {
+            ""type"": ""Action.OpenUrl"",
+            ""url"": ""http://adaptivecards.io"",
+            ""title"": ""Learn More""
+        }
+        ]
+    }
+");
+
+// カード付きでメッセージを投稿。
+var message = (await teams.CreateDirectMessageAsync("your_webex_teams_account@example.com",
+    "[Learn More](http://adaptivecards.io) about Adaptive Card.",
+    card)).GetData();
+
+Console.WriteLine("Message was posted: ID = {0}", message.Id);
+
+
+// 匿名型やクラスのインスタンスからも生成できます。
+var cardObj = new
+{
+    type    = "AdaptiveCard",
+    version = "1.0",
+    body    = new []
+    {
+        new
+        {
+            type = "TextBlock",
+            text = "Adaptive Cards",
+            size = "large",
+        }
+    },
+    actions = new []
+    {
+        new
+        {
+            type  = "Action.OpenUrl",
+            url   = "http://adaptivecards.io",
+            title = "Learn More"
+        }
+    },
+};
+
+// objectから生成。
+card = AdaptiveCardAttachment.FromObject(cardObj);
+
+// カード付きでメッセージを投稿。
+message = (await teams.CreateDirectMessageAsync("your_webex_teams_account@example.com",
+    "[Learn More](http://adaptivecards.io) about Adaptive Card.",
+    card)).GetData();
+
+Console.WriteLine("Message was posted: ID = {0}", message.Id);
+
+// teams.GetAttachmentActionAsync()でユーザからの入力を受け取れます。
+// 本APIClientのWebhook listner, event handlerには、これらの入力を受け取る機能があります。
+```
+
 * ゲストユーザ用のアカウントを発行して投稿する例
 
 Webex Teamsの[Guest Issuer機能](https://developer.webex.com/guest-issuer.html)を利用する例です。
@@ -111,6 +184,7 @@ Webex Teams API Clientのサンプルは、 [こちらをクリック](https://g
 * Webex Teamsの基本的なAPI(List/Get/Create Message, Spaceなど)。
 * Webex TeamsのAdmin API(List/Get Event, Licenseなど)。
 * ストレージに保存するTokenの暗号化と復号。
+* AdaptiveCardsの添付(カードの作成やユーザ入力の取得)。
 * List API用のPagination機能。Paginationを簡単にするためのEnumerator。
 * Retry-after値の処理とRetry handler。
 * Markdown builder。
@@ -124,25 +198,30 @@ Webex Teams API Clientのサンプルは、 [こちらをクリック](https://g
 
 | Teamsのリソース名                  | 利用可能な機能                 | 説明                                 |
 | :-------------------------------- | :---------------------------- | :---------------------------------- |
-| Person/People                     | List/Get                      | 利用可能。Get Meも利用可能                     |
-| Space(Room)                       | List/Create/Get/Update/Delete | 利用可能。Roomは、API Clientでは、Spaceと呼ばれる。                                  |
-| SpaceMembership(Membership)       | List/Create/Get/Update/Delete | 利用可能。Membershipは、API Clientでは、SpaceMembershipと呼ばれる。        |
-| Message                           | List/Create/Get/Delete        | 利用可能。ローカルのstreamからファイル添付も可能 |
-| Team                              | List/Create/Get/Update/Delete | 利用可能。                                   |
-| TeamMembership                    | List/Create/Get/Update/Delete | 利用可能。                                   |
-| Webhook                           | List/Create/Get/Update/Delete | 利用可能。                                   |
-| File                              | GetInfo/GetData/Upload        | 利用可能。                                   |
+| Person/People                     | List/Get                      | v1.2.2から利用可能。Get Meも利用可能                     |
+| Space(Room)                       | List/Create/Get/Update/Delete | v1.2.2から利用可能。Roomは、API Clientでは、Spaceと呼ばれる。                                  |
+| Space(Room) Meeting Info    | Get                           | v1.7.1から利用可能。   |
+| SpaceMembership(Membership)       | List/Create/Get/Update/Delete | v1.2.2から利用可能。Membershipは、API Clientでは、SpaceMembershipと呼ばれる。        |
+| Message                           | List/Create/Get/Delete        | v1.2.2から利用可能。ローカルのstreamからファイル添付も可能 |
+| AdaptiveCards               | List/Create/Get/Delete        | v1.7.1から利用可能。 |
+| AttachmentActions           | Create/Get                    | v1.7.1から利用可能。 |
+| Team                              | List/Create/Get/Update/Delete | v1.2.2から利用可能。                                   |
+| TeamMembership                    | List/Create/Get/Update/Delete | v1.2.2から利用可能。                                   |
+| Webhook                           | List/Create/Get/Update/Delete | v1.2.2から利用可能。                                   |
+| File                              | GetInfo/GetData/Upload        | v1.2.2から利用可能。                                   |
+| Place/Device/xAPI           | -                             | v1.8.1で計画中。                                      |
+
 
 ### Admin機能
 | Teamsのリソース名 | 利用可能な機能                | 説明 |
 | :-------------- | :---------------------------- | :---------------------------------------------- |
-| Person/People   | Create/Update/Delete          | 利用可能。                                       |
-| Event           | List/Get                      | 利用可能。                                       |
-| Organization    | List/Get                      | 利用可能。                                       |
-| License         | List/Get                      | 利用可能。                                       |
-| Role            | List/Get                      | 利用可能。                                       |
-| GroupResource            | List/Get                      | 利用可能。                                      |
-| GroupResourceMembership  | List/Get/Update                      | 利用可能。                                      |
+| Person/People   | Create/Update/Delete          | v1.2.2から利用可能。                                       |
+| Event           | List/Get                      | v1.2.2から利用可能。                                       |
+| Organization    | List/Get                      | v1.2.2から利用可能。                                       |
+| License         | List/Get                      | v1.2.2から利用可能。                                       |
+| Role            | List/Get                      | v1.2.2から利用可能。                                       |
+| GroupResource            | List/Get                      | v1.2.2から利用可能。                                      |
+| GroupResourceMembership  | List/Get/Update                      | v1.2.2から利用可能。                                      |
 
 ### ストレージのTokenの暗号化と復号
 

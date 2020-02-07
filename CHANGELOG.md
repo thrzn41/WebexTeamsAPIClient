@@ -9,6 +9,14 @@
 > NOTE: Datetime format is `yyyy-MM-dd`.
 
 ---
+### [2020-02-07] Version 1.7.1
+
+#### [NEW FEATURES]
+
+* AdaptiveCard feature(Create card and retrieve actions from user).
+* SpaceMeetingInfo feature.
+
+---
 ### [2019-02-15] Version 1.6.2
 
 #### [FIXED DEFECTS]
