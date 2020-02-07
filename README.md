@@ -30,6 +30,79 @@ var message = (await teams.CreateDirectMessageAsync("your_webex_teams_account@ex
 Console.WriteLine("Message was posted: ID = {0}", message.Id);
 ```
 
+* A Simple example to post a message with Adaptive Cards created from Json string or object.
+
+``` csharp
+// Create From Json String.
+var card = AdaptiveCardAttachment.FromJsonString(
+@"
+    {
+        ""type"": ""AdaptiveCard"",
+        ""version"": ""1.0"",
+        ""body"": [
+        {
+            ""type"": ""TextBlock"",
+            ""text"": ""Adaptive Cards"",
+            ""size"": ""large""
+        }
+        ],
+        ""actions"": [
+        {
+            ""type"": ""Action.OpenUrl"",
+            ""url"": ""http://adaptivecards.io"",
+            ""title"": ""Learn More""
+        }
+        ]
+    }
+");
+
+// Post a message with card.
+var message = (await teams.CreateDirectMessageAsync("your_webex_teams_account@example.com",
+    "[Learn More](http://adaptivecards.io) about Adaptive Card.",
+    card)).GetData();
+
+Console.WriteLine("Message was posted: ID = {0}", message.Id);
+
+
+// Also, you can create from Anonymous type or class instance.
+var cardObj = new
+{
+    type    = "AdaptiveCard",
+    version = "1.0",
+    body    = new []
+    {
+        new
+        {
+            type = "TextBlock",
+            text = "Adaptive Cards",
+            size = "large",
+        }
+    },
+    actions = new []
+    {
+        new
+        {
+            type  = "Action.OpenUrl",
+            url   = "http://adaptivecards.io",
+            title = "Learn More"
+        }
+    },
+};
+
+card = AdaptiveCardAttachment.FromObject(cardObj);
+
+// Post a message with card.
+message = (await teams.CreateDirectMessageAsync("your_webex_teams_account@example.com",
+    "[Learn More](http://adaptivecards.io) about Adaptive Card.",
+    card)).GetData();
+
+Console.WriteLine("Message was posted: ID = {0}", message.Id);
+
+// You can use teams.GetAttachmentActionAsync() to get action from users.
+// Webhook listner, event handler in this APIClient has capablities to get these actions.
+```
+
+
 * An example to use Guest Issuer
 
 It is an example that facilitates [Guest Issuer](https://developer.webex.com/guest-issuer.html) of Webex Teams.  
@@ -111,6 +184,7 @@ Samples for Webex Teams API Client is available on [here](https://github.com/thr
 * Basic Webex Teams APIs(List/Get/Create Message, Space, etc.).
 * Webex Teams Admin APIs(List/Get Event, License, etc.).
 * Encrypt/Decrypt Webex Teams token in storage.
+* AdaptiveCards attachment(Create Cards and Get AttachmentActions).
 * Pagination for list APIs. Enumerator to facilitate the pagination.
 * Retry-after value, Retry handler.
 * Markdown builder.
@@ -124,26 +198,30 @@ Samples for Webex Teams API Client is available on [here](https://github.com/thr
 
 | Teams Resource              | Available Feature             | Description                                     |
 | :-------------------------- | :---------------------------- | :---------------------------------------------- |
-| Person/People               | List/Get                      | Available. Get Me is also available                        |
-| Space(Room)                 | List/Create/Get/Update/Delete | Available. Room is called 'Space' in this API Client.   |
-| SpaceMembership(Membership) | List/Create/Get/Update/Delete | Available. Membership is called 'SpaceMembership' in this API Client.                                               |
-| Message                     | List/Create/Get/Delete        | Available. Attach file from local stream is also available |
-| Team                        | List/Create/Get/Update/Delete | Available.                                      |
-| TeamMembership              | List/Create/Get/Update/Delete | Available.                                      |
-| Webhook                     | List/Create/Get/Update/Delete | Available.                                      |
-| File                        | GetInfo/GetData/Upload        | Available.                                      |
+| Person/People               | List/Get                      | Available in v1.2.2. Get Me is also available                        |
+| Space(Room)                 | List/Create/Get/Update/Delete | Available in v1.2.2. Room is called 'Space' in this API Client.   |
+| Space(Room) Meeting Info    | Get                           | Available in v1.7.1.   |
+| SpaceMembership(Membership) | List/Create/Get/Update/Delete | Available in v1.2.2. Membership is called 'SpaceMembership' in this API Client.        |
+| Message                     | List/Create/Get/Delete        | Available in v1.2.2. Attach file from local stream is also available |
+| AdaptiveCards               | List/Create/Get/Delete        | Available in v1.7.1 |
+| AttachmentActions           | Create/Get                    | Available in v1.7.1 |
+| Team                        | List/Create/Get/Update/Delete | Available in v1.2.2.                                      |
+| TeamMembership              | List/Create/Get/Update/Delete | Available in v1.2.2.                                      |
+| Webhook                     | List/Create/Get/Update/Delete | Available in v1.2.2.                                      |
+| File                        | GetInfo/GetData/Upload        | Available in v1.2.2.                                      |
+| Place/Device/xAPI           | -                             | Planed in v1.8.1.                                      |
 
 ### Admin Features
 
 | Teams Resource | Available Feature | Description |
 | :-------------- | :---------------------------- | :---------------------------------------------- |
-| Person/People   | Create/Update/Delete          | Available.                                      |
-| Event           | List/Get                      | Available.                                      |
-| Organization    | List/Get                      | Available.                                      |
-| License         | List/Get                      | Available.                                      |
-| Role            | List/Get                      | Available.                                      |
-| GroupResource            | List/Get                      | Available.                                      |
-| GroupResourceMembership  | List/Get/Update                      | Available.                                      |
+| Person/People   | Create/Update/Delete          | Available in v1.2.2.                                      |
+| Event           | List/Get                      | Available in v1.2.2.                                      |
+| Organization    | List/Get                      | Available in v1.2.2.                                      |
+| License         | List/Get                      | Available in v1.2.2.                                      |
+| Role            | List/Get                      | Available in v1.2.2.                                      |
+| GroupResource            | List/Get                      | Available in v1.2.2.                                      |
+| GroupResourceMembership  | List/Get/Update                      | Available in v1.2.2.                                      |
 
 ### Token encryption/decryption in storage
 `ProtectedString` provides token encryption/decryption.  

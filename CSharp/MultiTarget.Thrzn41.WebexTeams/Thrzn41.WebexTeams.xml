@@ -5778,6 +5778,11 @@
             Teams messages API Path.
             </summary>
         </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.TeamsAPIClient.TEAMS_DIRECT_MESSAGES_API_PATH">
+            <summary>
+            Teams direct messages API Path.
+            </summary>
+        </member>
         <member name="F:Thrzn41.WebexTeams.Version1.TeamsAPIClient.TEAMS_ATTACHMENT_ACTIONS_API_PATH">
             <summary>
             Teams attachment actions API Path.
@@ -5816,6 +5821,11 @@
         <member name="F:Thrzn41.WebexTeams.Version1.TeamsAPIClient.TEAMS_MESSAGES_API_URI">
             <summary>
             Teams messages API Uri.
+            </summary>
+        </member>
+        <member name="F:Thrzn41.WebexTeams.Version1.TeamsAPIClient.TEAMS_DIRECT_MESSAGES_API_URI">
+            <summary>
+            Teams direct messages API Uri.
             </summary>
         </member>
         <member name="F:Thrzn41.WebexTeams.Version1.TeamsAPIClient.TEAMS_ATTACHMENT_ACTIONS_API_URI">
@@ -6203,6 +6213,25 @@
             <param name="mentionedPeople">List messages where the caller is mentioned by specifying "me" or the caller personId.</param>
             <param name="before">List messages sent before a date and time.</param>
             <param name="beforeMessage">List messages sent before a message, by ID.</param>
+            <param name="max">Limit the maximum number of messages in the response.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.ListDirectMessagesAsync(System.String,Thrzn41.WebexTeams.Version1.PersonIdType,System.Nullable{System.Int32},System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Lists direct messages.
+            </summary>
+            <param name="personIdOrEmail">Person id or email that the message is posted.</param>
+            <param name="personIdType"><see cref="T:Thrzn41.WebexTeams.Version1.PersonIdType"/> of personIdOrEmail parameter.</param>
+            <param name="max">Limit the maximum number of messages in the response.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.ListDirectMessagesAsync(Thrzn41.WebexTeams.Version1.Person,System.Nullable{System.Int32},System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Lists direct messages.
+            </summary>
+            <param name="person"><see cref="T:Thrzn41.WebexTeams.Version1.Person"/> that the message is posted.</param>
             <param name="max">Limit the maximum number of messages in the response.</param>
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>

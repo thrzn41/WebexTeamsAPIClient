@@ -8,6 +8,13 @@
 
 > NOTE: 日付形式は、`yyyy-MM-dd`です。
 
+---
+### [2020-02-07] Version 1.7.1
+
+#### [NEW FEATURES]
+
+* AdaptiveCard機能(カードの作成やユーザからの入力受け取り)。
+* SpaceMeetingInfo機能。
 
 ---
 ### [2019-02-15] Version 1.6.2
