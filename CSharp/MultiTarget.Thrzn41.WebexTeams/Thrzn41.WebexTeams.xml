@@ -1188,6 +1188,40 @@
             <param name="operation">Operation type to serialize.</param>
             <param name="path">Path to the Json the error occured.</param>
         </member>
+        <member name="T:Thrzn41.WebexTeams.TeamsListObject`1">
+            <summary>
+            Base Object for all Cisco Webex Teams list objects.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsListObject`1.Item(System.Int32)">
+            <summary>
+            Indexer.
+            </summary>
+            <param name="index">The index of the items.</param>
+            <returns>The item of this list.</returns>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsListObject`1.ItemCount">
+            <summary>
+            Gets the item count.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsListObject`1.HasItems">
+            <summary>
+            Indicates the object contains items or not.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsListObject`1.GetEnumerator">
+            <summary>
+            Gets <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </summary>
+            <returns><see cref="T:System.Collections.Generic.IEnumerable`1"/>.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.TeamsListObject`1.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets <see cref="T:System.Collections.IEnumerable"/>.
+            </summary>
+            <returns><see cref="T:System.Collections.IEnumerable"/>.</returns>
+        </member>
         <member name="T:Thrzn41.WebexTeams.TeamsListResult`1">
             <summary>
             The result of Cisco API list request.
@@ -6768,6 +6802,29 @@
             Indicates whether the object has error or not.
             </summary>
         </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsData.CheckHasErrors(System.Collections.Generic.IDictionary{System.String,Newtonsoft.Json.Linq.JToken})">
+            <summary>
+            Indicates whether the object has error or not.
+            </summary>
+            <param name="jsonExtensionData">JsonExtensionData.</param>
+            <returns>true if the data has errors.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsData.GetErrors(System.Collections.Generic.IDictionary{System.String,Newtonsoft.Json.Linq.JToken})">
+            <summary>
+            Gets Errors.
+            </summary>
+            <param name="jsonExtensionData">JsonExtensionData.</param>
+            <returns>Errors or null.</returns>
+            <exception cref="T:Thrzn41.WebexTeams.TeamsJsonSerializationException">Throws on serialization error.</exception>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsData.GetErrorMessage(System.Collections.Generic.IDictionary{System.String,Newtonsoft.Json.Linq.JToken})">
+            <summary>
+            Get error message.
+            </summary>
+            <param name="jsonExtensionData">JsonExtensionData.</param>
+            <returns>Error message.</returns>
+            <exception cref="T:Thrzn41.WebexTeams.TeamsJsonSerializationException">Throws on serialization error.</exception>
+        </member>
         <member name="M:Thrzn41.WebexTeams.Version1.TeamsData.GetErrorMessage">
             <summary>
             Get error message.
@@ -6809,6 +6866,38 @@
             <summary>
             Item count.
             </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.TeamsListData`1.Item(System.Int32)">
+            <summary>
+            Indexer.
+            </summary>
+            <param name="index">The index of the items.</param>
+            <returns>The item of this list.</returns>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.TeamsListData`1.HasErrors">
+            <summary>
+            Indicates whether the object has error or not.
+            </summary>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsListData`1.GetEnumerator">
+            <summary>
+            Gets <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </summary>
+            <returns><see cref="T:System.Collections.Generic.IEnumerable`1"/>.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsListData`1.GetErrorMessage">
+            <summary>
+            Get error message.
+            </summary>
+            <returns>Error message.</returns>
+            <exception cref="T:Thrzn41.WebexTeams.TeamsJsonSerializationException">Throws on serialization error.</exception>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsListData`1.GetErrors">
+            <summary>
+            Gets Errors.
+            </summary>
+            <returns>Errors or null.</returns>
+            <exception cref="T:Thrzn41.WebexTeams.TeamsJsonSerializationException">Throws on serialization error.</exception>
         </member>
         <member name="T:Thrzn41.WebexTeams.Version1.Webhook">
             <summary>

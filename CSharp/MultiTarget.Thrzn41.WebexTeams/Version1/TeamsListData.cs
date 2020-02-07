@@ -34,10 +34,9 @@ namespace Thrzn41.WebexTeams.Version1
     /// </summary>
     /// <typeparam name="TTeamsObject">Teams Object that is contained in the list.</typeparam>
     [JsonObject(MemberSerialization.OptIn)]
-    public class TeamsListData<TTeamsObject> : TeamsData
-        where TTeamsObject : TeamsData, new()
+    public class TeamsListData<TTeamsObject> : TeamsListObject<TTeamsObject>
+        where TTeamsObject : TeamsObject, new()
     {
-
         /// <summary>
         /// Item list.
         /// </summary>
@@ -48,7 +47,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// Indicates the object contains items or not.
         /// </summary>
         [JsonIgnore]
-        public bool HasItems
+        public override bool HasItems
         {
             get
             {
@@ -60,7 +59,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// Item count.
         /// </summary>
         [JsonIgnore]
-        public int ItemCount
+        public override int ItemCount
         {
             get
             {
@@ -68,6 +67,64 @@ namespace Thrzn41.WebexTeams.Version1
             }
         }
 
+        /// <summary>
+        /// Indexer.
+        /// </summary>
+        /// <param name="index">The index of the items.</param>
+        /// <returns>The item of this list.</returns>
+        [JsonIgnore]
+        public override TTeamsObject this[int index]
+        {
+            get
+            {
+                return this.Items[index];
+            }
+        }
+
+        /// <summary>
+        /// Indicates whether the object has error or not.
+        /// </summary>
+        [JsonIgnore]
+        public override bool HasErrors
+        {
+            get
+            {
+                return TeamsData.CheckHasErrors(this.JsonExtensionData);
+            }
+        }
+
+        /// <summary>
+        /// Gets <see cref="IEnumerable{TTeamsObject}"/>.
+        /// </summary>
+        /// <returns><see cref="IEnumerable{TTeamsObject}"/>.</returns>
+        public override IEnumerator<TTeamsObject> GetEnumerator()
+        {
+            for (int i = 0; i < this.ItemCount; i++)
+            {
+                yield return this.Items[i];
+            }
+        }
+
+
+        /// <summary>
+        /// Get error message.
+        /// </summary>
+        /// <returns>Error message.</returns>
+        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
+        public override string GetErrorMessage()
+        {
+            return (TeamsData.GetErrorMessage(this.JsonExtensionData) ?? base.GetErrorMessage());
+        }
+
+        /// <summary>
+        /// Gets Errors.
+        /// </summary>
+        /// <returns>Errors or null.</returns>
+        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
+        public ErrorData[] GetErrors()
+        {
+            return TeamsData.GetErrors(this.JsonExtensionData);
+        }
 
     }
 
