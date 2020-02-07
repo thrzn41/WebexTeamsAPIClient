@@ -734,7 +734,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
             var e = rls.GetListResultEnumerator();
 
-            while(await e.MoveNextAsync())
+            while (await e.MoveNextAsync())
             {
                 rls = e.CurrentResult;
 
@@ -757,13 +757,25 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                     guid = rls.ListTransactionId;
                 }
 
-                if( ++counter >= 2 )
+                if (++counter >= 2)
                 {
                     // In this test, break after 2nd loop.
                     break;
                 }
             }
 
+            rls = await teams.ListSpacesAsync(max: 2);
+
+            e = rls.GetListResultEnumerator();
+
+            while (await e.MoveNextAsync())
+            {
+                foreach (var item in e.CurrentResult.GetData())
+                {
+                    Assert.IsNotNull(item.Id);
+                    Assert.IsNotNull(item.Title);
+                }
+            }
         }
 
 

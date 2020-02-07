@@ -22,6 +22,7 @@
  * SOFTWARE.
  */
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -46,10 +47,97 @@ namespace Thrzn41.WebexTeams.Version1
         {
             get
             {
-                return (this.JsonExtensionData != null && this.JsonExtensionData.ContainsKey("errors"));
+                return CheckHasErrors(this.JsonExtensionData);
             }
         }
 
+
+        /// <summary>
+        /// Indicates whether the object has error or not.
+        /// </summary>
+        /// <param name="jsonExtensionData">JsonExtensionData.</param>
+        /// <returns>true if the data has errors.</returns>
+        internal static bool CheckHasErrors(IDictionary<string, JToken> jsonExtensionData)
+        {
+            return (jsonExtensionData != null && jsonExtensionData.ContainsKey("errors"));
+        }
+
+        /// <summary>
+        /// Gets Errors.
+        /// </summary>
+        /// <param name="jsonExtensionData">JsonExtensionData.</param>
+        /// <returns>Errors or null.</returns>
+        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
+        internal static ErrorData[] GetErrors(IDictionary<string, JToken> jsonExtensionData)
+        {
+            ErrorData[] result = null;
+
+            if (CheckHasErrors(jsonExtensionData))
+            {
+                try
+                {
+                    var jtoken = jsonExtensionData["errors"];
+
+                    if (jtoken.Type == Newtonsoft.Json.Linq.JTokenType.Array)
+                    {
+                        result = jsonExtensionData["errors"].ToObject<ErrorData[]>();
+                    }
+
+                    if (result == null)
+                    {
+                        result = new ErrorData[0];
+                    }
+                }
+                catch (JsonReaderException jre)
+                {
+                    throw new TeamsJsonSerializationException(TeamsSerializationOperation.Deserialize, jre.LineNumber, jre.LinePosition, jre.Path);
+                }
+                catch (JsonSerializationException jse)
+                {
+                    throw new TeamsJsonSerializationException(TeamsSerializationOperation.Deserialize, jse.LineNumber, jse.LinePosition, jse.Path);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get error message.
+        /// </summary>
+        /// <param name="jsonExtensionData">JsonExtensionData.</param>
+        /// <returns>Error message.</returns>
+        /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
+        internal static string GetErrorMessage(IDictionary<string, JToken> jsonExtensionData)
+        {
+            if (CheckHasErrors(jsonExtensionData))
+            {
+                var errors = GetErrors(jsonExtensionData);
+
+                if (errors != null && errors.Length > 0)
+                {
+                    int? errorCode     = errors[0].ErrorCode;
+                    string description = errors[0].Description;
+
+                    string message = null;
+
+                    if (errorCode.HasValue)
+                    {
+                        message = String.Format(ErrorMessages.Version1TeamsResultErrorWithCode, description, errorCode.Value);
+                    }
+                    else if (!String.IsNullOrEmpty(description))
+                    {
+                        message = String.Format(ErrorMessages.Version1TeamsResultError, description);
+                    }
+
+                    if (message != null)
+                    {
+                        return message;
+                    }
+                }
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// Get error message.
@@ -58,34 +146,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
         public override string GetErrorMessage()
         {
-            if(this.HasErrors)
-            {
-                var errors = GetErrors();
-
-                if(errors != null && errors.Length > 0)
-                {
-                    int?   errorCode   = errors[0].ErrorCode;
-                    string description = errors[0].Description;
-
-                    string message = null;
-
-                    if(errorCode.HasValue)
-                    {
-                        message = String.Format(ErrorMessages.Version1TeamsResultErrorWithCode, description, errorCode.Value);
-                    }
-                    else if( !String.IsNullOrEmpty(description) )
-                    {
-                        message = String.Format(ErrorMessages.Version1TeamsResultError, description);
-                    }
-
-                    if(message != null)
-                    {
-                        return message;
-                    }
-                }
-            }
-
-            return base.GetErrorMessage();
+            return (GetErrorMessage(this.JsonExtensionData) ?? base.GetErrorMessage());
         }
 
 
@@ -143,35 +204,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <exception cref="TeamsJsonSerializationException">Throws on serialization error.</exception>
         public ErrorData[] GetErrors()
         {
-            ErrorData[] result = null;
-
-            if (this.HasErrors)
-            {
-                try
-                {
-                    var jtoken = this.JsonExtensionData["errors"];
-
-                    if (jtoken.Type == Newtonsoft.Json.Linq.JTokenType.Array)
-                    {
-                        result = this.JsonExtensionData["errors"].ToObject<ErrorData[]>();
-                    }
-
-                    if (result == null)
-                    {
-                        result = new ErrorData[0];
-                    }
-                }
-                catch (JsonReaderException jre)
-                {
-                    throw new TeamsJsonSerializationException(TeamsSerializationOperation.Deserialize, jre.LineNumber, jre.LinePosition, jre.Path);
-                }
-                catch (JsonSerializationException jse)
-                {
-                    throw new TeamsJsonSerializationException(TeamsSerializationOperation.Deserialize, jse.LineNumber, jse.LinePosition, jse.Path);
-                }
-            }
-
-            return result;
+            return GetErrors(this.JsonExtensionData);
         }
 
     }
