@@ -44,7 +44,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <summary>
         /// Teams API Path.
         /// </summary>
-        protected const string TEAMS_API_PATH = "https://api.ciscospark.com/v1/";
+        protected const string TEAMS_API_PATH = "https://webexapis.com/v1/";
 
 
         /// <summary>
