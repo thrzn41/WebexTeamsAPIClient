@@ -180,7 +180,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                 @"
                     {
                         ""type"": ""AdaptiveCard"",
-                        ""version"": ""1.0"",
+                        ""version"": ""1.2"",
                         ""body"": [
                         {
                             ""type"": ""TextBlock"",
