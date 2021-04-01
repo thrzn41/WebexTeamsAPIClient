@@ -142,7 +142,7 @@ namespace Thrzn41.WebexTeams.Version1
         /// <summary>
         /// Uri pattern of Teams API.
         /// </summary>
-        internal readonly static Regex TEAMS_API_URI_PATTERN = new Regex(String.Format("^{0}", TEAMS_API_PATH), RegexOptions.Compiled, TimeSpan.FromSeconds(60.0f));
+        internal readonly static Regex TEAMS_API_URI_PATTERN = new Regex(String.Format("(^{0})|(^https://api.ciscospark.com/v1/)", TEAMS_API_PATH), RegexOptions.Compiled, TimeSpan.FromSeconds(60.0f));
 
         /// <summary>
         /// Person email pattern.
