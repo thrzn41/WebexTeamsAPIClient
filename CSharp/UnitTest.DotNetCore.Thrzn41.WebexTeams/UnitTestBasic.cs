@@ -159,6 +159,9 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
             Assert.AreNotEqual(Guid.Empty, r.TransactionId);
 
+            Assert.IsTrue(r.RequestInfo.ContentLength > 0);
+            Assert.IsTrue(r.ContentLength > 0);
+
             Assert.AreEqual("POST /v1/messages HTTP/1.1", r.RequestLine);
 
             Assert.AreEqual("Hello, Cisco Webex Teams!!", r.Data.Text);

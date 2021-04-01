@@ -1557,6 +1557,16 @@
             <see cref="T:System.Version"/> of Http of this request.
             </summary>
         </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsRequestInfo.ContentLength">
+            <summary>
+            Content-Length in bytes for request.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsRequestInfo.HasContentLength">
+            <summary>
+            Indicates the result has Content length.
+            </summary>
+        </member>
         <member name="M:Thrzn41.WebexTeams.TeamsRequestInfo.GetRequestLine">
             <summary>
             Gets Request line.
@@ -1924,6 +1934,16 @@
         <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.HasTimeToRetry">
             <summary>
             Indicates the result has time to retry.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.ContentLength">
+            <summary>
+            Content-Length of the result in bytes.
+            </summary>
+        </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.HasContentLength">
+            <summary>
+            Indicates the result has Content length.
             </summary>
         </member>
         <member name="P:Thrzn41.WebexTeams.TeamsResultInfo.RequestInfo">

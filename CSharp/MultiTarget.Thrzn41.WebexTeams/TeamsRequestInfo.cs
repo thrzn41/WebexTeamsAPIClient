@@ -63,6 +63,21 @@ namespace Thrzn41.WebexTeams
         /// </summary>
         public Version HttpVersion { get; internal set; }
 
+        /// <summary>
+        /// Content-Length in bytes for request.
+        /// </summary>
+        public long? ContentLength { get; internal set; }
+
+        /// <summary>
+        /// Indicates the result has Content length.
+        /// </summary>
+        public bool HasContentLength
+        {
+            get
+            {
+                return this.ContentLength.HasValue;
+            }
+        }
 
         /// <summary>
         /// Gets Request line.
