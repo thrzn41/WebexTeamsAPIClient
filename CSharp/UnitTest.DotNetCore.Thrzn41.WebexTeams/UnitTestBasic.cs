@@ -737,6 +737,10 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
             var e = rls.GetListResultEnumerator();
 
+            Assert.AreEqual(-1, e.CurrentPageIndex);
+
+            int pageIndex = 0;
+
             while (await e.MoveNextAsync())
             {
                 rls = e.CurrentResult;
@@ -745,6 +749,7 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                 Assert.IsTrue(rls.IsSuccessStatus);
                 Assert.IsTrue(rls.HasNext);
                 Assert.AreEqual(2, rls.Data.ItemCount);
+                Assert.AreEqual(pageIndex++, e.CurrentPageIndex);
 
                 var resourceOperation = rls.ParseResourceOperation();
                 Assert.AreEqual(TeamsResource.Space, resourceOperation.Resource);
@@ -771,6 +776,11 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
             e = rls.GetListResultEnumerator();
 
+            Assert.AreEqual(-1, e.CurrentPageIndex);
+
+            pageIndex = 0;
+
+
             while (await e.MoveNextAsync())
             {
                 foreach (var item in e.CurrentResult.GetData())
@@ -778,6 +788,8 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
                     Assert.IsNotNull(item.Id);
                     Assert.IsNotNull(item.Title);
                 }
+
+                Assert.AreEqual(pageIndex++, e.CurrentPageIndex);
             }
         }
 

@@ -52,6 +52,11 @@ namespace Thrzn41.WebexTeams
         public TeamsListResult<TTeamsObject> CurrentResult { get; private set; } = null;
 
         /// <summary>
+        /// Current PageIndex.
+        /// </summary>
+        public int CurrentPageIndex { get; private set; } = -1;
+
+        /// <summary>
         /// Retry will be tried by this instance if needed.
         /// </summary>
         private TeamsRetry retry;
@@ -119,6 +124,11 @@ namespace Thrzn41.WebexTeams
                 }
 
                 isMoved = true;
+            }
+
+            if(isMoved)
+            {
+                this.CurrentPageIndex++;
             }
 
             return isMoved;

@@ -1291,6 +1291,11 @@
             Current result.
             </summary>
         </member>
+        <member name="P:Thrzn41.WebexTeams.TeamsListResultEnumerator`1.CurrentPageIndex">
+            <summary>
+            Current PageIndex.
+            </summary>
+        </member>
         <member name="F:Thrzn41.WebexTeams.TeamsListResultEnumerator`1.retry">
             <summary>
             Retry will be tried by this instance if needed.
