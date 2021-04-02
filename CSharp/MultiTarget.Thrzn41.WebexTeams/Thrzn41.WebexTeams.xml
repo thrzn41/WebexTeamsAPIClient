@@ -6300,6 +6300,30 @@
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
         </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.ListMessageRepliesAsync(System.String,System.String,System.String,System.Nullable{System.DateTime},System.String,System.Nullable{System.Int32},System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Lists message replies.
+            </summary>
+            <param name="spaceId">List messages for a space, by ID.</param>
+            <param name="parentMessageId">List messages with a parent, by ID.</param>
+            <param name="mentionedPeople">List messages where the caller is mentioned by specifying "me" or the caller personId.</param>
+            <param name="before">List messages sent before a date and time.</param>
+            <param name="beforeMessage">List messages sent before a message, by ID.</param>
+            <param name="max">Limit the maximum number of messages in the response.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.ListDirectMessageRepliesAsync(System.String,System.String,Thrzn41.WebexTeams.Version1.PersonIdType,System.Nullable{System.Int32},System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Lists direct message replies.
+            </summary>
+            <param name="personIdOrEmail">Person id or email that the message is posted.</param>
+            <param name="parentMessageId">List messages with a parent, by ID.</param>
+            <param name="personIdType"><see cref="T:Thrzn41.WebexTeams.Version1.PersonIdType"/> of personIdOrEmail parameter.</param>
+            <param name="max">Limit the maximum number of messages in the response.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
         <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.CreateMessageAsync(System.String,System.String,System.Collections.Generic.IEnumerable{System.Uri},Thrzn41.WebexTeams.Version1.MessageTarget,Thrzn41.WebexTeams.Version1.MessageTextType,System.Nullable{System.Threading.CancellationToken})">
             <summary>
             Creates a message.
@@ -6442,7 +6466,7 @@
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.ReplyToMessageAsync(System.String,System.String,System.String,System.Collections.Generic.IEnumerable{System.Uri},Thrzn41.WebexTeams.Version1.MessageTarget,Thrzn41.WebexTeams.Version1.MessageTextType,System.Nullable{System.Threading.CancellationToken})">
             <summary>
-            Creates a message.
+            Replies to a message.
             </summary>
             <param name="parentMessageId">Message id to be replied to.</param>
             <param name="targetId">Id that the message is posted.</param>
@@ -6455,7 +6479,7 @@
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.ReplyToMessageAsync(System.String,System.String,System.String,Thrzn41.WebexTeams.Version1.Attachment,Thrzn41.WebexTeams.Version1.MessageTarget,Thrzn41.WebexTeams.Version1.MessageTextType,System.Nullable{System.Threading.CancellationToken})">
             <summary>
-            Creates a message with an attachment.
+            Replies to a message with an attachment.
             </summary>
             <param name="parentMessageId">Message id to be replied to.</param>
             <param name="targetId">Id that the message is posted.</param>
@@ -6468,7 +6492,7 @@
         </member>
         <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.ReplyToMessageAsync(System.String,System.String,System.String,Thrzn41.WebexTeams.TeamsFileData,Thrzn41.WebexTeams.Version1.MessageTarget,Thrzn41.WebexTeams.Version1.MessageTextType,System.Nullable{System.Threading.CancellationToken})">
             <summary>
-            Creates a message.
+            Replies to a message with a file.
             </summary>
             <param name="parentMessageId">Message id to be replied to.</param>
             <param name="targetId">Id that the message is posted.</param>
