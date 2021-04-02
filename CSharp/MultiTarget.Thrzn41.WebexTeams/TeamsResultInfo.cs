@@ -112,9 +112,26 @@ namespace Thrzn41.WebexTeams
         }
 
         /// <summary>
+        /// Content-Length of the result in bytes.
+        /// </summary>
+        public long? ContentLength { get; internal set; }
+
+        /// <summary>
+        /// Indicates the result has Content length.
+        /// </summary>
+        public bool HasContentLength
+        {
+            get
+            {
+                return this.ContentLength.HasValue;
+            }
+        }
+
+
+        /// <summary>
         /// <see cref="TeamsRequestInfo"/> for this request.
         /// </summary>
-        internal TeamsRequestInfo RequestInfo { get; set; }
+        public TeamsRequestInfo RequestInfo { get; internal set; }
 
 
         /// <summary>
@@ -126,7 +143,7 @@ namespace Thrzn41.WebexTeams
             {
                 if (this.RequestInfo == null)
                 {
-                    return "UNKNOWN * HTTP/1.1";
+                    return "UNKNOWN * HTTP/unknown";
                 }
 
                 return this.RequestInfo.GetRequestLine();
@@ -278,6 +295,7 @@ namespace Thrzn41.WebexTeams
             destination.RetryAfter      = this.RetryAfter;
             destination.TimeToRetry     = this.TimeToRetry;
             destination.TrackingId      = this.TrackingId;
+            destination.ContentLength   = this.ContentLength;
         }
 
     }

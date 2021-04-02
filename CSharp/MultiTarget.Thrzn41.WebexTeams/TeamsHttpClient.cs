@@ -904,7 +904,22 @@ namespace Thrzn41.WebexTeams
                                     result.Data = ((data != null) ? data : info) as TTeamsObject;
                                 }
                             }
+
+                            result.ContentLength = contentHeaders?.ContentLength;
                         }
+                    }
+                    else
+                    {
+                        result.ContentLength = 0;
+                    }
+
+                    if(request.Content == null)
+                    {
+                        result.RequestInfo.ContentLength = 0;
+                    }
+                    else
+                    {
+                        result.RequestInfo.ContentLength = request.Content.Headers?.ContentLength;
                     }
 
 
