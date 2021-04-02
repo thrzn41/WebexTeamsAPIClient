@@ -1336,6 +1336,57 @@ namespace Thrzn41.WebexTeams.Version1
 
 
         /// <summary>
+        /// Updates a message.
+        /// </summary>
+        /// <param name="messageId">MessageId to be updated.</param>
+        /// <param name="spaceId">Id that the message is posted.</param>
+        /// <param name="markdownOrText">markdown or text to be posted.</param>
+        /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task<TeamsResult<Message>> UpdateMessageAsync(string messageId, string spaceId, string markdownOrText, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        {
+            var message = new Message();
+
+            message.SpaceId = spaceId;
+
+            switch (textType)
+            {
+                case MessageTextType.Text:
+                    message.Text = markdownOrText;
+                    break;
+                default:
+                    message.Markdown = markdownOrText;
+                    break;
+            }
+
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsResult<Message>, Message>(
+                                    HttpMethod.Put,
+                                    new Uri(String.Format("{0}/{1}", TEAMS_MESSAGES_API_PATH, Uri.EscapeDataString(messageId))),
+                                    null,
+                                    message,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Updates a message.
+        /// </summary>
+        /// <param name="message">Message to be updated.</param>
+        /// <param name="spaceId">Id that the message is posted.</param>
+        /// <param name="markdownOrText">markdown or text to be posted.</param>
+        /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public Task<TeamsResult<Message>> UpdateMessageAsync(Message message, string spaceId, string markdownOrText, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        {
+            return UpdateMessageAsync(message.Id, spaceId, markdownOrText, textType, cancellationToken);
+        }
+
+        /// <summary>
         /// Gets message detail.
         /// </summary>
         /// <param name="messageId">Message id that the detail info is gotten.</param>

@@ -6435,6 +6435,28 @@
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
         </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.UpdateMessageAsync(System.String,System.String,System.String,Thrzn41.WebexTeams.Version1.MessageTextType,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Updates a message.
+            </summary>
+            <param name="messageId">MessageId to be updated.</param>
+            <param name="spaceId">Id that the message is posted.</param>
+            <param name="markdownOrText">markdown or text to be posted.</param>
+            <param name="textType"><see cref="T:Thrzn41.WebexTeams.Version1.MessageTextType"/> of markdownOrText parameter.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.UpdateMessageAsync(Thrzn41.WebexTeams.Version1.Message,System.String,System.String,Thrzn41.WebexTeams.Version1.MessageTextType,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Updates a message.
+            </summary>
+            <param name="message">Message to be updated.</param>
+            <param name="spaceId">Id that the message is posted.</param>
+            <param name="markdownOrText">markdown or text to be posted.</param>
+            <param name="textType"><see cref="T:Thrzn41.WebexTeams.Version1.MessageTextType"/> of markdownOrText parameter.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
         <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.GetMessageAsync(System.String,System.Nullable{System.Threading.CancellationToken})">
             <summary>
             Gets message detail.

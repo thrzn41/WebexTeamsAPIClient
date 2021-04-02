@@ -174,6 +174,41 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
         }
 
         [TestMethod]
+        public async Task TestUpdateMessage()
+        {
+            var r = await teams.CreateMessageAsync(unitTestSpace.Id, "This message is to be updated.");
+
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+            Assert.AreEqual("This message is to be updated.", r.Data.Text);
+
+            r = await teams.UpdateMessageAsync(r.Data.Id, unitTestSpace.Id, "This is an updated message.");
+
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+
+            Assert.IsTrue(r.IsSuccessStatus);
+            Assert.IsTrue(r.Data.HasValues);
+
+            Assert.IsNotNull(r.Data.Id);
+            Assert.IsNotNull(r.TrackingId);
+
+            Assert.AreNotEqual(Guid.Empty, r.TransactionId);
+
+            Assert.IsTrue(r.RequestInfo.ContentLength > 0);
+            Assert.IsTrue(r.ContentLength > 0);
+
+            Assert.AreEqual(String.Format("PUT /v1/messages/{0} HTTP/1.1", r.Data.Id), r.RequestLine);
+
+            Assert.AreEqual("This is an updated message.", r.Data.Text);
+
+            var resourceOperation = r.ParseResourceOperation();
+            Assert.AreEqual(TeamsResource.Message, resourceOperation.Resource);
+            Assert.AreEqual(TeamsOperation.Update, resourceOperation.Operation);
+            Assert.AreEqual("UpdateMessage", resourceOperation.ToString());
+
+        }
+
+
+        [TestMethod]
         public async Task TestCreateMessageWithAdaptiveCardFromString()
         {
             var card = AdaptiveCardAttachment.FromJsonString(
