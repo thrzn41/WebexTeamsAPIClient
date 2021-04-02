@@ -52,6 +52,12 @@ namespace Thrzn41.WebexTeams.Version1
         public string Id { get; internal set; }
 
         /// <summary>
+        /// ParentId of the message for message thread.
+        /// </summary>
+        [JsonProperty(PropertyName = "parentId")]
+        public string ParentId { get; internal set; }
+
+        /// <summary>
         /// Id of Teams space that this message exists in.
         /// </summary>
         [JsonProperty(PropertyName = "roomId")]

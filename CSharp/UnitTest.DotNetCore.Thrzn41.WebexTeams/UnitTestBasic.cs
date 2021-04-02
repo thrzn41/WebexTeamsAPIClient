@@ -207,6 +207,146 @@ namespace UnitTest.DotNetCore.Thrzn41.WebexTeams
 
         }
 
+        [TestMethod]
+        public async Task TestReplyToMessage()
+        {
+            var r = await teams.CreateMessageAsync(unitTestSpace.Id, "This message is to be replied.");
+
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+            Assert.AreEqual("This message is to be replied.", r.Data.Text);
+
+            r = await teams.ReplyToMessageAsync(r.Data.Id, unitTestSpace.Id, "This is a reply message.");
+
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+
+            Assert.IsTrue(r.IsSuccessStatus);
+            Assert.IsTrue(r.Data.HasValues);
+
+            Assert.IsNotNull(r.Data.Id);
+            Assert.IsNotNull(r.TrackingId);
+
+            Assert.AreNotEqual(Guid.Empty, r.TransactionId);
+
+            Assert.IsTrue(r.RequestInfo.ContentLength > 0);
+            Assert.IsTrue(r.ContentLength > 0);
+
+            Assert.AreEqual("POST /v1/messages HTTP/1.1", r.RequestLine);
+
+            Assert.AreEqual("This is a reply message.", r.Data.Text);
+
+            var resourceOperation = r.ParseResourceOperation();
+            Assert.AreEqual(TeamsResource.Message, resourceOperation.Resource);
+            Assert.AreEqual(TeamsOperation.Create, resourceOperation.Operation);
+            Assert.AreEqual("CreateMessage", resourceOperation.ToString());
+
+        }
+
+        [TestMethod]
+        public async Task TestReplyToMessageWithAttachment()
+        {
+            var r = await teams.CreateMessageAsync(unitTestSpace.Id, "This message is to be replied with attachment.");
+
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+            Assert.AreEqual("This message is to be replied with attachment.", r.Data.Text);
+
+            var exePath = new FileInfo(Assembly.GetExecutingAssembly().Location);
+
+            string path = String.Format("{0}{1}TestData{1}thrzn41.png", exePath.DirectoryName, Path.DirectorySeparatorChar);
+
+            Uri fileUri = null;
+            using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var data = new TeamsFileData(fs, "mypng.png", TeamsMediaType.ImagePNG))
+            {
+                r = await teams.ReplyToMessageAsync(r.Data.Id, unitTestSpace.Id, "This is a reply message with attachment.", data);
+                Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+                Assert.IsTrue(r.IsSuccessStatus);
+                Assert.IsTrue(r.Data.HasValues);
+                Assert.IsTrue(r.Data.HasFiles);
+
+                fileUri = r.Data.FileUris[0];
+            }
+
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+
+            Assert.IsTrue(r.IsSuccessStatus);
+            Assert.IsTrue(r.Data.HasValues);
+
+            Assert.IsNotNull(r.Data.Id);
+            Assert.IsNotNull(r.TrackingId);
+
+            Assert.AreNotEqual(Guid.Empty, r.TransactionId);
+
+            Assert.IsTrue(r.RequestInfo.ContentLength > 0);
+            Assert.IsTrue(r.ContentLength > 0);
+
+            Assert.AreEqual("POST /v1/messages HTTP/1.1", r.RequestLine);
+
+            Assert.AreEqual("This is a reply message with attachment.", r.Data.Text);
+
+            var resourceOperation = r.ParseResourceOperation();
+            Assert.AreEqual(TeamsResource.Message, resourceOperation.Resource);
+            Assert.AreEqual(TeamsOperation.Create, resourceOperation.Operation);
+            Assert.AreEqual("CreateMessage", resourceOperation.ToString());
+
+        }
+
+        [TestMethod]
+        public async Task TestReplyToMessageWithCard()
+        {
+            var r = await teams.CreateMessageAsync(unitTestSpace.Id, "This message is to be replied with card.");
+
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+            Assert.AreEqual("This message is to be replied with card.", r.Data.Text);
+
+            var card = AdaptiveCardAttachment.FromJsonString(
+                @"
+                    {
+                        ""type"": ""AdaptiveCard"",
+                        ""version"": ""1.2"",
+                        ""body"": [
+                        {
+                            ""type"": ""TextBlock"",
+                            ""text"": ""Adaptive Cards"",
+                            ""size"": ""large""
+                        }
+                        ],
+                        ""actions"": [
+                        {
+                            ""type"": ""Action.OpenUrl"",
+                            ""url"": ""http://adaptivecards.io"",
+                            ""title"": ""Learn More""
+                        }
+                        ]
+                    }
+                ");
+
+            r = await teams.ReplyToMessageAsync(r.Data.Id, unitTestSpace.Id, "This is a reply message with card.", card);
+
+            Assert.AreEqual(HttpStatusCode.OK, r.HttpStatusCode);
+
+            Assert.IsTrue(r.IsSuccessStatus);
+            Assert.IsTrue(r.Data.HasValues);
+
+            Assert.IsNotNull(r.Data.Id);
+            Assert.IsNotNull(r.TrackingId);
+
+            Assert.AreNotEqual(Guid.Empty, r.TransactionId);
+
+            Assert.IsTrue(r.RequestInfo.ContentLength > 0);
+            Assert.IsTrue(r.ContentLength > 0);
+
+            Assert.AreEqual("POST /v1/messages HTTP/1.1", r.RequestLine);
+
+            Assert.AreEqual("This is a reply message with card.", r.Data.Text);
+
+            var resourceOperation = r.ParseResourceOperation();
+            Assert.AreEqual(TeamsResource.Message, resourceOperation.Resource);
+            Assert.AreEqual(TeamsOperation.Create, resourceOperation.Operation);
+            Assert.AreEqual("CreateMessage", resourceOperation.ToString());
+
+        }
+
+
 
         [TestMethod]
         public async Task TestCreateMessageWithAdaptiveCardFromString()

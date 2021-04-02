@@ -986,6 +986,79 @@ namespace Thrzn41.WebexTeams.Version1
         }
 
         /// <summary>
+        /// Lists message replies.
+        /// </summary>
+        /// <param name="spaceId">List messages for a space, by ID.</param>
+        /// <param name="parentMessageId">List messages with a parent, by ID.</param>
+        /// <param name="mentionedPeople">List messages where the caller is mentioned by specifying "me" or the caller personId.</param>
+        /// <param name="before">List messages sent before a date and time.</param>
+        /// <param name="beforeMessage">List messages sent before a message, by ID.</param>
+        /// <param name="max">Limit the maximum number of messages in the response.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task<TeamsListResult<MessageList>> ListMessageRepliesAsync(string spaceId, string parentMessageId, string mentionedPeople = null, DateTime? before = null, string beforeMessage = null, int? max = null, CancellationToken? cancellationToken = null)
+        {
+            var queryParameters = new NameValueCollection();
+            
+            queryParameters.Add("roomId", spaceId);
+            queryParameters.Add("parentId", parentMessageId);
+            queryParameters.Add("max", max?.ToString());
+            queryParameters.Add("mentionedPeople", mentionedPeople);
+            queryParameters.Add("before", before?.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffK"));
+            queryParameters.Add("beforeMessage", beforeMessage);
+
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsListResult<MessageList>, MessageList>(
+                                    HttpMethod.Get,
+                                    TEAMS_MESSAGES_API_URI,
+                                    queryParameters,
+                                    null,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Lists direct message replies.
+        /// </summary>
+        /// <param name="personIdOrEmail">Person id or email that the message is posted.</param>
+        /// <param name="parentMessageId">List messages with a parent, by ID.</param>
+        /// <param name="personIdType"><see cref="PersonIdType"/> of personIdOrEmail parameter.</param>
+        /// <param name="max">Limit the maximum number of messages in the response.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task<TeamsListResult<MessageList>> ListDirectMessageRepliesAsync(string personIdOrEmail, string parentMessageId, PersonIdType personIdType = PersonIdType.Detect, int? max = null, CancellationToken? cancellationToken = null)
+        {
+            personIdType = DetectPersonIdType(personIdOrEmail, personIdType);
+
+            string parameterName = "personId";
+
+            if (personIdType == PersonIdType.Email)
+            {
+                parameterName = "personEmail";
+            }
+
+            var queryParameters = new NameValueCollection();
+
+            queryParameters.Add(parameterName, personIdOrEmail);
+            queryParameters.Add("parentId", parentMessageId);
+            queryParameters.Add("max", max?.ToString());
+
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsListResult<MessageList>, MessageList>(
+                                    HttpMethod.Get,
+                                    TEAMS_DIRECT_MESSAGES_API_URI,
+                                    queryParameters,
+                                    null,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+
+        /// <summary>
         /// Creates a message.
         /// </summary>
         /// <param name="targetId">Id that the message is posted.</param>
@@ -1334,6 +1407,186 @@ namespace Thrzn41.WebexTeams.Version1
             return (CreateDirectMessageAsync(person.Id, markdownOrText, attachment, PersonIdType.Id, textType, cancellationToken));
         }
 
+
+        /// <summary>
+        /// Replies to a message.
+        /// </summary>
+        /// <param name="parentMessageId">Message id to be replied to.</param>
+        /// <param name="targetId">Id that the message is posted.</param>
+        /// <param name="markdownOrText">markdown or text to be posted.</param>
+        /// <param name="files">File uris to be attached with the message.</param>
+        /// <param name="target"><see cref="MessageTarget"/> that the targetId parameter represents.</param>
+        /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task<TeamsResult<Message>> ReplyToMessageAsync(string parentMessageId, string targetId, string markdownOrText, IEnumerable<Uri> files = null, MessageTarget target = MessageTarget.SpaceId, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        {
+            var message = new Message();
+
+            message.ParentId = parentMessageId;
+
+            switch (target)
+            {
+                case MessageTarget.PersonId:
+                    message.ToPersonId = targetId;
+                    break;
+                case MessageTarget.PersonEmail:
+                    message.ToPersonEmail = targetId;
+                    break;
+                default:
+                    message.SpaceId = targetId;
+                    break;
+            }
+
+            switch (textType)
+            {
+                case MessageTextType.Text:
+                    message.Text = markdownOrText;
+                    break;
+                default:
+                    message.Markdown = markdownOrText;
+                    break;
+            }
+
+            if (files != null)
+            {
+                List<string> fileList = new List<string>();
+
+                foreach (var item in files)
+                {
+                    fileList.Add(item.AbsoluteUri);
+                }
+
+                message.Files = fileList.ToArray();
+            }
+
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsResult<Message>, Message>(
+                                    HttpMethod.Post,
+                                    TEAMS_MESSAGES_API_URI,
+                                    null,
+                                    message,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+
+        /// <summary>
+        /// Replies to a message with an attachment.
+        /// </summary>
+        /// <param name="parentMessageId">Message id to be replied to.</param>
+        /// <param name="targetId">Id that the message is posted.</param>
+        /// <param name="markdownOrText">markdown or text to be posted.</param>
+        /// <param name="attachment">Message attachment to be attached with the message.</param>
+        /// <param name="target"><see cref="MessageTarget"/> that the targetId parameter represents.</param>
+        /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task<TeamsResult<Message>> ReplyToMessageAsync(string parentMessageId, string targetId, string markdownOrText, Attachment attachment, MessageTarget target = MessageTarget.SpaceId, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        {
+            var message = new Message();
+
+            message.ParentId = parentMessageId;
+
+            switch (target)
+            {
+                case MessageTarget.PersonId:
+                    message.ToPersonId = targetId;
+                    break;
+                case MessageTarget.PersonEmail:
+                    message.ToPersonEmail = targetId;
+                    break;
+                default:
+                    message.SpaceId = targetId;
+                    break;
+            }
+
+            switch (textType)
+            {
+                case MessageTextType.Text:
+                    message.Text = markdownOrText;
+                    break;
+                default:
+                    message.Markdown = markdownOrText;
+                    break;
+            }
+
+            if (attachment != null)
+            {
+                message.Attachments = new Attachment[] { attachment };
+            }
+
+            var result = await this.teamsHttpClient.RequestJsonAsync<TeamsResult<Message>, Message>(
+                                    HttpMethod.Post,
+                                    TEAMS_MESSAGES_API_URI,
+                                    null,
+                                    message,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Replies to a message with a file.
+        /// </summary>
+        /// <param name="parentMessageId">Message id to be replied to.</param>
+        /// <param name="targetId">Id that the message is posted.</param>
+        /// <param name="markdownOrText">markdown or text to be posted.</param>
+        /// <param name="fileData">File data to be attached with the message.</param>
+        /// <param name="target"><see cref="MessageTarget"/> that the targetId parameter represents.</param>
+        /// <param name="textType"><see cref="MessageTextType"/> of markdownOrText parameter.</param>
+        /// <param name="cancellationToken"><see cref="CancellationToken"/> to be used for cancellation.</param>
+        /// <returns><see cref="TeamsResult{TTeamsObject}"/> to get result.</returns>
+        public async Task<TeamsResult<Message>> ReplyToMessageAsync(string parentMessageId, string targetId, string markdownOrText, TeamsFileData fileData, MessageTarget target = MessageTarget.SpaceId, MessageTextType textType = MessageTextType.Markdown, CancellationToken? cancellationToken = null)
+        {
+            string targetKey;
+            string textKey;
+
+            switch (target)
+            {
+                case MessageTarget.PersonId:
+                    targetKey = "toPersonId";
+                    break;
+                case MessageTarget.PersonEmail:
+                    targetKey = "toPersonEmail";
+                    break;
+                default:
+                    targetKey = "roomId";
+                    break;
+            }
+
+            switch (textType)
+            {
+                case MessageTextType.Text:
+                    textKey = "text";
+                    break;
+                default:
+                    textKey = "markdown";
+                    break;
+            }
+
+            var stringData = new NameValueCollection();
+
+            stringData.Add("parentId", parentMessageId);
+            stringData.Add(targetKey, targetId);
+            stringData.Add(textKey, markdownOrText);
+
+            var result = await this.teamsHttpClient.RequestMultipartFormDataAsync<TeamsResult<Message>, Message>(
+                                    HttpMethod.Post,
+                                    TEAMS_MESSAGES_API_URI,
+                                    null,
+                                    stringData,
+                                    fileData,
+                                    cancellationToken);
+
+            result.IsSuccessStatus = (result.IsSuccessStatus && (result.HttpStatusCode == System.Net.HttpStatusCode.OK));
+
+            return result;
+        }
 
         /// <summary>
         /// Updates a message.

@@ -4341,6 +4341,11 @@
             Id of the message.
             </summary>
         </member>
+        <member name="P:Thrzn41.WebexTeams.Version1.Message.ParentId">
+            <summary>
+            ParentId of the message for message thread.
+            </summary>
+        </member>
         <member name="P:Thrzn41.WebexTeams.Version1.Message.SpaceId">
             <summary>
             Id of Teams space that this message exists in.
@@ -6431,6 +6436,45 @@
             <param name="markdownOrText">markdown or text to be posted.</param>
             <param name="attachment">Message attachment to be attached with the message.</param>
             <param name="personIdType"><see cref="T:Thrzn41.WebexTeams.Version1.PersonIdType"/> of personIdOrEmail parameter.</param>
+            <param name="textType"><see cref="T:Thrzn41.WebexTeams.Version1.MessageTextType"/> of markdownOrText parameter.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.ReplyToMessageAsync(System.String,System.String,System.String,System.Collections.Generic.IEnumerable{System.Uri},Thrzn41.WebexTeams.Version1.MessageTarget,Thrzn41.WebexTeams.Version1.MessageTextType,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Creates a message.
+            </summary>
+            <param name="parentMessageId">Message id to be replied to.</param>
+            <param name="targetId">Id that the message is posted.</param>
+            <param name="markdownOrText">markdown or text to be posted.</param>
+            <param name="files">File uris to be attached with the message.</param>
+            <param name="target"><see cref="T:Thrzn41.WebexTeams.Version1.MessageTarget"/> that the targetId parameter represents.</param>
+            <param name="textType"><see cref="T:Thrzn41.WebexTeams.Version1.MessageTextType"/> of markdownOrText parameter.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.ReplyToMessageAsync(System.String,System.String,System.String,Thrzn41.WebexTeams.Version1.Attachment,Thrzn41.WebexTeams.Version1.MessageTarget,Thrzn41.WebexTeams.Version1.MessageTextType,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Creates a message with an attachment.
+            </summary>
+            <param name="parentMessageId">Message id to be replied to.</param>
+            <param name="targetId">Id that the message is posted.</param>
+            <param name="markdownOrText">markdown or text to be posted.</param>
+            <param name="attachment">Message attachment to be attached with the message.</param>
+            <param name="target"><see cref="T:Thrzn41.WebexTeams.Version1.MessageTarget"/> that the targetId parameter represents.</param>
+            <param name="textType"><see cref="T:Thrzn41.WebexTeams.Version1.MessageTextType"/> of markdownOrText parameter.</param>
+            <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
+            <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
+        </member>
+        <member name="M:Thrzn41.WebexTeams.Version1.TeamsAPIClient.ReplyToMessageAsync(System.String,System.String,System.String,Thrzn41.WebexTeams.TeamsFileData,Thrzn41.WebexTeams.Version1.MessageTarget,Thrzn41.WebexTeams.Version1.MessageTextType,System.Nullable{System.Threading.CancellationToken})">
+            <summary>
+            Creates a message.
+            </summary>
+            <param name="parentMessageId">Message id to be replied to.</param>
+            <param name="targetId">Id that the message is posted.</param>
+            <param name="markdownOrText">markdown or text to be posted.</param>
+            <param name="fileData">File data to be attached with the message.</param>
+            <param name="target"><see cref="T:Thrzn41.WebexTeams.Version1.MessageTarget"/> that the targetId parameter represents.</param>
             <param name="textType"><see cref="T:Thrzn41.WebexTeams.Version1.MessageTextType"/> of markdownOrText parameter.</param>
             <param name="cancellationToken"><see cref="T:System.Threading.CancellationToken"/> to be used for cancellation.</param>
             <returns><see cref="T:Thrzn41.WebexTeams.TeamsResult`1"/> to get result.</returns>
